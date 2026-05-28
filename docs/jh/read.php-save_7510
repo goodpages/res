@@ -1,0 +1,853 @@
+﻿标题：Redis_php 学习
+出处：流浪的龙－个人知识管理
+时间：Thu, 25 Aug 2016 20:42:18 +0000
+作者：renjihe1988
+地址：http://i.renjihe.com/blog/read.php?7510
+
+内容：
+PhpRedis是php的一个扩展，效率是相当高有链表排序功能，对创建内存级的模块业务关系很有用;以下是redis官方提供的命令使用技巧:
+Redis::__construct构造函数
+1$redis = new Redis();
+
+
+connect, open 链接redis服务
+参数：
+host: string，服务地址port: int,端口号timeout: float,链接时长 (可选, 默认为 0 ，不限链接时间)注: 在redis.conf中也有时间，默认为300
+pconnect, popen 不会主动关闭的链接
+参考同上
+setOption 设置redis模式
+getOption 查看redis设置的模式
+ping 查看连接状态
+get 得到某个key的值（string值）
+如果该key不存在，return false
+set 写入key 和 value（string值）
+如果写入成功，return ture
+setex 带生存时间的写入值
+1$redis->setex('key', 3600, 'value'); // sets key &rarr; value, with 1h TTL.
+
+
+setnx 判断是否重复的，写入值
+1$redis->setnx('key', 'value');
+2$redis->setnx('key', 'value');
+
+
+delete  删除指定key的值
+返回已经删除key的个数（长整数）
+1$redis->delete('key1', 'key2');
+2$redis->delete(array('key3', 'key4', 'key5'));
+
+
+ttl
+得到一个key的生存时间
+persist
+移除生存时间到期的key
+如果key到期 true 如果不到期 false
+mset （redis版本1.1以上才可以用）
+同时给多个key赋值
+1$redis->mset(array('key0' => 'value0', 'key1' => 'value1'));
+
+
+multi, exec, discard
+进入或者退出事务模式
+参数可选Redis::MULTI或Redis::PIPELINE. 默认是 Redis::MULTI
+Redis::MULTI：将多个操作当成一个事务执行
+Redis::PIPELINE:让（多条）执行命令简单的，更加快速的发送给服务器，但是没有任何原子性的保证
+discard:删除一个事务
+返回值
+multi()，返回一个redis对象，并进入multi-mode模式，一旦进入multi-mode模式，以后调用的所有方法都会返回相同的对象，只到exec(）方法被调用。
+watch, unwatch （代码测试后，不能达到所说的效果）
+监测一个key的值是否被其它的程序更改。如果这个key在watch 和 exec （方法）间被修改，这个 MULTI/EXEC 事务的执行将失败（return false）
+unwatch 取消被这个程序监测的所有key
+参数，一对key的列表
+1$redis->watch('x');
+2$ret = $redis->multi() ->incr('x') ->exec();
+
+
+subscribe *
+方法回调。注意，该方法可能在未来里发生改变
+publish *
+发表内容到某一个通道。注意，该方法可能在未来里发生改变
+exists
+判断key是否存在。存在 true 不在 false
+incr, incrBy
+key中的值进行自增1，如果填写了第二个参数，者自增第二个参数所填的值
+1$redis->incr('key1');
+2$redis->incrBy('key1', 10);
+
+
+decr, decrBy
+做减法，使用方法同incr
+getMultiple
+传参
+由key组成的数组
+返回参数
+如果key存在返回value，不存在返回false
+1$redis->set('key1', 'value1');
+2$redis->set('key2', 'value2');
+3$redis->set('key3', 'value3');
+4$redis->getMultiple(array('key1', 'key2', 'key3'));
+5$redis->lRem('key1', 'A', 2);
+6$redis->lRange('key1', 0, -1);
+
+
+List相关操作
+lPush
+1$redis->lPush(key, value);
+
+
+在名称为key的list左边（头）添加一个值为value的元素
+rPush
+1$redis->rPush(key, value);
+
+
+在名称为key的list右边（尾）添加一个值为value的元素
+lPushx/rPushx
+1$redis->lPushx(key, value);
+
+
+在名称为key的list左边(头)/右边（尾）添加一个值为value的元素,如果value已经存在，则不添加
+lPop/rPop
+1$redis->lPop('key');
+
+
+输出名称为key的list左(头)起/右（尾）起的第一个元素，删除该元素
+blPop/brPop
+1$redis->blPop('key1', 'key2', 10);
+
+
+lpop命令的block版本。即当timeout为0时，若遇到名称为key i的list不存在或该list为空，则命令结束。如果timeout>0，则遇到上述情况时，等待timeout秒，如果问题没有解决，则对keyi+1开始的list执行pop操作
+lSize
+1$redis->lSize('key');
+
+
+返回名称为key的list有多少个元素
+lIndex, lGet
+1$redis->lGet('key', 0);
+
+
+返回名称为key的list中index位置的元素
+lSet
+1$redis->lSet('key', 0, 'X');
+
+
+给名称为key的list中index位置的元素赋值为value
+lRange, lGetRange
+1$redis->lRange('key1', 0, -1);
+
+
+返回名称为key的list中start至end之间的元素（end为 -1 ，返回所有）
+lTrim, listTrim
+1$redis->lTrim('key', start, end);
+
+
+截取名称为key的list，保留start至end之间的元素
+lRem, lRemove
+1$redis->lRem('key', 'A', 2);
+
+
+删除count个名称为key的list中值为value的元素。count为0，删除所有值为value的元素，count>0从头至尾删除count个值为value的元素，count<0从尾到头删除|count|个值为value的元素
+lInsert
+在名称为为key的list中，找到值为pivot 的value，并根据参数Redis::BEFORE | Redis::AFTER，来确定，newvalue 是放在 pivot 的前面，或者后面。如果key不存在，不会插入，如果 pivot不存在，return -1
+01$redis->delete('key1');
+02$redis->lInsert('key1', Redis::AFTER, 'A', 'X');
+03$redis->lPush('key1', 'A');
+04$redis->lPush('key1', 'B');
+05$redis->lPush('key1', 'C');
+06$redis->lInsert('key1', Redis::BEFORE, 'C', 'X');
+07$redis->lRange('key1', 0, -1);
+08$redis->lInsert('key1', Redis::AFTER, 'C', 'Y');
+09$redis->lRange('key1', 0, -1);
+10$redis->lInsert('key1', Redis::AFTER, 'W', 'value');
+
+
+rpop/lpush
+01$redis->delete('x', 'y');
+02$redis->lPush('x', 'abc');
+03$redis->lPush('x', 'def');
+04$redis->lPush('y', '123');
+05$redis->lPush('y', '456'); // move the last of x to the front of y. var_dump($redis->rpoplpush('x', 'y'));
+06var_dump($redis->lRange('x', 0, -1));
+07var_dump($redis->lRange('y', 0, -1));
+08array
+09  0 => string 'def' (length=3)
+10  1 => string 'abc' (length=3)
+11 
+12array
+13  0 => string '456' (length=3)
+14  1 => string '123' (length=3)
+
+
+返回并删除名称为srckey的list的尾元素，并将该元素添加到名称为dstkey的list的头部
+SET相关操作
+sAdd
+1$redis->sAdd(key , value);
+
+
+向名称为key的set中添加元素value,如果value存在，不写入，return false
+sRem, sRemove
+1$redis->sAdd('key1' , 'set1');
+2$redis->sAdd('key1' , 'set2');
+3$redis->sAdd('key1' , 'set3');
+4$redis->sRem('key1', 'set2');
+
+
+删除名称为key的set中的元素value
+sMove
+1$redis->sMove(seckey, dstkey, value);
+
+
+将value元素从名称为srckey的集合移到名称为dstkey的集合
+sIsMember, sContains
+1$redis->sIsMember(key, value);
+
+
+名称为key的集合中查找是否有value元素，有ture 没有false
+sCard, sSize
+1$redis->sIsMember(key, value);
+
+
+返回名称为key的set的元素个数
+sPop
+随机返回并删除名称为key的set中一个元素
+sRandMember
+随机返回名称为key的set中一个元素，不删除
+sInter
+求交集
+sInterStore
+1$redis->sInterStore('output', 'key1', 'key2', 'key3')
+
+
+求交集并将交集保存到output的集合
+sUnion
+1$redis->sUnion('s0', 's1', 's2');
+2//s0,s1,s2 同时求并集
+
+
+求并集
+sUnionStore
+1$redis->sUnionStore('output', 'key1', 'key2', 'key3')；
+
+
+求并集并将并集保存到output的集合
+sDiff
+求差集
+sDiffStore
+求差集并将差集保存到output的集合
+sMembers, sGetMembers
+返回名称为key的set的所有元素
+sort
+排序，分页等
+参数
+'by' => 'some_pattern_*''limit' => array(0, 1)'get' => 'some_other_pattern_*' or an array of patterns'sort' => 'asc' or 'desc''alpha' => TRUE'store' => 'external-key'1$redis->delete('s');
+2$redis->sadd('s', 5);
+3$redis->sadd('s', 4);
+4$redis->sadd('s', 2);
+5$redis->sadd('s', 1);
+6$redis->sadd('s', 3);
+7var_dump($redis->sort('s')); // 1,2,3,4,5
+8var_dump($redis->sort('s', array('sort' => 'desc'))); // 5,4,3,2,1
+9var_dump($redis->sort('s', array('sort' => 'desc', 'store' => 'out'))); // (int)5
+
+
+string相关操作
+getSet
+1$redis->set('x', '42');
+2$exValue = $redis->getSet('x', 'lol'); // return '42', replaces x by 'lol'
+3$newValue = $redis->get('x')' // return 'lol'
+
+
+返回原来key中的值，并将value写入key
+append
+1$redis->set('key', 'value1');
+2$redis->append('key', 'value2');
+3$redis->get('key');
+
+
+string，名称为key的string的值在后面加上value
+getRange （方法不存在）
+1$redis->set('key', 'string value');
+2$redis->getRange('key', 0, 5);
+3$redis->getRange('key', -5, -1);
+
+
+返回名称为key的string中start至end之间的字符
+setRange （方法不存在）
+1$redis->set('key', 'Hello world');
+2$redis->setRange('key', 6, "redis");
+3$redis->get('key');
+
+
+改变key的string中start至end之间的字符为value
+strlen
+1$redis->strlen('key');
+
+
+得到key的string的长度
+getBit/setBit
+返回2进制信息
+zset（sorted set）相关操作
+zAdd(key, score, member)
+1$redis->zAdd('key', 1, 'val1');
+2$redis->zAdd('key', 0, 'val0');
+3$redis->zAdd('key', 5, 'val5');
+4$redis->zRange('key', 0, -1); // array(val0, val1, val5)
+
+
+向名称为key的zset中添加元素member，score用于排序。如果该元素已经存在，则根据score更新该元素的顺序。
+zRange(key, start, end,withscores)
+1$redis->zAdd('key1', 0, 'val0');
+2$redis->zAdd('key1', 2, 'val2');
+3$redis->zAdd('key1', 10, 'val10');
+4$redis->zRange('key1', 0, -1); // with scores $redis->zRange('key1', 0, -1, true);
+
+
+返回名称为key的zset（元素已按score从小到大排序）中的index从start到end的所有元素
+zDelete,zRem(key, member)
+1$redis->zAdd('key', 0, 'val0');
+2$redis->zAdd('key', 2, 'val2');
+3$redis->zAdd('key', 10, 'val10');
+4$redis->zDelete('key', 'val2');
+5$redis->zRange('key', 0, -1);
+
+
+删除名称为key的zset中的元素member
+zRevRange(key, start, end,withscores)
+1$redis->zAdd('key', 0, 'val0');
+2$redis->zAdd('key', 2, 'val2');
+3$redis->zAdd('key', 10, 'val10');
+4$redis->zRevRange('key', 0, -1); // with scores $redis->zRevRange('key', 0, -1, true);
+
+
+返回名称为key的zset（元素已按score从大到小排序）中的index从start到end的所有元素.withscores: 是否输出socre的值，默认false，不输出
+zRangeByScore, zRevRangeByScore
+1$redis->zRangeByScore(key, star, end, array(withscores， limit ));
+
+
+返回名称为key的zset中score >= star且score <= end的所有元素
+zCount
+1$redis->zCount(key, star, end);
+
+
+返回名称为key的zset中score >= star且score <= end的所有元素的个数
+zRemRangeByScore, zDeleteRangeByScore
+1$redis->zRemRangeByScore('key', star, end);
+
+
+删除名称为key的zset中score >= star且score <= end的所有元素，返回删除个数
+zSize, zCard
+返回名称为key的zset的所有元素的个数
+zScore
+1$redis->zScore(key, val2);
+
+
+返回名称为key的zset中元素val2的score
+zRank, zRevRank
+1$redis->zRevRank(key, val);
+
+
+返回名称为key的zset（元素已按score从小到大排序）中val元素的rank（即index，从0开始），若没有val元素，返回&ldquo;null&rdquo;。zRevRank 是从大到小排序
+zIncrBy
+1$redis->zIncrBy('key', increment, 'member');
+
+
+如果在名称为key的zset中已经存在元素member，则该元素的score增加increment；否则向集合中添加该元素，其score的值为increment
+zUnion/zInter
+参数
+keyOutputarrayZSetKeysarrayWeightsaggregateFunction Either "SUM", "MIN", or "MAX": defines the behaviour to use on duplicate entries during the zUnion.对N个zset求并集和交集，并将最后的集合保存在dstkeyN中。对于集合中每一个元素的score，在进行AGGREGATE运算前，都要乘以对于的WEIGHT参数。如果没有提供WEIGHT，默认为1。默认的AGGREGATE是SUM，即结果集合中元素的score是所有集合对应元素进行SUM运算的值，而MIN和MAX是指，结果集合中元素的score是所有集合对应元素中最小值和最大值。
+Hash相关操作
+hSet
+1$redis->hSet('h', 'key1', 'hello');
+
+
+向名称为h的hash中添加元素key1&mdash;>hello
+hGet
+1$redis->hGet('h', 'key1');
+
+
+返回名称为h的hash中key1对应的value（hello）
+hLen
+1$redis->hLen('h');
+
+
+返回名称为h的hash中元素个数
+hDel
+1$redis->hDel('h', 'key1');
+
+
+删除名称为h的hash中键为key1的域
+hKeys
+1$redis->hKeys('h');
+
+
+返回名称为key的hash中所有键
+hVals
+1$redis->hVals('h')
+
+
+返回名称为h的hash中所有键对应的value
+hGetAll
+1$redis->hGetAll('h');
+
+
+返回名称为h的hash中所有的键（field）及其对应的value
+hExists
+1$redis->hExists('h', 'a');
+
+
+名称为h的hash中是否存在键名字为a的域
+hIncrBy
+1$redis->hIncrBy('h', 'x', 2);
+
+
+将名称为h的hash中x的value增加2
+hMset
+1$redis->hMset('user:1', array('name' => 'Joe', 'salary' => 2000));
+
+
+向名称为key的hash中批量添加元素
+hMGet
+1$redis->hmGet('h', array('field1', 'field2'));
+
+
+返回名称为h的hash中field1,field2对应的value
+redis 相关操作
+flushDB
+清空当前数据库
+flushAll
+清空所有数据库
+randomKey
+1$key = $redis->randomKey();
+
+
+随机返回key空间的一个key
+select
+选择一个数据库
+move
+1$redis->select(0); // switch to DB 0
+2$redis->set('x', '42'); // write 42 to x
+3$redis->move('x', 1); // move to DB 1
+4$redis->select(1); // switch to DB 1
+5$redis->get('x'); // will return 42
+
+
+转移一个key到另外一个数据库
+rename, renameKey
+1$redis->set('x', '42');
+2$redis->rename('x', 'y');
+3$redis->get('y'); // &rarr; 42
+4$redis->get('x'); // &rarr; `FALSE`
+
+
+给key重命名
+renameNx
+与remane类似，但是，如果重新命名的名字已经存在，不会替换成功
+setTimeout, expire
+1$redis->setTimeout('x', 3);
+
+
+设定一个key的活动时间（s）
+expireAt
+1$redis->expireAt('x', time() + 3);
+
+
+key存活到一个unix时间戳时间
+keys, getKeys
+1$keyWithUserPrefix = $redis->keys('user*');
+
+
+返回满足给定pattern的所有key
+dbSize
+1$count = $redis->dbSize();
+
+
+查看现在数据库有多少key
+auth
+1$redis->auth('foobared');
+
+
+密码认证
+bgrewriteaof
+1$redis->bgrewriteaof();
+
+
+使用aof来进行数据库持久化
+slaveof
+1$redis->slaveof('10.0.1.7', 6379);
+
+
+选择从服务器
+save
+将数据同步保存到磁盘
+bgsave
+将数据异步保存到磁盘
+lastSave
+返回上次成功将数据保存到磁盘的Unix时戳
+info
+返回redis的版本信息等详情
+type
+返回key的类型值
+string: Redis::REDIS_STRING
+set: Redis::REDIS_SET
+list: Redis::REDIS_LIST
+zset: Redis::REDIS_ZSET
+hash: Redis::REDIS_HASH
+other: Redis::REDIS_NOT_FOUND
+ 
+练习内容：
+$redis = new Redis();
+//var_dump($redis);
+$redis->connect('127.0.0.1',6379);
+//$redis->set('test', "hello world!");
+//echo $redis->get("test");
+ 
+ 
+///////////////////////////////////////////////////////////
+//setex带生存时间的写入值
+//$redis->setex("test",60,"value");
+//echo $redis->get("test");
+//测试成功，过60秒生存期，值失效
+ 
+ 
+ 
+//setnx判断是否重复的，写入值
+/*$redis->delete('test');
+$_return = $redis->setnx('test','value');
+var_dump($_return);
+echo "<BR><BR>";
+$return = $redis->setnx('test','value');
+var_dump($return);*/
+ 
+ 
+ 
+//delete 删除指定key的值
+//返回已经删除key的个数(长整数)
+/*$redis->set('test','value1');
+$redis->set('test1','value2');
+$return = $redis->delete(array("test","test1"));
+//返回被删除数值的数量
+var_dump($return);*/
+ 
+ 
+//ttl 得到一个key的生存时间
+//$redis->setex("key1", 300, "val1");
+//$ttl = $redis->ttl('key1');
+//echo $ttl;
+ 
+ 
+//persist
+//移除生存时间到期的key
+//如果key到期true如果不到期false
+//$_result = $redis->persist("key1");
+//var_dump($_result);
+ 
+ 
+//mset(1.1以上可以用)
+//同时给多个key赋值
+/*$_result = $redis->mset(array('key1'=>'value1', 'key2'=>'value2'));
+var_dump($_result);
+$key1 = $redis->get('key1');
+echo $key1;*/
+ 
+ 
+//exists
+//判断key是否存在，存在true不存在false
+//$_result = $redis->exists('key1');
+//var_dump($_result);
+ 
+ 
+//incr, incrBy
+//key中的值进行自增1, 如果值写的了第二个参数，自增第二个参数值的值
+/*$redis->set('key3', 10);
+$key3 = $redis->get('key3');
+echo "key=={$key3}<BR>";
+ 
+$redis->incr('key3');
+$key3 = $redis->get('key3');
+echo "key=={$key3}<BR>";
+ 
+$redis->incr('key3', 10);
+$key3 = $redis->get('key3');
+echo "key=={$key3}<BR>";*/
+ 
+ 
+//decr, decrBy 做感法，使用方法同incr
+ 
+ 
+//getMultiple
+//传参 由key组成的数组
+//返回参数 如果key存在返回value, 不存在返回false
+/*$redis->set('key1','value1');
+$redis->set('key2','value2');
+$redis->set('key3','value3');
+$result = $redis->getMultiple(array('key1','key2','key4'));
+var_dump($result);
+ 
+$result = $redis->lRem('key1','A',2); //这句不知道是什么意思
+$result = $redis->get('key1');
+var_dump($result);*/
+ 
+ 
+//List相关操作
+//lPush  在名称为key的list左边（头）添加一个值为value的元素
+//$redis->delete('key1');
+//$result = $redis->lPush('key1','value0');
+//var_dump($result);
+ 
+//rPush 的名称为key的list右边(尾)添加一个值为value的元素
+//$result = $redis->rPush('key1','value1');
+//var_dump($result);
+ 
+ 
+//lPushx/rPushx 在名称为key的list左边(头)/右边(尾)添加一个值为value的元素
+//如果value已经存在，则不添加
+//$result = $redis->lPushx('key1','value1'); //好像不起作用
+//var_dump($result);
+ 
+ 
+ 
+//lPop/rPop 输出名称为key的list左/右起的第一个元素，删除该元素
+//$val = $redis->lPop('key1');
+//echo $val;
+ 
+ 
+//blPop/brPop
+//lpop命令的block版本，即当timeout为0时，若遇到名称为key i的list不存在或该list为空，则命令结束，
+//如果timeout>0,则遇到上述情况时，等持timeout秒，如果问题没有解决，则对key+1开始的list执行pop操作
+//没有测试
+ 
+ 
+//lSize 返回名称为key的list有多少个元素
+//$size = $redis->lSize('key1');
+//echo "<BR>size:".$size."<BR>";
+ 
+ 
+//lIndex, lGet 返回名称为key的list中的index位置元素
+//$redis->lPush('key1','value100');
+//$val = $redis->lGet('key1',3);
+//echo $val;
+ 
+ 
+//lSet 给名称为key的list中index位置的元素赋值为value
+//$redis->lSet('key1',0,'valuenew');
+//echo $val = $redis->lIndex('key1',0);
+ 
+ 
+//lRange, lGetRange 返回名称为key的list中start到end之间的元素(end 为-1, 返回所有)
+//$list = $redis->lRange('key1',0, -1);
+//var_dump($list);
+ 
+ 
+//lTrim/ listTrim 截取名称为key的list, 保留start到end之间的元素
+//$list = $redis->lTrim('key1',0,3); //这里的截取是直接删除的意思
+//var_dump($list);
+ 
+ 
+//lRem, lRemove
+//删除count个名称为key的list中值为value元素，count为0，删除所有值为value的元素，count<0从头到尾删除count个值为value的元素
+//count<0从尾到头删除count个值为value的元素
+//$_result = $redis->lRem('key1','value100',1);
+//var_dump($_result);
+ 
+ 
+//lInsert 在名称为key的list中，找到值为pivot和value, 并根据参数Redis::BEFORE | Redis::AFTER,
+//来确定，newvalue是放在pivot的前面，或者后面，如果key不存在，不会插入，如果piovt不存在 return -1
+//$result = $redis->lInsert('key1',Redis::AFTER, 'value100', 'X');
+//$result = $redis->lInsert('key1',Redis::BEFORE, 'value1','value_new');
+//var_dump($result);
+ 
+ 
+//rpop/lpush 返回并删除名称为scrkey的list的尾元素，并将该元素添加到名称为dstkey的list的头部
+/*$redis->delete('x');
+$redis->delete('y');
+$redis->lPush('x','abc');
+$redis->lPush('x','def');
+ 
+$redis->lPush('y', '123');
+$redis->lPush('y', '456');*/
+ 
+/*$return = $redis->rpoplpush('x','y');
+var_dump($return);
+ 
+ 
+$list = $redis->lRange('x',0, -1);
+var_dump($list);
+echo "<BR>";
+ 
+$list = $redis->lRange('y',0, -1);
+var_dump($list);
+echo "<BR>";*/
+ 
+/*$list = $redis->lRange('key1',0, -1);
+var_dump($list);
+echo "<BR><BR>";
+ 
+$size = $redis->lSize('key1');
+echo "<BR>size:".$size."<BR>";
+*/
+ 
+ 
+ 
+ 
+ 
+ 
+//SET相关操作
+//sAdd 向名称为key的set中添加元素value,如果value存在，不写入 return false
+//$return = $redis->sAdd('key10','value10');
+//var_dump($return);
+ 
+ 
+//sRem, sRemove 删除名称为key的set中的元素value
+//$redis->sAdd('key10','value10');
+//$redis->sAdd('key10','value11');
+//$redis->sAdd('key10','value12');
+//$redis->sRem('key10','value10');
+ 
+ 
+//sMove 将value元素从名称为srckey的集合移到名称为dstkey的集合
+//$redis->sMove(seckey, dstkey, value)
+ 
+ 
+//sIsMember, sContains 名称为key的集合中查找是否有value元素,有true没有false
+//$redis->sIsMember(key, value);
+ 
+ 
+//sCard, sSize 返回名称为key的set的元素个数
+//$redis->sIsMember(key, value);
+//$result = $redis->sPop('key10');
+//var_dump($result);
+ 
+ 
+//sRandMember 随机返回名称为key的set中一个元素,不删除
+ 
+ 
+ 
+///////////////////////////////////////////////
+//sInter 求交集
+//sInterStore 求交集并将交集保存到output的集合
+//也就是求出两个set中相同的value值的信息
+/*$redis->sAdd('key10','value10');
+$redis->sAdd('key10','value11');
+ 
+$redis->sAdd('key11', 'value10');
+$redis->sAdd('key11', 'value11');
+ 
+ 
+$result = $redis->sInterStore('output','key10','key11');
+var_dump($result);*/
+ 
+ 
+//sUnion 求并集
+//$redis->sUnion('s0', 's1', 's2'); //应该是key和value值一样的
+ 
+ 
+ 
+//sUnionStore 求并集并将并集保存到output的集合
+//$redis->sUnionStore('output', 'key1','key2');
+ 
+ 
+//sDiff 求差集并将差集保存到output的集合
+ 
+ 
+//sMembers, sGetMembers
+//返回名称为key的set所所有值
+ 
+ 
+//sort 排序， 分页等
+/*
+'by' => 'some_pattern_*'
+'limit' => array(0, 1)
+'get' => 'some_other_pattern_*' or an array of patterns
+'sort' => 'asc' or 'desc'
+'alpha' => TRUE
+'store' => 'external-key'
+*/
+ 
+ 
+/*$redis->delete('s');
+$redis->sadd('s',5);
+$redis->sadd('s',4);
+$redis->sadd('s',3);
+$redis->sadd('s',2);
+$redis->sadd('s',1);
+var_dump($redis->sort('s'));
+echo "<BR>";
+var_dump($redis->sort('s', array('sort'=>'desc')));
+echo "<BR>";
+var_dump($redis->sort('s', array('sort'=>'desc', 'store'=>'out')));
+*/
+ 
+ 
+ 
+//String相关操作
+//getset 返回原来key中的值，并将value写入到key中
+/*$redis->set('x', '42');
+$exValue = $redis->getSet('x', 'l0l');
+$newVlaue = $redis->get('x');
+echo $newVlaue."<BR><BR>";*/
+ 
+//append string, 名称为key的string的值在后面加上value
+/*$redis->set('key','value1');
+$redis->append('key','value2');
+$value = $redis->get('key');
+echo $value;*/
+ 
+ 
+//getRange() 返回名称为key的string中start到end之间的字符串
+//$val = $redis->getRange('key', 2, 5);
+//echo $val;
+ 
+ 
+//setRange() 改变key的string中start到end之间的字符为value
+//$redis->set('key', 'Hello world');
+//$redis->setRange('key', 6, 'reids'); //6是指最后6个值
+//$val = $redis->get('key');
+//echo $val;
+ 
+ 
+//strlen 得到key的string的长度
+//$len = $redis->strlen('key');
+//echo $len;
+ 
+ 
+//getBit / setBit 返回二进制信息
+//$bit = $redis->getBit('key'); //无此方法
+//echo $bit;
+ 
+ 
+ 
+ 
+//zset(sorted set)相关操作
+ 
+//zAdd(kye score, member); 向名称为key的zset中添加元素member, 
+//score用于排序，如果该元素已经存在，则根据score更新该元素的顺序
+/*$redis->delete('key');
+$redis->zAdd('key',1,'val1');
+$redis->zAdd('key',0,'val0');
+$redis->zAdd('key',5,'val5');
+$list = $redis->zRange('key',0, -1);
+var_dump($list);*/
+ 
+//zRange(key, start, end, withscores)
+//返回名称为key的zset(元素已按score从小到大排序)中的index从start到end的所有元素
+ 
+ 
+//zDelete, zRem(key, member)
+//删除名称为key的zset中的元素member
+ 
+ 
+ 
+ 
+//sPop 随机返回并删除名称为key的set中一个元素
+ 
+ 
+ 
+//$list = $redis->sSize('output');
+//var_dump($list);
+
+
+
+
+
+
+
+Generated by Bo-blog 2.1.1 Release

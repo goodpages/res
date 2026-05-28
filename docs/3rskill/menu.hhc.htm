@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>菜单</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', 'Microsoft YaHei', sans-serif;
+            padding: 0px;
+            background: white;
+        }
+
+        .tree-container {
+            padding: 4px 6px;
+        }
+
+        .tree {
+            list-style: none;
+            padding-left: 10px;
+        }
+
+        .tree > li {
+            margin: 2px 0;
+        }
+
+        .tree ul {
+            list-style: none;
+            padding-left: 25px;
+            display: none;
+            border-left: 1px dashed #e0e0e0;
+            margin-left: 8px;
+        }
+
+        .tree ul.expanded {
+            display: block;
+        }
+
+        .tree-node {
+            display: flex;
+            align-items: center;
+            padding: 4px 6px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .tree-node:hover {
+            background: #f0f4ff;
+        }
+
+        .tree-node.active {
+            background: #e3f2fd;
+        }
+
+        .toggle-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            color: #999;
+            font-size: 12px;
+            transition: transform 0.2s ease;
+        }
+
+        .toggle-icon.expanded {
+            transform: rotate(90deg);
+            color: #667eea;
+        }
+
+        .toggle-icon.leaf {
+            width: 20px;
+            margin-right: 8px;
+        }
+
+        .node-icon {
+            margin-right: 10px;
+            font-size: 16px;
+            color: #667eea;
+        }
+
+        .node-icon.folder {
+            color: #ffc107;
+        }
+
+        .node-icon.folder-open {
+            color: #ff9800;
+        }
+
+        .node-icon.leaf {
+            color: #4caf50;
+        }
+
+        .node-text {
+            flex: 1;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .node-text:hover {
+            color: #667eea;
+        }
+
+        .node-text.has-url {
+            text-decoration: underline;
+            text-decoration-color: transparent;
+            transition: text-decoration-color 0.2s ease;
+        }
+
+        .node-text.has-url:hover {
+            text-decoration-color: #667eea;
+        }
+
+        /* 加载动画 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tree ul {
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* 滚动条样式 */
+        .tree-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .tree-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .tree-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="tree-container">
+        <ul id="treeRoot" class="tree"></ul>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // 树形数据结构
+            const treeData = JSON.parse(`[
+    {
+        "id": 1,
+        "name": "dnd3R法术大全",
+        "icon": "fa-folder",
+        "leafIcon": "fa-file-alt",
+        "children": [
+            {
+                "id": 12,
+                "name": "首页.htm",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "首页.htm"
+            },
+            {
+                "id": 12,
+                "name": "职业法术列表",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 122,
+                        "name": "BoED扩展--圣洁法术.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "职业法术列表/BoED扩展--圣洁法术.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "CA扩展--巫觋法术.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "职业法术列表/CA扩展--巫觋法术.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "CA扩展--战法师法术.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "职业法术列表/CA扩展--战法师法术.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "CW扩展--魔剑客法术.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "职业法术列表/CW扩展--魔剑客法术.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "PHB2扩展--暮刃法术.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "职业法术列表/PHB2扩展--暮刃法术.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "PHB2扩展--欺愚者法术.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "职业法术列表/PHB2扩展--欺愚者法术.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "吟游诗人法术.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "职业法术列表/吟游诗人法术.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "圣武士神术.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "职业法术列表/圣武士神术.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "巡林客神术.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "职业法术列表/巡林客神术.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "德鲁伊神术.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "职业法术列表/德鲁伊神术.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "法师术士法术.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "职业法术列表/法师术士法术.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "牧师神术.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "职业法术列表/牧师神术.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "进阶职业列表",
+                        "icon": "fa-folder",
+                        "leafIcon": "fa-file-alt",
+                        "children": [
+                            {
+                                "id": 1222,
+                                "name": "刺客法术.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/进阶职业列表/刺客法术.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "暗黑卫士法术.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/进阶职业列表/暗黑卫士法术.htm"
+                            }
+                        ]
+                    },
+                    {
+                        "id": 122,
+                        "name": "领域法术",
+                        "icon": "fa-folder",
+                        "leafIcon": "fa-file-alt",
+                        "children": [
+                            {
+                                "id": 1222,
+                                "name": "BoED--信使领域herald domain.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/BoED--信使领域herald%20domain.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "BoED--喜乐领域joy domain.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/BoED--喜乐领域joy%20domain.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "BoED--团体领域community domain.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/BoED--团体领域community%20domain.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "BoED--天界领域celestial domain.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/BoED--天界领域celestial%20domain.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "BoED--忍耐领域endurance domain.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/BoED--忍耐领域endurance%20domain.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "BoED--欢愉领域pleasure domain.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/BoED--欢愉领域pleasure%20domain.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "BoED--神谴领域wrath domain.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/BoED--神谴领域wrath%20domain.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "BoED--精类领域fey domain.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/BoED--精类领域fey%20domain.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "BoED--荣耀领域glory domain.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/BoED--荣耀领域glory%20domain.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "CW--专制领域(Tyranny Domain).htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/CW--专制领域(Tyranny%20Domain).htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "CW--勇气领域(Courage Domain).htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/CW--勇气领域(Courage%20Domain).htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "CW--命运领域(Fate Domain).htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/CW--命运领域(Fate%20Domain).htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "CW--计划领域(Planning Domain).htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/CW--计划领域(Planning%20Domain).htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "CW--贵族领域(Nobility Domain).htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/CW--贵族领域(Nobility%20Domain).htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "Dra--财富领域（WEALTH DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/Dra--财富领域（WEALTH%20DOMAIN）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "Dra--贪婪领域（GREED DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/Dra--贪婪领域（GREED%20DOMAIN）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "Dra--进阶支配领域（DOMINATION PRESTIGE DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/Dra--进阶支配领域（DOMINATION%20PRESTIGE%20DOMAIN）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "Dra--进阶荣耀领域（GLORY PRESTIGE DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/Dra--进阶荣耀领域（GLORY%20PRESTIGE%20DOMAIN）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "Dra--龙领域（Dragon Domain）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/Dra--龙领域（Dragon%20Domain）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "LM--不死领域（Undeath Domain）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/LM--不死领域（Undeath%20Domain）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "LM--控死领域（Deathbound Domain）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/LM--控死领域（Deathbound%20Domain）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "LM--饥饿领域（Hunger Domain）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/LM--饥饿领域（Hunger%20Domain）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "LoM--力场领域（FOECR DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/LoM--力场领域（FOECR%20DOMAIN）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "LoM--心灵领域（MIND DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/LoM--心灵领域（MIND%20DOMAIN）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "LoM--憎恨领域（HATRED DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/LoM--憎恨领域（HATRED%20DOMAIN）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "LoM--疯狂领域（MADNESS DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/LoM--疯狂领域（MADNESS%20DOMAIN）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "LoM--秽黯领域（VILE DARKNESS DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/LoM--秽黯领域（VILE%20DARKNESS%20DOMAIN）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "LoM--腐化领域（CORRUPTION DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/LoM--腐化领域（CORRUPTION%20DOMAIN）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "RoD--城市领域(City Domain).htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/RoD--城市领域(City%20Domain).htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "RoD--宿命领域(Destiny Domain).htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/RoD--宿命领域(Destiny%20Domain).htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "RoW--天空领域（Sky Domain）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/RoW--天空领域（Sky%20Domain）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "保护领域（PROTECTION DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/保护领域（PROTECTION%20DOMAIN）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "力量领域（STRENGTH DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/力量领域（STRENGTH%20DOMAIN）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "动物领域（ANIMAL DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/动物领域（ANIMAL%20DOMAIN）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "医疗领域（HEALING DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/医疗领域（HEALING%20DOMAIN）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "善良领域（GOOD DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/善良领域（GOOD%20DOMAIN）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "土领域（EARTH DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/土领域（EARTH%20DOMAIN）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "太阳领域（SUN DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/太阳领域（SUN%20DOMAIN）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "战争领域（WAR DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/战争领域（WAR%20DOMAIN）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "旅行领域（TRAVEL DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/旅行领域（TRAVEL%20DOMAIN）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "机运领域（LUCK DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/机运领域（LUCK%20DOMAIN）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "植物领域（PLANT DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/植物领域（PLANT%20DOMAIN）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "死亡领域（DEATH DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/死亡领域（DEATH%20DOMAIN）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "气领域（AIR DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/气领域（AIR%20DOMAIN）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "水领域（WATER DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/水领域（WATER%20DOMAIN）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "混乱领域（CHAOS DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/混乱领域（CHAOS%20DOMAIN）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "火领域（FIRE DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/火领域（FIRE%20DOMAIN）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "知识领域（KNOWLEDGE DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/知识领域（KNOWLEDGE%20DOMAIN）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "破坏领域（DESTRUCTION DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/破坏领域（DESTRUCTION%20DOMAIN）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "秩序领域（LAW DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/秩序领域（LAW%20DOMAIN）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "诡术领域（TRICKERY DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/诡术领域（TRICKERY%20DOMAIN）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "邪恶领域（EVIL DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/邪恶领域（EVIL%20DOMAIN）.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "魔法领域（MAGIC DOMAIN）.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "职业法术列表/领域法术/魔法领域（MAGIC%20DOMAIN）.htm"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 12,
+                "name": "法术字母索引",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 122,
+                        "name": "A.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "法术字母索引/A.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "B.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "法术字母索引/B.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "C.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "法术字母索引/C.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "D.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "法术字母索引/D.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "E.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "法术字母索引/E.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "F.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "法术字母索引/F.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "G.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "法术字母索引/G.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "H.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "法术字母索引/H.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "I.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "法术字母索引/I.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "J.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "法术字母索引/J.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "K.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "法术字母索引/K.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "L.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "法术字母索引/L.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "M.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "法术字母索引/M.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "N.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "法术字母索引/N.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "O.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "法术字母索引/O.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "P.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "法术字母索引/P.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "Q.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "法术字母索引/Q.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "R.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "法术字母索引/R.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "S.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "法术字母索引/S.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "T.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "法术字母索引/T.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "U.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "法术字母索引/U.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "V.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "法术字母索引/V.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "W.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "法术字母索引/W.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "X.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "法术字母索引/X.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "Y.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "法术字母索引/Y.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "Z.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "法术字母索引/Z.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "关于降咒-Bestowed Curese.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "法术字母索引/关于降咒-Bestowed%20Curese.htm"
+                    },
+                    {
+                        "id": 122,
+                        "name": "召唤列表-summon.htm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "法术字母索引/召唤列表-summon.htm"
+                    }
+                ]
+            },
+            {
+                "id": 12,
+                "name": "各种其他类法书及超能",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 122,
+                        "name": "暗影秘术",
+                        "icon": "fa-folder",
+                        "leafIcon": "fa-file-alt",
+                        "children": [
+                            {
+                                "id": 1222,
+                                "name": "暗影秘术概述.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "各种其他类法书及超能/暗影秘术/暗影秘术概述.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "暗影秘术的非官方修改.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "各种其他类法书及超能/暗影秘术/暗影秘术的非官方修改.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "暗影秘术详述",
+                                "icon": "fa-folder",
+                                "leafIcon": "fa-file-alt",
+                                "children": [
+                                    {
+                                        "id": 12222,
+                                        "name": "暗影秘术A-C.htm",
+                                        "icon": "fa-file-alt",
+                                        "isLeaf": true,
+                                        "url": "各种其他类法书及超能/暗影秘术/暗影秘术详述/暗影秘术A-C.htm"
+                                    },
+                                    {
+                                        "id": 12222,
+                                        "name": "暗影秘术D-K.htm",
+                                        "icon": "fa-file-alt",
+                                        "isLeaf": true,
+                                        "url": "各种其他类法书及超能/暗影秘术/暗影秘术详述/暗影秘术D-K.htm"
+                                    },
+                                    {
+                                        "id": 12222,
+                                        "name": "暗影秘术L-R.htm",
+                                        "icon": "fa-file-alt",
+                                        "isLeaf": true,
+                                        "url": "各种其他类法书及超能/暗影秘术/暗影秘术详述/暗影秘术L-R.htm"
+                                    },
+                                    {
+                                        "id": 12222,
+                                        "name": "暗影秘术S.htm",
+                                        "icon": "fa-file-alt",
+                                        "isLeaf": true,
+                                        "url": "各种其他类法书及超能/暗影秘术/暗影秘术详述/暗影秘术S.htm"
+                                    },
+                                    {
+                                        "id": 12222,
+                                        "name": "暗影秘术T-W(完结）.htm",
+                                        "icon": "fa-file-alt",
+                                        "isLeaf": true,
+                                        "url": "各种其他类法书及超能/暗影秘术/暗影秘术详述/暗影秘术T-W(完结）.htm"
+                                    },
+                                    {
+                                        "id": 12222,
+                                        "name": "暗影秘术T-W.htm",
+                                        "icon": "fa-file-alt",
+                                        "isLeaf": true,
+                                        "url": "各种其他类法书及超能/暗影秘术/暗影秘术详述/暗影秘术T-W.htm"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": 122,
+                        "name": "灵契",
+                        "icon": "fa-folder",
+                        "leafIcon": "fa-file-alt",
+                        "children": [
+                            {
+                                "id": 1222,
+                                "name": "契灵简表.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "各种其他类法书及超能/灵契/契灵简表.htm"
+                            }
+                        ]
+                    },
+                    {
+                        "id": 122,
+                        "name": "真言",
+                        "icon": "fa-folder",
+                        "leafIcon": "fa-file-alt",
+                        "children": [
+                            {
+                                "id": 1222,
+                                "name": "心智演化之语.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "各种其他类法书及超能/真言/心智演化之语.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "真言列表",
+                                "icon": "fa-folder",
+                                "leafIcon": "fa-file-alt",
+                                "children": [
+                                    {
+                                        "id": 12222,
+                                        "name": "世界词汇.htm",
+                                        "icon": "fa-file-alt",
+                                        "isLeaf": true,
+                                        "url": "各种其他类法书及超能/真言/真言列表/世界词汇.htm"
+                                    },
+                                    {
+                                        "id": 12222,
+                                        "name": "人名词汇.htm",
+                                        "icon": "fa-file-alt",
+                                        "isLeaf": true,
+                                        "url": "各种其他类法书及超能/真言/真言列表/人名词汇.htm"
+                                    },
+                                    {
+                                        "id": 12222,
+                                        "name": "地址词汇.htm",
+                                        "icon": "fa-file-alt",
+                                        "isLeaf": true,
+                                        "url": "各种其他类法书及超能/真言/真言列表/地址词汇.htm"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": 1222,
+                                "name": "真言详述.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "各种其他类法书及超能/真言/真言详述.htm"
+                            }
+                        ]
+                    },
+                    {
+                        "id": 122,
+                        "name": "邪术",
+                        "icon": "fa-folder",
+                        "leafIcon": "fa-file-alt",
+                        "children": [
+                            {
+                                "id": 1222,
+                                "name": "邪术列表.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "各种其他类法书及超能/邪术/邪术列表.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "邪术详述.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "各种其他类法书及超能/邪术/邪术详述.htm"
+                            }
+                        ]
+                    },
+                    {
+                        "id": 122,
+                        "name": "龙火邪术",
+                        "icon": "fa-folder",
+                        "leafIcon": "fa-file-alt",
+                        "children": [
+                            {
+                                "id": 1222,
+                                "name": "龙火邪术列表.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "各种其他类法书及超能/龙火邪术/龙火邪术列表.htm"
+                            },
+                            {
+                                "id": 1222,
+                                "name": "龙火邪术详述.htm",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "各种其他类法书及超能/龙火邪术/龙火邪术详述.htm"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]`);
+
+            // 构建树形结构
+            function buildTree(data, container) {
+                data.forEach(function(item) {
+                    const $li = $('<li>').appendTo(container);
+                    
+                    // 创建节点
+                    const $node = $('<div>').addClass('tree-node');
+                    
+                    // 展开/收起图标
+                    const $toggleIcon = $('<span>').addClass('toggle-icon');
+                    if (item.isLeaf || !item.children || item.children.length === 0) {
+                        $toggleIcon.addClass('leaf').html('<i class="fas fa-minus" style="opacity: 0;"></i>');
+                    } else {
+                        $toggleIcon.html('<i class="fas fa-chevron-right"></i>');
+                    }
+                    
+                    // 节点图标
+                    const $nodeIcon = $('<span>').addClass('node-icon');
+                    if (item.isLeaf || !item.children || item.children.length === 0) {
+                        const iconClass = item.icon || item.leafIcon || 'fa-file';
+                        $nodeIcon.addClass('leaf').html(`<i class="fas ${iconClass}"></i>`);
+                    } else {
+                        $nodeIcon.addClass('folder').html(`<i class="fas ${item.icon || 'fa-folder'}"></i>`);
+                    }
+                    
+                    // 如果叶子节点有URL，使用超链接方式
+                    if ((item.isLeaf || !item.children || item.children.length === 0) && item.url) {
+                        const $link = $('<a>')
+                            .attr('href', item.url)
+                            .attr('target', 'content')
+                            .addClass('node-text')
+                            .addClass('has-url')
+                            .text(item.name)
+                            .attr('title', '点击查看: ' + item.url);
+                        
+                        $node.append($toggleIcon, $nodeIcon, $link);
+                    } else {
+                        const $nodeText = $('<span>').addClass('node-text').text(item.name);
+                        $node.append($toggleIcon, $nodeIcon, $nodeText);
+                    }
+                    
+                    $li.append($node);
+                    
+                    // 如果有子节点，创建子列表
+                    if (!item.isLeaf && item.children && item.children.length > 0) {
+                        const $childList = $('<ul>').appendTo($li);
+                        buildTree(item.children, $childList);
+                        
+                        // 绑定点击事件
+                        $node.on('click', function(e) {
+                            e.stopPropagation();
+                            toggleNode($(this), $childList, $nodeIcon);
+                        });
+                    } else {
+                        // 叶子节点点击事件（仅用于选中效果，链接跳转由<a>标签自动处理）
+                        $node.on('click', function(e) {
+                            // 阻止事件冒泡
+                            e.stopPropagation();
+                            
+                            // 选中节点
+                            selectNode($(this));
+                            
+                            // 如果点击的是链接，让链接默认行为生效
+                            if ($(e.target).is('a') || $(e.target).parent().is('a')) {
+                                // 链接会自动跳转到iframe，无需额外处理
+                                // 隐藏空状态，显示iframe
+                                $('#emptyState').hide();
+                                $('#contentFrame').show();
+                            }
+                        });
+                    }
+                });
+            }
+
+            // 展开/收起节点
+            function toggleNode($node, $childList, $nodeIcon) {
+                const $toggleIcon = $node.find('.toggle-icon');
+                const isExpanded = $childList.hasClass('expanded');
+                
+                if (isExpanded) {
+                    $childList.removeClass('expanded');
+                    $toggleIcon.removeClass('expanded');
+                    $nodeIcon.removeClass('folder-open').addClass('folder');
+                } else {
+                    $childList.addClass('expanded');
+                    $toggleIcon.addClass('expanded');
+                    $nodeIcon.removeClass('folder').addClass('folder-open');
+                }
+                
+                selectNode($node);
+            }
+
+            // 选中节点
+            function selectNode($node) {
+                $('.tree-node').removeClass('active');
+                $node.addClass('active');
+                
+                const nodeName = $node.find('.node-text').text();
+                console.log('选中节点:', nodeName);
+            }
+
+            // 监听iframe加载完成
+            $('#contentFrame').on('load', function() {
+                console.log('iframe内容加载完成');
+            });
+
+            // 初始化树
+            buildTree(treeData, $('#treeRoot'));
+            
+            // 默认展开第一层
+            // $('#treeRoot > li > ul').addClass('expanded');
+            // $('#treeRoot > li > .tree-node .toggle-icon').addClass('expanded');
+            // $('#treeRoot > li > .tree-node .node-icon').removeClass('folder').addClass('folder-open');
+        });
+    </script>
+</body>
+</html>

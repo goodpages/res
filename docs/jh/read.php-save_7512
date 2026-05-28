@@ -1,0 +1,400 @@
+﻿标题：初探nodejs学习笔记- 如何使用nodejs接收get/post 数据
+出处：流浪的龙－个人知识管理
+时间：Sat, 27 Aug 2016 01:31:49 +0000
+作者：renjihe1988
+地址：http://i.renjihe.com/blog/read.php?7512
+
+内容：
+前言：
+
+其实很早就对nodejs感兴趣没时间研究，最近做web前端感觉时间还充裕，来看看曾经买的图灵的nodejs书，也记录一下学习学习。防工具盗链抓取 freddon所有 
+
+其实基于google v8引擎而上的nodejs，服务端写javascript还是优点多多的，尤其是对于我这样一个一直喜欢javascript的人来说真是haliluya！hayaya！ nodejs是单进程（严格意义来讲是无线程概念的）、采取事件轮询、回调等等来达到&lsquo;多任务&rsquo;的效果，好了，我简单就说这么多。上Code！
+
+Server服务端 
+
+为了好代码好看、测试好操作，get、post请求方式全在一个js文件里面写了
+
+说明部分也全写在代码里了，也养成一个好习惯
+
+app.js
+
+/*导入需要用到的nodejs库*/
+var http = require('http');
+var url = require('url');
+var qs = require('querystring');
+
+/**
+ * 简单配置个路由 用来检测无用的请求 仅符合路由规则的才能被接受
+ * 自己可以按照需要定义
+ * @type {{/: string, favicon: string, user: string, login: string, biz: string}}
+ */
+var route = {
+    '/': "/",
+    'favicon': '/favicon.ico',
+    'user': '/user',
+    'login': '/user/login',
+    'biz': '/biz'
+};
+
+/**
+ * 上述路由的简单判断规则
+ * @param reqPath
+ * @returns {boolean}
+ */
+var isValid = function (reqPath) {
+    for (var key in route) {
+        if (route[key] == reqPath) {
+            return true;
+        }
+    }
+    return false;
+};
+
+/**
+ * 照样输出json格式的数据
+ * @param query
+ * @param res
+ */
+var writeOut = function (query, res) {
+    res.write(JSON.stringify(query));
+    res.end();
+}
+
+/**
+ * 启用http创建一个端口为8124的服务
+ * createServer内侧为回调函数：
+ * ...可看作java servlet中的 onService(HttpRequest,HttpResponse)
+ * ...或者（doGet、doPost）
+ */
+http.createServer(function (req, res) {
+
+    if (!isValid(url.parse(req.url).pathname)) {
+        res.writeHead(404, {'Content-Type': 'text/plain;charset=utf-8'});
+        res.write("{'errcode':404,'errmsg':'404 页面不见啦'}");
+        res.end();
+    } else {
+        res.writeHead(200, {'Content-Type': 'text/plain;charset=utf-8'});
+        if (req.method.toUpperCase() == 'POST') {
+            var postData = "";
+            /**
+             * 因为post方式的数据不太一样可能很庞大复杂，
+             * 所以要添加监听来获取传递的数据
+             * 也可写作 req.on("data",function(data){});
+             */
+            req.addListener("data", function (data) {
+                postData += data;
+            });
+            /**
+             * 这个是如果数据读取完毕就会执行的监听方法
+             */
+            req.addListener("end", function () {
+                var query = qs.parse(postData);
+                writeOut(query, res);
+            });
+        }
+        else if (req.method.toUpperCase() == 'GET') {
+            /**
+             * 也可使用var query=qs.parse(url.parse(req.url).query);
+             * 区别就是url.parse的arguments[1]为true：
+             * ...也能达到&lsquo;querystring库&rsquo;的解析效果，而且不使用querystring
+             */
+            var query = url.parse(req.url, true).query;
+            writeOut(query, res);
+        } else {
+            //head put delete options etc.
+        }
+    }
+
+}).listen(8124, function () {
+    console.log("listen on port 8124");
+});
+
+
+Client 端
+
+其实只要能发请求就行了 ，有在线的post、get请求工具（前提是nodejs程序要上传到自己的服务器）也有可以下载的postman等等，当然也可以手动写一个html的form表单提交不就好了吗 防工具盗链抓取 freddon所有 
+
+如果服务端在自己本地，而且端口用上面所说的8124，so：
+
+
+
+使用HTML Form提交
+
+先上个常规的
+
+html文件如下
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<form method="post" action="http://127.0.0.1:8124/biz" >
+    <input name="name" type="text" value="freddon" />
+    <input name="domain" type="text" value="http://www.sagosoft.com/"/>
+    <input type="submit" value="以POST提交" />
+</form>
+
+
+<form method="get" action="http://127.0.0.1:8124/biz" >
+    <input name="name" type="text" value="freddon" />
+    <input name="domain" type="text" value="http://www.sagosoft.com/"/>
+    <input type="submit" value="以GET提交" />
+</form>
+
+</body>
+</html>
+
+
+得到的响应应该为：{"name":"freddon","domain":"http://www.sagosoft.com/"}
+
+使用Nodejs请求
+
+接下来，既然是使用Nodejs，那肯定有不用浏览器的办法，就是使用js来请求并在控制台打印。[可使用webstorm、intellij idea、命令行等环境]
+
+client.js
+
+var http = require("http");
+var qs = require('querystring');
+
+var postData = {"name": "freddon", "domain": "http://www.sagosoft.com/"};
+var outData=qs.stringify(postData);
+var options = {
+    host: '127.0.0.1',
+    port: 8124,
+    path: '/biz',
+    //path:'/biz?name=freddon&domain='+encodeURIComponent("http://www.sagosoft.com/"),
+    /**
+     * 如果改为get，上述的postdata需要自己拆成key＝value格式拼接在path之后
+     * 如 '/biz?name=freddon&domain='+encodeURIComponent("http://www.sagosoft.com/")
+     */
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        //只有post时，这个才有用
+        'Content-Length': outData.length
+
+    }
+};
+
+var requestCallback = function (response) {
+    response.setEncoding('utf-8');
+    console.log("状态码 %d \nheaders:\n %s \n当前的请求方式为【%s】请求",response.statusCode,
+        JSON.stringify(response.headers),options.method);
+    var receiveData = "";
+    response.on('data', function (chunk) {
+        receiveData += chunk;
+    }).on('end', function () {
+        //打印
+        console.log("\n从" + options.host + "获得的数据为：" + receiveData);
+    });
+
+};
+
+var req = http.request(options, requestCallback).on('error',function(e){
+
+    console.log(e.message);
+});
+req.write(outData);//当然如果是get请求 这个写了也没用
+req.end();
+运行结果 如下图：
+
+
+
+因为绝大数网络请求都是get请求，所以官方单独对get请求做了个简化版
+
+get.js
+
+var http = require("http");
+
+var urlPath='http://127.0.0.1:8124/biz?' +
+    'name=freddon&domain='+encodeURIComponent("http://www.sagosoft.com/");
+http.get(urlPath, function(response) {
+    response.setEncoding('utf-8');
+    console.log("状态码 %d \nheaders:\n %s \n当前的请求方式为【GET】请求",response.statusCode,
+        JSON.stringify(response.headers));
+    var receiveData = "";
+    response.on('data', function (chunk) {
+        receiveData += chunk;
+    }).on('end', function () {
+        //打印
+        console.log("\n获得的数据为：" + receiveData);
+    });
+
+}).on('error', function(e) {
+    console.log(e.message);
+});
+运行结果我就不截图了，跟上面的get请求结果相似。
+
+挺简单吧。ok，就到这里了。防工具盗链抓取 freddon所有 
+
+
+
+附加
+
+接下来加点简单的Auth验证,因为这个对于生产环境蛮重要的，一般来说都是md5(id、密钥、时间戳偏移)、id、时间戳 组合生成的base64或者其他格式，这里简单提一下，就一个字符串base64完事
+
+app.js
+
+/*导入需要用到的nodejs库*/
+var http = require('http');
+var url = require('url');
+var qs = require('querystring');
+
+/**
+ * 简单配置个路由 用来检测无用的请求 仅符合路由规则的才能被接受
+ * 自己可以按照需要定义
+ * @type {{/: string, favicon: string, user: string, login: string, biz: string}}
+ */
+var route = {
+    '/': "/",
+    'favicon': '/favicon.ico',
+    'user': '/user',
+    'login': '/user/login',
+    'biz': '/biz'
+};
+
+/**
+ * 上述路由的简单判断规则
+ * @param reqPath
+ * @returns {boolean}
+ */
+var isValid = function (reqPath) {
+    for (var key in route) {
+        if (route[key] == reqPath) {
+            return true;
+        }
+    }
+    return false;
+};
+
+/**
+ * 照样输出json格式的数据
+ * 如果想输出key＝value&key2=value。。。 格式
+ * 请使用qs.stringify(query)
+ * @param query
+ * @param res
+ */
+var writeOut = function (query, res) {
+    res.write(JSON.stringify(query));
+    res.end();
+}
+
+/**
+ * 简单做个auth认证
+ * @returns {String}
+ */
+var getAuthChunk = function () {
+    return new Buffer('freddon').toString('base64');
+};
+
+/**
+ * 启用http创建一个端口为8124的服务
+ * createServer内侧为回调函数：
+ * ...可看作java servlet中的 onService(HttpRequest,HttpResponse)
+ * ...或者（doGet、doPost）
+ */
+http.createServer(function (req, res) {
+    var auth = req.headers['authorization'];
+    if (!isValid(url.parse(req.url).pathname)) {
+        res.writeHead(404, {'Content-Type': 'text/plain;charset=utf-8'});
+        res.write("{'errcode':404,'errmsg':'404 页面不见啦'}");
+        res.end();
+    } else {
+        res.writeHead(200, {'Content-Type': 'text/plain;charset=utf-8'});
+        if(auth != getAuthChunk()){
+            res.end("sorry,you haven't permission to Access this");
+            return;
+        }
+        if (req.method.toUpperCase() == 'POST') {
+            var postData = "";
+            /**
+             * 因为post方式的数据不太一样可能很庞大复杂，
+             * 所以要添加监听来获取传递的数据
+             * 也可写作 req.on("data",function(data){});
+             */
+            req.addListener("data", function (data) {
+                postData += data;
+            });
+            /**
+             * 这个是如果数据读取完毕就会执行的监听方法
+             */
+            req.addListener("end", function () {
+                var query = qs.parse(postData);
+                writeOut(query, res);
+            });
+        }
+        else if (req.method.toUpperCase() == 'GET') {
+            /**
+             * 也可使用var query=qs.parse(url.parse(req.url).query);
+             * 区别就是url.parse的arguments[1]为true：
+             * ...也能达到&lsquo;querystring库&rsquo;的解析效果，而且不使用querystring
+             */
+            var query = url.parse(req.url, true).query;
+            writeOut(query, res);
+        } else {
+            //head put delete options etc.
+        }
+    }
+
+}).listen(8124, function () {
+    console.log("listen on port 8124");
+});
+
+
+client.js
+
+var http = require("http");
+var qs = require('querystring');
+
+var postData = {"name": "freddon", "domain": "http://www.sagosoft.com/"};
+var outData=qs.stringify(postData);
+var options = {
+    host: '127.0.0.1',
+    port: 8124,
+    path: '/biz',
+    //path:'/biz?name=freddon&domain='+encodeURIComponent("http://www.sagosoft.com/"),
+    /**
+     * 如果改为get，上述的postdata需要自己拆成key＝value格式拼接在path之后
+     * 如 '/biz?name=freddon&domain='+encodeURIComponent("http://www.sagosoft.com/")
+     */
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        //只有post时，这个才有用
+        'Content-Length': outData.length
+
+    }
+};
+
+var requestCallback = function (response) {
+    response.setEncoding('utf-8');
+    console.log("状态码 %d \nheaders:\n %s \n当前的请求方式为【%s】请求",response.statusCode,
+        JSON.stringify(response.headers),options.method);
+    var receiveData = "";
+    response.on('data', function (chunk) {
+        receiveData += chunk;
+    }).on('end', function () {
+        //打印
+        console.log("\n从" + options.host + "获得的数据为：" + receiveData);
+    });
+
+};
+
+var req = http.request(options, requestCallback).on('error',function(e){
+
+    console.log(e.message);
+});
+var authStr=new Buffer('freddon').toString('base64');
+req.setHeader("Authorization",authStr);
+req.write(outData);//当然如果是get请求 这个写了也没用
+req.end();
+
+
+
+
+Generated by Bo-blog 2.1.1 Release

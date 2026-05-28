@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>404 error - 今日电子</title>
+<link rel="stylesheet" type="text/css" href="/css/public.css" />
+<link rel="stylesheet" type="text/css" href="/css/content.css" />
+<link rel="stylesheet" type="text/css" href="/css/[!--self.classid--].css" />
+</head>
+
+<body>
+<div id="header">
+	<div class="banner">
+    	<img src="/images/banner.jpg" />
+    </div>
+    <div class="nav">
+    	<ul>
+        	<li><a href="/" class="nav1">首 页</a></li>
+        	<li><a href="/industry_news" class="nav2">行业新闻</a></li>
+        	<li><a href="/new_product" class="nav3">新 品</a></li>
+        	<li><a href="/advances " class="nav10">技术前沿</a></li>
+        	<li><a href="/subject" class="nav4">专题特写</a></li>        	
+                <li><a href="/special" class="nav5">技术特刊</a></li>     
+        	<li><a href="/application_design" class="nav6">应用设计</a></li>
+        	<li><a href="/events" class="nav7">展会活动</a></li>
+        	<li><a href="/special_report" class="nav8">特别报道</a></li>
+        	<li><a href="http://bbs.21ic.com" class="nav9" target="_blank">论 坛</a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="main" style="min-height:400px; _height:400px;">
+	<div class="error_holder">
+    	<span>很抱歉，您访问的页面不存在，请点击</span><a href="/" class="error_btn"><img src="/images/404_btn.gif" /></a><span>返回首页</span>
+    </div>
+    <div class="break"></div>
+</div><div id="footer">
+	<div class="footer_links">
+    	<a href="/copyright/order.htm">订阅与赠阅</a> | 
+    	<a href="http://www.21ic.com" target="_blank">21IC</a> | 
+    	<a href="/copyright/aboutus.htm">关于我们</a> | 
+    	<a href="/copyright/advertise.htm">广告合作</a> | 
+    	<a href="/copyright/contribute.htm">征稿启事</a> | 
+    	<a href="/copyright/privacy.htm">隐私声明</a> | 
+    	<a href="http://electronicproducts.com/" target="_blank">ENGLISH</a>
+    </div>
+    <p class="copyrights">
+    	Copyright <span class="copyright_c">&copy;</span>1998-2016 [今日电子　www.epc.com.cn] All Rights Reserved. &nbsp;&nbsp;&nbsp;&nbsp;京ICP证041565号<br />
+主办单位：中国电子工业出版社、美国国际数据集团(IDG)&nbsp;&nbsp;&nbsp;&nbsp;版权合作：美国《Electronic Products》杂志<br />
+电话：010-59705655(总机)，&nbsp;&nbsp;82168259(编辑部)，&nbsp;&nbsp;59705650(发行部)，&nbsp;&nbsp;59705657(传真)<br />
+广告部：010-59705630/35/36 
+    </p>
+    <div class="break"></div>
+<div style="display:none;">
+<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+	try {
+		var pageTracker = _gat._getTracker("UA-8055488-1");
+		pageTracker._trackPageview();
+	}
+	catch(err){}
+</script>
+</div>
+</div>
+<div style="display:none;"><script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fab7ebf57dd6d4314262c859087553e92' type='text/javascript'%3E%3C/script%3E"));
+</script>
+</div>
+</body>
+</html>

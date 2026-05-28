@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+<channel>
+<title><![CDATA[流浪的龙－个人知识管理]]></title> 
+<link>http://i.renjihe.com/blog/index.php</link> 
+<description><![CDATA[]]></description> 
+<language>zh-cn</language> 
+<copyright><![CDATA[流浪的龙－个人知识管理]]></copyright>
+<item>
+<link>http://i.renjihe.com/blog/read.php?5349</link>
+<title><![CDATA[JS 图形和游戏开发引擎 FlashJS]]></title> 
+<author>renjihe1988 &lt;admin@yourname.com&gt;</author>
+<category><![CDATA[硬件]]></category>
+<pubDate>Fri, 16 Aug 2013 02:28:38 +0000</pubDate> 
+<guid>http://i.renjihe.com/blog/read.php?5349</guid> 
+<description>
+<![CDATA[ 
+	<p style="margin: 0px 0px 10px; padding: 0px; font-family: 微软雅黑, Verdana, sans-serif, 宋体; font-size: 13px; line-height: 21px">FlashJS 是一个开源的 JS 图形和游戏开发引擎，使用 Flash/ActionScript3 的技术实现。FlashJS 提供完整的游戏实例和语法糖。</p><p style="margin: 0px 0px 10px; padding: 0px; font-family: 微软雅黑, Verdana, sans-serif, 宋体; font-size: 13px; line-height: 21px">主要特性：</p><ul style="margin: 0.5em 0px 0.5em 1.5em; padding: 0px; list-style-position: inside; font-family: 微软雅黑, Verdana, sans-serif, 宋体; font-size: 13px; line-height: 21px"><li style="margin: 0px; padding: 0px">scaleX, scaleY properties</li><li style="margin: 0px; padding: 0px">DisplayObject with alpha, rotation, x, y</li><li style="margin: 0px; padding: 0px">addChild, removeChild, removeChildAt, getChild, getChildByName, numChildren</li><li style="margin: 0px; padding: 0px">Keyboard and mouse events</li><li style="margin: 0px; padding: 0px">Loader</li><li style="margin: 0px; padding: 0px">Stage and it`s onEnterFrame event</li><li style="margin: 0px; padding: 0px">Tweens</li><li style="margin: 0px; padding: 0px">Tested and Supported in Firefox 4+, Internet Explorer 9+, Opera 11, and latest versions of Chrome &amp; Safari<br /></li></ul>
+]]>
+</description>
+</item>
+</channel>
+</rss>

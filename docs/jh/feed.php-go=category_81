@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+<channel>
+<title><![CDATA[流浪的龙－个人知识管理]]></title> 
+<link>http://i.renjihe.com/blog/index.php</link> 
+<description><![CDATA[]]></description> 
+<language>zh-cn</language> 
+<copyright><![CDATA[流浪的龙－个人知识管理]]></copyright>
+<item>
+<link>http://i.renjihe.com/blog/read.php?5958</link>
+<title><![CDATA[游戏开发资源]]></title> 
+<author>renjihe1988 &lt;admin@yourname.com&gt;</author>
+<category><![CDATA[资源管理]]></category>
+<pubDate>Mon, 12 May 2014 02:17:39 +0000</pubDate> 
+<guid>http://i.renjihe.com/blog/read.php?5958</guid> 
+<description>
+<![CDATA[ 
+	支持多平台！2D和3D游戏引擎：<br />cocos2d-x<br />godot: http://i.renjihe.com/blog/read.php?5918<br />genesis-3d: http://genesis-3d.com.cn/<br />Torque 3D:&nbsp;http://i.renjihe.com/blog/read.php?4725<br />Ploycode:&nbsp;http://i.renjihe.com/blog/read.php?4726<br /><br />资源网站：<br /><div>Freesound.org</div><div>OpenGameArt.org</div><div>SoundCloud - Share Your Sounds</div><div>Bfxr. Make sound effects for your games.</div><div>http://www.abundant-music.com/</div><div>http://forums.tigsource.com/index.php?topic=8970.0 登陆了Steam的Realm of the Mad God就是用的这个tileset。</div><div>Unity - Asset Store</div><div>在Google中搜索free game assets。</div>
+]]>
+</description>
+</item>
+</channel>
+</rss>

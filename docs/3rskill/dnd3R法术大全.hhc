@@ -1,0 +1,530 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML>
+<HEAD>
+<meta name="GENERATOR" content="Microsoft&reg; HTML Help Workshop 4.1">
+<!-- Sitemap 1.0 -->
+</HEAD>
+<BODY>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="dnd3R法术大全">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="首页.htm">
+<param name="Local" value="首页.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="职业法术列表">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="BoED扩展--圣洁法术.htm">
+<param name="Local" value="职业法术列表/BoED扩展--圣洁法术.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="CA扩展--巫觋法术.htm">
+<param name="Local" value="职业法术列表/CA扩展--巫觋法术.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="CA扩展--战法师法术.htm">
+<param name="Local" value="职业法术列表/CA扩展--战法师法术.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="CW扩展--魔剑客法术.htm">
+<param name="Local" value="职业法术列表/CW扩展--魔剑客法术.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="PHB2扩展--暮刃法术.htm">
+<param name="Local" value="职业法术列表/PHB2扩展--暮刃法术.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="PHB2扩展--欺愚者法术.htm">
+<param name="Local" value="职业法术列表/PHB2扩展--欺愚者法术.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="吟游诗人法术.htm">
+<param name="Local" value="职业法术列表/吟游诗人法术.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="圣武士神术.htm">
+<param name="Local" value="职业法术列表/圣武士神术.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="巡林客神术.htm">
+<param name="Local" value="职业法术列表/巡林客神术.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="德鲁伊神术.htm">
+<param name="Local" value="职业法术列表/德鲁伊神术.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="法师术士法术.htm">
+<param name="Local" value="职业法术列表/法师术士法术.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="牧师神术.htm">
+<param name="Local" value="职业法术列表/牧师神术.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="进阶职业列表">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="刺客法术.htm">
+<param name="Local" value="职业法术列表/进阶职业列表/刺客法术.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="暗黑卫士法术.htm">
+<param name="Local" value="职业法术列表/进阶职业列表/暗黑卫士法术.htm">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="领域法术">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="BoED--信使领域herald domain.htm">
+<param name="Local" value="职业法术列表/领域法术/BoED--信使领域herald%20domain.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="BoED--喜乐领域joy domain.htm">
+<param name="Local" value="职业法术列表/领域法术/BoED--喜乐领域joy%20domain.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="BoED--团体领域community domain.htm">
+<param name="Local" value="职业法术列表/领域法术/BoED--团体领域community%20domain.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="BoED--天界领域celestial domain.htm">
+<param name="Local" value="职业法术列表/领域法术/BoED--天界领域celestial%20domain.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="BoED--忍耐领域endurance domain.htm">
+<param name="Local" value="职业法术列表/领域法术/BoED--忍耐领域endurance%20domain.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="BoED--欢愉领域pleasure domain.htm">
+<param name="Local" value="职业法术列表/领域法术/BoED--欢愉领域pleasure%20domain.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="BoED--神谴领域wrath domain.htm">
+<param name="Local" value="职业法术列表/领域法术/BoED--神谴领域wrath%20domain.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="BoED--精类领域fey domain.htm">
+<param name="Local" value="职业法术列表/领域法术/BoED--精类领域fey%20domain.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="BoED--荣耀领域glory domain.htm">
+<param name="Local" value="职业法术列表/领域法术/BoED--荣耀领域glory%20domain.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="CW--专制领域(Tyranny Domain).htm">
+<param name="Local" value="职业法术列表/领域法术/CW--专制领域(Tyranny%20Domain).htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="CW--勇气领域(Courage Domain).htm">
+<param name="Local" value="职业法术列表/领域法术/CW--勇气领域(Courage%20Domain).htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="CW--命运领域(Fate Domain).htm">
+<param name="Local" value="职业法术列表/领域法术/CW--命运领域(Fate%20Domain).htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="CW--计划领域(Planning Domain).htm">
+<param name="Local" value="职业法术列表/领域法术/CW--计划领域(Planning%20Domain).htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="CW--贵族领域(Nobility Domain).htm">
+<param name="Local" value="职业法术列表/领域法术/CW--贵族领域(Nobility%20Domain).htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Dra--财富领域（WEALTH DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/Dra--财富领域（WEALTH%20DOMAIN）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Dra--贪婪领域（GREED DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/Dra--贪婪领域（GREED%20DOMAIN）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Dra--进阶支配领域（DOMINATION PRESTIGE DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/Dra--进阶支配领域（DOMINATION%20PRESTIGE%20DOMAIN）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Dra--进阶荣耀领域（GLORY PRESTIGE DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/Dra--进阶荣耀领域（GLORY%20PRESTIGE%20DOMAIN）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Dra--龙领域（Dragon Domain）.htm">
+<param name="Local" value="职业法术列表/领域法术/Dra--龙领域（Dragon%20Domain）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="LM--不死领域（Undeath Domain）.htm">
+<param name="Local" value="职业法术列表/领域法术/LM--不死领域（Undeath%20Domain）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="LM--控死领域（Deathbound Domain）.htm">
+<param name="Local" value="职业法术列表/领域法术/LM--控死领域（Deathbound%20Domain）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="LM--饥饿领域（Hunger Domain）.htm">
+<param name="Local" value="职业法术列表/领域法术/LM--饥饿领域（Hunger%20Domain）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="LoM--力场领域（FOECR DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/LoM--力场领域（FOECR%20DOMAIN）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="LoM--心灵领域（MIND DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/LoM--心灵领域（MIND%20DOMAIN）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="LoM--憎恨领域（HATRED DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/LoM--憎恨领域（HATRED%20DOMAIN）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="LoM--疯狂领域（MADNESS DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/LoM--疯狂领域（MADNESS%20DOMAIN）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="LoM--秽黯领域（VILE DARKNESS DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/LoM--秽黯领域（VILE%20DARKNESS%20DOMAIN）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="LoM--腐化领域（CORRUPTION DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/LoM--腐化领域（CORRUPTION%20DOMAIN）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="RoD--城市领域(City Domain).htm">
+<param name="Local" value="职业法术列表/领域法术/RoD--城市领域(City%20Domain).htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="RoD--宿命领域(Destiny Domain).htm">
+<param name="Local" value="职业法术列表/领域法术/RoD--宿命领域(Destiny%20Domain).htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="RoW--天空领域（Sky Domain）.htm">
+<param name="Local" value="职业法术列表/领域法术/RoW--天空领域（Sky%20Domain）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="保护领域（PROTECTION DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/保护领域（PROTECTION%20DOMAIN）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="力量领域（STRENGTH DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/力量领域（STRENGTH%20DOMAIN）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="动物领域（ANIMAL DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/动物领域（ANIMAL%20DOMAIN）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="医疗领域（HEALING DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/医疗领域（HEALING%20DOMAIN）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="善良领域（GOOD DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/善良领域（GOOD%20DOMAIN）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="土领域（EARTH DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/土领域（EARTH%20DOMAIN）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="太阳领域（SUN DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/太阳领域（SUN%20DOMAIN）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="战争领域（WAR DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/战争领域（WAR%20DOMAIN）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="旅行领域（TRAVEL DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/旅行领域（TRAVEL%20DOMAIN）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="机运领域（LUCK DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/机运领域（LUCK%20DOMAIN）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="植物领域（PLANT DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/植物领域（PLANT%20DOMAIN）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="死亡领域（DEATH DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/死亡领域（DEATH%20DOMAIN）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="气领域（AIR DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/气领域（AIR%20DOMAIN）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="水领域（WATER DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/水领域（WATER%20DOMAIN）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="混乱领域（CHAOS DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/混乱领域（CHAOS%20DOMAIN）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="火领域（FIRE DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/火领域（FIRE%20DOMAIN）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="知识领域（KNOWLEDGE DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/知识领域（KNOWLEDGE%20DOMAIN）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="破坏领域（DESTRUCTION DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/破坏领域（DESTRUCTION%20DOMAIN）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="秩序领域（LAW DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/秩序领域（LAW%20DOMAIN）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="诡术领域（TRICKERY DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/诡术领域（TRICKERY%20DOMAIN）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="邪恶领域（EVIL DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/邪恶领域（EVIL%20DOMAIN）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="魔法领域（MAGIC DOMAIN）.htm">
+<param name="Local" value="职业法术列表/领域法术/魔法领域（MAGIC%20DOMAIN）.htm">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="法术字母索引">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="A.htm">
+<param name="Local" value="法术字母索引/A.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="B.htm">
+<param name="Local" value="法术字母索引/B.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="C.htm">
+<param name="Local" value="法术字母索引/C.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="D.htm">
+<param name="Local" value="法术字母索引/D.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="E.htm">
+<param name="Local" value="法术字母索引/E.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="F.htm">
+<param name="Local" value="法术字母索引/F.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="G.htm">
+<param name="Local" value="法术字母索引/G.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="H.htm">
+<param name="Local" value="法术字母索引/H.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="I.htm">
+<param name="Local" value="法术字母索引/I.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="J.htm">
+<param name="Local" value="法术字母索引/J.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="K.htm">
+<param name="Local" value="法术字母索引/K.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="L.htm">
+<param name="Local" value="法术字母索引/L.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="M.htm">
+<param name="Local" value="法术字母索引/M.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="N.htm">
+<param name="Local" value="法术字母索引/N.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="O.htm">
+<param name="Local" value="法术字母索引/O.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="P.htm">
+<param name="Local" value="法术字母索引/P.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Q.htm">
+<param name="Local" value="法术字母索引/Q.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="R.htm">
+<param name="Local" value="法术字母索引/R.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="S.htm">
+<param name="Local" value="法术字母索引/S.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="T.htm">
+<param name="Local" value="法术字母索引/T.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="U.htm">
+<param name="Local" value="法术字母索引/U.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="V.htm">
+<param name="Local" value="法术字母索引/V.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="W.htm">
+<param name="Local" value="法术字母索引/W.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="X.htm">
+<param name="Local" value="法术字母索引/X.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Y.htm">
+<param name="Local" value="法术字母索引/Y.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Z.htm">
+<param name="Local" value="法术字母索引/Z.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="关于降咒-Bestowed Curese.htm">
+<param name="Local" value="法术字母索引/关于降咒-Bestowed%20Curese.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="召唤列表-summon.htm">
+<param name="Local" value="法术字母索引/召唤列表-summon.htm">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="各种其他类法书及超能">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="暗影秘术">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="暗影秘术概述.htm">
+<param name="Local" value="各种其他类法书及超能/暗影秘术/暗影秘术概述.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="暗影秘术的非官方修改.htm">
+<param name="Local" value="各种其他类法书及超能/暗影秘术/暗影秘术的非官方修改.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="暗影秘术详述">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="暗影秘术A-C.htm">
+<param name="Local" value="各种其他类法书及超能/暗影秘术/暗影秘术详述/暗影秘术A-C.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="暗影秘术D-K.htm">
+<param name="Local" value="各种其他类法书及超能/暗影秘术/暗影秘术详述/暗影秘术D-K.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="暗影秘术L-R.htm">
+<param name="Local" value="各种其他类法书及超能/暗影秘术/暗影秘术详述/暗影秘术L-R.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="暗影秘术S.htm">
+<param name="Local" value="各种其他类法书及超能/暗影秘术/暗影秘术详述/暗影秘术S.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="暗影秘术T-W(完结）.htm">
+<param name="Local" value="各种其他类法书及超能/暗影秘术/暗影秘术详述/暗影秘术T-W(完结）.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="暗影秘术T-W.htm">
+<param name="Local" value="各种其他类法书及超能/暗影秘术/暗影秘术详述/暗影秘术T-W.htm">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="灵契">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="契灵简表.htm">
+<param name="Local" value="各种其他类法书及超能/灵契/契灵简表.htm">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="真言">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="心智演化之语.htm">
+<param name="Local" value="各种其他类法书及超能/真言/心智演化之语.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="真言列表">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="世界词汇.htm">
+<param name="Local" value="各种其他类法书及超能/真言/真言列表/世界词汇.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="人名词汇.htm">
+<param name="Local" value="各种其他类法书及超能/真言/真言列表/人名词汇.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="地址词汇.htm">
+<param name="Local" value="各种其他类法书及超能/真言/真言列表/地址词汇.htm">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="真言详述.htm">
+<param name="Local" value="各种其他类法书及超能/真言/真言详述.htm">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="邪术">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="邪术列表.htm">
+<param name="Local" value="各种其他类法书及超能/邪术/邪术列表.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="邪术详述.htm">
+<param name="Local" value="各种其他类法书及超能/邪术/邪术详述.htm">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="龙火邪术">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="龙火邪术列表.htm">
+<param name="Local" value="各种其他类法书及超能/龙火邪术/龙火邪术列表.htm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="龙火邪术详述.htm">
+<param name="Local" value="各种其他类法书及超能/龙火邪术/龙火邪术详述.htm">
+</OBJECT>
+</UL>
+</UL>
+</UL>
+</BODY>
+</HTML>

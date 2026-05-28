@@ -1,0 +1,209 @@
+﻿标题：node.js源码研究—模块组织加载
+出处：流浪的龙－个人知识管理
+时间：Wed, 24 Aug 2016 19:37:05 +0000
+作者：renjihe1988
+地址：http://i.renjihe.com/blog/read.php?7497
+
+内容：
+粗略研究了一下node.js源码，它有8000行C++代码，2000行javascript代码，来看看js和C++间是怎么组织连接起来，以及各个模块是怎样互相调用的。
+本文使用的node.js版本是0.4.8，可以在https://github.com/joyent/node/tree/v0.4.8这里看到源码。
+js2c.pynode.js使用了V8附带的js2c.py工具把所有内置的js代码转换成C++里的数组，生成node_natives.h直接include到程序中，成了C++源码的一部分。这样做能提高内置js模块的编译效率。
+node.js里内置的javascript包括了主程序src/node.js和模块程序lib/*.js，通过js2c.py让每一个js文件都生成一个源码数组，存放在build/src/node_natives.h里，node_natives.h在node.js编译后才会生成(编译的脚本wscript中调用了js2c.py)，可以看到大致的结构如下：
+01
+02
+03
+04
+05
+06
+07
+08
+09
+10
+11
+12
+13
+14
+namespace node {
+    const char node_native[] = {47, 47, 32, 67, 112 ......}
+    const char console_native[] = {47, 47, 32, 67, 112 ......}
+    const char buffer_native[] = {47, 47, 32, 67, 112 ......}
+    .....
+}
+struct _native {  const char* name;  const char* source;  size_t source_len;};
+static const struct _native natives[] = {
+  { "node", node_native, sizeof(node_native)-1 },
+  { "dgram", dgram_native, sizeof(dgram_native)-1 },
+  { "console", console_native, sizeof(console_native)-1 },
+  { "buffer", buffer_native, sizeof(buffer_native)-1 },
+    ....
+}
+
+
+
+这个文件被包含在node_javascript.cc里，node_javascript.cc提供了两个接口：MainSource() 处理node_native源码返回v8::Handle类型的数据可供编译。DefineJavaScript(target) 把其他所有模块源码变成v8::Handle类型后加载到传入的target对象上。
+所有的js模块都被转换成了C数组，接下来看看它们怎么执行和互相调用。
+执行js主程序/传递process先看看node.js的底层C++传递给javascript的一个变量process，在一开始运行node.js时，程序会先配置好process
+1
+Handle<object>process = SetupProcessObject(argc, argv);
+
+
+
+然后把process作为参数去调用js主程序src/node.js返回的函数，这样process就传递到javascript里了。
+01
+02
+03
+04
+05
+06
+07
+08
+09
+10
+11
+12
+13
+14
+15
+16
+//node.cc
+//通过MainSource()获取已转化的src/node.js源码，并执行它
+Local f_value = ExecuteString(MainSource(), IMMUTABLE_STRING("node.js"));
+ 
+//执行src/node.js后获得的是一个函数，从node.js源码可以看出：
+//node.js
+//(function(process) {
+//    global = this;
+//    ....
+//})
+Local f = Local::Cast(f_value);
+ 
+//创建函数执行环境，调用函数，把process传入
+Local<object>global = v8::Context::GetCurrent()-&gt;Global();
+Local args[1] = { Local::New(process) };
+f-&gt;Call(global, 1, args);
+
+
+
+C++模块node.js的模块除了lib/*.js里用js语言编写的以外，还有一些使用C++编写，像os/stdio/crypto/buffer等。这些模块都通过node.h提供的NODE_MODULE方法存储在变量_module里。node_extensions.cc提供了get_builtin_module(name)接口获取这些模块。
+process.binding/C++模块加载process提供的一个获取模块的接口是binding，它的实现Binding()函数可以在node.cc找到。
+01
+02
+03
+04
+05
+06
+07
+08
+09
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+Persistent<Object> binding_cache;
+static Handle<Value> Binding(const Arguments& args) {
+  HandleScope scope;
+  Local<String> module = args[0]->ToString();
+  String::Utf8Value module_v(module);
+  node_module_struct* modp;
+ 
+  if (binding_cache.IsEmpty()) {
+    binding_cache = Persistent<Object>::New(Object::New());
+  }
+  Local<Object> exports;
+  if (binding_cache->Has(module)) {
+    exports = binding_cache->Get(module)->ToObject();
+  
+  } else if ((modp = get_builtin_module(*module_v)) != NULL) {
+    exports = Object::New();
+    modp->register_func(exports);
+    binding_cache->Set(module, exports);
+  
+  } else if (!strcmp(*module_v, "constants")) {
+    exports = Object::New();
+    DefineConstants(exports);
+    binding_cache->Set(module, exports);
+  
+#ifdef __POSIX__
+  } else if (!strcmp(*module_v, "io_watcher")) {
+    exports = Object::New();
+    IOWatcher::Initialize(exports);
+    binding_cache->Set(module, exports);
+#endif
+  
+  } else if (!strcmp(*module_v, "natives")) {
+    exports = Object::New();
+    DefineJavaScript(exports);
+    binding_cache->Set(module, exports);
+  
+  } else {
+     return ThrowException(Exception::Error(String::New("No such module")));
+  }
+   return scope.Close(exports);
+}
+
+
+
+从源码可以看到，调用process.binding时，先看缓存里是否已经存在此模块，不存在再调用get_builtin_module查找C++内置模块，找到的话获取后绑定在exports上，在最后返回exports。
+此外还有针对其他模块的特殊处理，其中natives模块就是调用上文提到的DefineJavaScript(exports)接口获取到所有内置的js模块绑定在exports上。
+现在在js上需要调用C++提供的模块只需要调用process.binding就行了，例如
+1
+var stdio = ﻿process.binding("stdio")
+
+
+
+js模块加载src/node.js上实现了一个NativeModule对象用于管理js模块，它通过调用process.binding(&ldquo;natives&rdquo;)把所有内置的js模块放在NativeModule._source上，并提供require接口供调用。在require里会给代码加一层包装，把一些变量传给这个模块。
+1
+2
+3
+4
+NativeModule.wrapper = [
+'(function (exports, require, module, __filename, __dirname) { ',
+'\n});'
+];
+
+
+
+再用process提供的其中一个js编译接口process.runInThisContext执行代码。
+1
+2
+var fn = runInThisContext(source, this.filename, true);
+fn(this.exports, NativeModule.require, this, this.filename);
+
+
+
+于是在主程序src/node.js上可以调用NativeModule.require(&ldquo;net&rdquo;)去加载net模块，在lib/*.js的各个js模块里能通过调用传进来的require()去加载其他内置js模块。
+总结流程粗略总结一下加载模块的流程：
+加载C++模块（以stdio为例）：process.binding(&ldquo;stdio&rdquo;) -> get_builtin_module(&ldquo;stdio&rdquo;) -> _module -> NODE_MODULE(node_stdio, node::Stdio::Initialize)(定义)
+加载js模块（以net为例）require(&ldquo;net&rdquo;) -> NativeModule.require(&ldquo;net&rdquo;) -> process.binding(&ldquo;natives&rdquo;)[&ldquo;net&rdquo;] -> DefineJavaScript() -> natives[] -> node_natives.h
+
+
+
+Generated by Bo-blog 2.1.1 Release

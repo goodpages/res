@@ -1,0 +1,1376 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang='zh-CN' xml:lang='zh-CN' xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+	<!-- 此meta用于腾讯验证我们网址的有效性 -->
+    <meta property="qc:admins" content="2554550177673301616654" />
+	<!-- 此meta用于百度站长工具 -->
+    <meta name="baidu-site-verification" content="kerGDpToCx" />
+
+    <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?t=1451964198000" />
+  <title>开源项目大全 - 开源中国社区</title>
+  <meta name="Keywords" content="java开源,开源软件,手机开源,开源网站,开源社区,php开源,开源erp,开源博客,开源项目,开源cms,开源crm,gis开源,开源代码"/>  <meta name="Description" content="开源中国社区 www.oschina.net 成立于2008年8月，其目的是为中国的IT技术人员提供一个全面的、快捷更新的用来检索开源软件以及交流使用开源经验的平台，截止到 2009年10月，已收录41892款开源软件。"/>    <link rel="stylesheet" href="/css/channel.css?t=1470682757000" type="text/css" media="screen" />
+  <link rel="stylesheet" type="text/css" href="/js/2011/fancybox/jquery.fancybox-1.3.4.css?t=1451964198000" media="screen" />
+  <link rel="alternate" type="application/rss+xml" title="最新开源项目" href="http://www.oschina.net/project/rss" />
+  <link rel="alternate" type="application/rss+xml" title="最新开源资讯" href="http://www.oschina.net/news/rss" />
+  <link rel="alternate" type="application/rss+xml" title="最新问题列表" href="http://www.oschina.net/question/rss" />
+  <link rel="alternate" type="application/rss+xml" title="最新翻译列表" href="http://www.oschina.net/translate/rss" />
+  <link rel="alternate" type="application/rss+xml" title="最新博客列表" href="http://www.oschina.net/blog/rss" />
+  <link rel="alternate" type="application/rss+xml" title="推荐博客列表" href="http://www.oschina.net/blog/rss?show=more" />
+  <link rel="alternate" type="application/rss+xml" title="推荐软件列表" href="http://www.oschina.net/project/rss?show=recomms" />
+  <link rel="alternate" type="application/rss+xml" title="最新代码分享列表" href="http://www.oschina.net/code/rss" />
+  <link rel="alternate" type="application/rss+xml" title="开源中国 - 源码列表" href="http://www.oschina.net/code/source_rss" />
+    <!--添加emoji支持-->
+    <link rel="stylesheet" type="text/css" href="/js/team/grunt/dist/emoji/emoji.min.css?t=1463610254000">
+
+  <script type="text/javascript" src="/js/2012/jquery-1.7.1.min.js?t=1451964198000"></script>
+  <script type="text/javascript" src="/js/2012/jquery.form.js?t=1451964198000"></script>
+  <script type="text/javascript" src="/js/2011/fancybox/jquery.fancybox-fixed.js?t=1451964198000?2014031702"></script>
+    <link rel="stylesheet" href="/js/poshytip/tip-yellowsimple/tip-yellowsimple.css?t=1451964199000" type="text/css" />
+  <script type="text/javascript" src="/js/poshytip/jquery.poshytip.min.js?t=1451964199000"></script>
+    <!-- 此script用于百度统计工具 -->
+	<script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?a411c4d1664dd70048ee98afe7b28f0b";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+	<script type="text/javascript">
+  	g_user = {
+	id:0,
+	name:'',
+	login:false};  </script>
+    <script type="text/javascript" src="/js/2011/oschina.js?t=1451964198000"></script>
+  <script type="text/javascript" src="/js/utils.js?t=1451964199000"></script>
+  <script type="text/javascript" src="/js/channel.js?t=1460585984000?2014022501"></script>
+  <link rel="alternate" type="application/rss+xml" title="开源中国 - 最新项目" href="http://www.oschina.net/project/rss" />
+<link rel="alternate" type="application/rss+xml" title="开源中国 - 最新推荐项目" href="http://www.oschina.net/project/rss?show=recomms" />
+  <style type="text/css">
+  
+  </style>
+</head>
+<body>
+<div id='OSC_NavTop'>
+	<div class="wp998">
+        <div id="OSC_Channels">
+        	<ul>
+        	<li class="item"><a href="http://www.oschina.net/" class='home'>首页</a></li>        	<li class="item control_select"><a href="http://www.oschina.net/project" class='project hl'>开源项目</a>
+				<ul class="cs_content">
+					<li><a href='http://www.oschina.net/project/zh'>国产开源项目</a></li>
+					<li><a href='http://www.oschina.net/project/tags'>项目分类</a></li>
+					<li><a href='http://www.oschina.net/project/list?sort=time'>最新收录项目</a></li>
+					<li class='split'></li>
+                	                	<li><a href="http://www.oschina.net/project/lang/19/java">Java 开源软件</a></li>
+                	<li><a href="http://www.oschina.net/project/lang/194/csharp">C# 开源软件</a></li>
+                	<li><a href="http://www.oschina.net/project/lang/22/php">PHP 开源软件</a></li>
+                	<li><a href="http://www.oschina.net/project/lang/21/c">C/C++ 开源软件</a></li>
+                	<li><a href="http://www.oschina.net/project/lang/26/ruby">Ruby 开源软件</a></li>
+                	<li><a href="http://www.oschina.net/project/lang/25/python">Python 开源软件</a></li>
+                	<li><a href="http://www.oschina.net/project/lang/358/go">Go开源软件</a></li>
+                	<li><a href="http://www.oschina.net/project/lang/28/javascript">JS开源软件</a></li>
+				</ul>
+			</li>
+        	<li class="item control_select">
+				<a href="http://www.oschina.net/question" class='question'>问答</a>
+				<ul class="cs_content">
+                	<li><a href="http://www.oschina.net/question?catalog=1"> 技术问答 &raquo; </a></li>
+                	<li><a href="http://www.oschina.net/question?catalog=2"> 技术分享 &raquo; </a></li>
+                	<li><a href="http://www.oschina.net/question?catalog=3"> IT大杂烩 &raquo; </a></li>
+                	<li><a href="http://www.oschina.net/question?catalog=100"> 职业生涯 &raquo; </a></li>
+                	<li><a href="http://www.oschina.net/question?catalog=4"> 站务/建议 &raquo; </a></li>
+                	<li><a href="http://www.oschina.net/alipay"> 支付宝专区 &raquo; </a></li>
+                	<li><a href="http://www.oschina.net/mopaas"> MoPaaS专区 &raquo; </a></li>
+                	<li><a href="http://www.oschina.net/hardware"> 开源硬件专区 &raquo; </a></li>
+				</ul>
+			</li>
+        	<li class="item"><a href="http://www.oschina.net/tweets" class='tweets'>动弹</a></li>
+        	        	<li class="item"><a href="http://www.oschina.net/blog" class='blog'>博客</a></li>
+        	<li class="item"><a href="http://www.oschina.net/translate" class='tran'>翻译</a></li>
+            <li class="item"><a href="http://www.oschina.net/news" class='news'>资讯</a></li>
+        	<li class="item control_select">
+				<a href="http://www.oschina.net/android" class='mobile'>专题</a>
+				<ul class="cs_content cs_mobile">
+        			<li><a href='http://www.oschina.net/events' style='color:#c00'>源创会</a> <a href='/video'>视频</a></li>
+        			<li><a href='http://www.oschina.net/question/tag/%E9%AB%98%E6%89%8B%E9%97%AE%E7%AD%94'>高手问答</a> <a href='http://www.oschina.net/question/tag/%E5%BC%80%E6%BA%90%E8%AE%BF%E8%B0%88'>访谈</a></li>
+        			<li><a href='http://www.oschina.net/question/tag/%E5%BC%80%E6%BA%90%E5%91%A8%E5%88%8A'>周刊</a> <a href='http://my.oschina.net/xxiaobian/blog?catalog=547834'>乱弹</a></li>
+            		<li><a href="http://www.oschina.net/company">公司开源导航页</a></li>
+					<li class='split'></li>
+                	<li class="android_"><a href="http://www.oschina.net/android">Android开发专区</a></li>
+                	<li class="ios_"><a href="http://www.oschina.net/ios/home">iOS开发专区</a></li>
+                	<li class="ios_"><a href="http://www.oschina.net/ios/codingList">iOS代码库</a></li>
+                	<li class="wp7_"><a href="http://www.oschina.net/wp">Windows Phone</a></li>
+					
+				</ul>
+			</li>
+        	        										            <li class="item control_select">
+                <a href="http://city.oschina.net/" id="MyCities" title="城市圈">城市圈</a>
+				<ul class="cs_content">
+				                </ul>
+			</li>
+        	</ul>
+        </div>
+		<div id="OSC_Userbar">
+                		    		当前访客身份：游客 [ <a href="http://www.oschina.net/home/login?goto_page=http%3A%2F%2Fwww.oschina.net%2Fproject%2FDon%27t_repeat_yourself">登录</a> | <a href="http://www.oschina.net/home/reg">加入开源中国</a> ]
+    				</div>
+		<div class='clear'></div>
+	</div>
+
+</div>
+<div id='OSC_Banner'><div class="wp998"><a href='http://www.oschina.net/' class='Logo' title='OSChina 开源中国'>开源中国</a>
+<h1><a href='/project'>开源项目</a></h1>
+<dl>
+	<dt>共收录了 <em>41892</em> 个项目</dt>
+	<dt>
+		<a href="/project/tags">分类导航</a>&nbsp;|
+		<a href="/project/list">软件列表</a>&nbsp;|
+		<a href="/project/zh">国产开源软件</a>&nbsp;|
+		<a href="/news/list?show=project">软件资讯</a>&nbsp;|
+		<a href="http://www.oschina.net/home/go?page=admin%2Fnew-project" style="font-weight:bold;">添加软件</a>
+	</dt>
+</dl>
+
+<form action='http://www.oschina.net/search' class='search'>
+	<input type='hidden' name='scope' value='project'/>
+	<input id='channel_q' type='text' name='q' value='' placeholder='在 41892 个开源项目中搜索' class='TXT'/>
+    <button type='submit' class='BTN'>搜 索</button>
+</form>
+<div class='clear'></div></div></div>
+<div id="OSC_Screen">
+	<div id="OSC_Content" class='CenterDiv'>
+
+
+<style>
+#SoftwareChannel {overflow:hidden;}
+.SoftwareBody {float:left;width:730px;}
+.SoftwareRight {float:right; width:250px;}
+
+
+#ZH_Header {margin:0 0 20px 0; height: 148px; background: url(/img/ZH_Header_bg.jpg) no-repeat; }
+#ZH_Header h1 {float: left; width: 400px; margin-left: 50px; display: inline;  font-size:36pt; color: #bc2f17; line-height: 130px;}
+#ZH_Header h2 { font-size: 18pt;}
+#ZH_Header h2 em {font-size: 30pt; color:#40aa53;}
+#ZH_Header p {float: right; margin-right: 55px; margin-top: 5px; width: 480px;}
+#ZH_Header p a{ padding: 0 30px 0 10px; display: inline-block; background: #557dba url(/img/ZH_tijiao.gif) 133px 7px no-repeat; line-height: 30px; font-size: 11pt; color: #fff; text-decoration: none; }
+
+#ZH_Tags {}
+
+.ZH_Tabs {background-color:#eee;height:28px;margin-bottom:10px;}
+.ZH_Tabs ul{float:left;height:28px;line-height:28px;}
+.ZH_Tabs li{float:left;font-size:10.5pt;}
+.ZH_Tabs li a{color:#000;display:block;text-decoration:None;padding:0 15px;}
+.ZH_Tabs li a.active {background-color:#557DBA;color:#fff;}
+.ZH_Tabs li a.sep{border-right:1px solid #ccc;}
+.ZH_Tabs .desc {color:#999;float:left; margin:8px 0 0 20px;}
+.ZH_Tabs .more{float:right;margin:6px 6px 0 0;text-decoration:None;}
+
+
+
+.TopZHProjects {margin:20px 2px;background:#fafcff;}
+.TopZHProjects ul li {float:left; width:48%; height:60px;padding-left:10px;margin:0 0 10px 0;}
+.TopZHProjects ul li span img {widht:48px;height:48px;}
+.TopZHProjects ul li h3 {font-size:10.5pt;}
+.TopZHProjects ul li h3 a {text-decoration:none;}
+.TopZHProjects ul li p {color:#666;font-size:9pt;margin:3px 0 0 5px; line-height: 16px;}
+
+.TopZHProjects ul li span {float: left; width: 52px; margin-right: 8px; display: inline; }
+.TopZHProjects ul li span img{ border: 1px #eee solid;}
+
+#ZH_ProjectList {margin:20px 0 0 0;}
+#ZH_ProjectList h2 {margin:0 0 30px 0;background:#557DBA;color:#fff;padding:5px;}
+
+#ZH_Tags, .ZH_top_users {margin:0px 0 0 30px;}
+#ZH_Tags strong, .ZH_top_users strong {display:block; font-size:12pt; margin:0 0 20px 0;}
+#ZH_Tags ul {line-height:22px;font-size:9pt;color:#666;margin:0 0 0 10px;}
+#ZH_Tags ul li a {font-size:12pt;text-decoration:none;margin-right:5px;}
+
+.RightProjectList ul {margin:5px;}
+.RightProjectList ul li {overflow:hidden;margin-bottom:10px;}
+.RightProjectList ul li span.date {color:#999;font-size:8pt;float:right;-webkit-text-size-adjust:none;}
+.RightProjectList ul li a {font-weight:bold;display:block;margin:0 0 5px 0;}
+.RightProjectList ul li p {color:#666;}
+
+/* 项目详细列表 */
+.ProjectList {background:#fff;}
+.ProjectList ul.List {margin:20px 5px;}
+.ProjectList ul.List li {margin:10px 0 20px 0;border-bottom:1px dashed #ddd;}
+.ProjectList ul.List li h3 {font-size:14pt;text-decoration:none;background:url('/img/r_arrow.gif') no-repeat left center;padding-left:16px;}
+.ProjectList ul.List li h3 em {font-style:normal;color:#060;}
+.ProjectList ul.List li h3 a { text-decoration:none;}
+.ProjectList ul.List li a .name {color:#060;display:inline;margin:0;}
+.ProjectList ul.List li a.projectImg {display:block;margin:10px 0;}
+.ProjectList ul.List li a.projectImg img {max-width:500px;}
+.ProjectList ul.List li a.more {font-weight:normal;color:#A00;display:block;margin:10px 0 0 0;}
+.ProjectList ul.List li a:hover {color:#FF3300;text-decoration:underline;}
+.ProjectList ul.List li p.detail {margin:5px 0 5px 15px;color:#666;font-size:9pt;line-height:20px;}
+.ProjectList ul.List li p.news {margin:10px 0 5px 0;}
+.ProjectList ul.List li p.news a {color:#333;}
+
+
+/* /project/tags */
+.CATALOGS {border:1px solid #ccc;background:#fff;}
+.CATALOGS h2 {background:#cfc;font-size:10pt;padding:3px 5px;color:#666;height:24px;}
+.CATALOGS .TOP_TAG {margin:10px 10px 20px 10px;}
+.CATALOGS .TOP_TAG h3 {border-bottom:2px solid #ccc;font-size:10.5pt;padding:0 0 3px 0;margin-bottom:10px;}
+.CATALOGS .TOP_TAG ul {line-height:26px;overflow:hidden;}
+.CATALOGS .TOP_TAG ul li {float:left;width:176px;height:24px;overflow:hidden;font-size:10pt;}
+.CATALOGS .TOP_TAG ul li a {text-decoration:None;}
+.CATALOGS .TOP_TAG ul li em {font-style:normal;font-size:8pt;color:#666;-webkit-text-size-adjust:none;}
+.CATALOGS .LANGS ul li {width:100px;}
+.CATALOGS .TOP_TAG .TAG_LINKS {margin:0 0 10px 0;}
+.CATALOGS .TOP_TAG .TAG_LINKS a {color:#A00;font-weight:bold;margin-right:20px;}
+
+.TAGS .TAG {border:1px solid #40AA53;margin-bottom:10px;}
+.TAGS .TAG h3 {
+	color:#060;
+	font-size:11pt;
+	background:#DDFFDD url('/img/all.gif') no-repeat 5px center;
+	padding:3px 5px 3px 20px;
+}
+.TAGS .TAG h3 .more {float:right;font-weight:normal;font-size:9pt;}
+.TAGS .TAG ul {
+	font-size:9.5pt;
+	padding:5px 0;
+}
+.TAGS .TAG ul li {
+	background:url('/img/a2.gif') no-repeat 5px center;
+	padding-left:18px;
+}
+.TAGS .TAG ul li a {color:#060;text-decoration:none;}
+.TAGS .TAG ul li a:hover {text-decoration:underline;color:#A00;}
+.TAGS .TAG ul li em {color:#666;font-size:9pt;font-style:normal;margin-left:5px;}
+.TAGS .TAG ul li.current {background-color:#fee;}
+.TAGS .TAG ul li.current a {color:#A00;font-weight:bold;}
+
+.TagLinks {margin:10px 0 20px 0;line-height:22px;border:1px dashed #ccc;background:#ffc;padding:3px 5px}
+.TagLinks a {font-weight:bold;color:#A00;margin:0 13px 0 3px;}
+
+/* 软件列表页 */
+.AllProjectList {overflow:hidden;}
+.AllProjectList .TagTree {float:left; width:235px;overflow-y:auto;overflow-x:hidden;}
+
+.AllProjectList .ProjectList {float:right; width:740px;padding:10px 5px;border:1px solid #ddd;}
+
+.AllProjectList .ProjectList h2 {overflow:hidden;margin:0 5px;font-size:18pt;font-weight:normal;color:#333;}
+.AllProjectList .ProjectList h2 em {font-style:normal;color:#A00;margin:0 2px 0 3px;}
+.AllProjectList .ProjectList h2 .stat {float:right;font-size:12pt;margin:5px 0 0 0;}
+.AllProjectList .ProjectList h2 .stat .selected {color:#A00;}
+.AllProjectList .ProjectList .PrefixFiler {font-size:10.5pt;margin:0 5px;}
+.AllProjectList .ProjectList .PrefixFiler a {margin-right:4px;text-decoration:none;}
+.AllProjectList .ProjectList .PrefixFiler a.current {font-weight:bold; color:#A00;}
+.AllProjectList .ProjectList .FilterForm {margin-left:5px;display:block;}
+.AllProjectList .ProjectList .FilterForm a.selected {font-weight:bold; color:#A00;}
+
+.TagTree {border:1px solid #ddd;background:#fff;}
+.TagTree a {text-decoration:none;}
+.TagTree h2 {background:#eee;color:#060;font-weight:normal;padding:5px 10px;font-size:12pt;}
+.TagTree .TopTag {margin:10px;}
+.TagTree .TopTag h3 {font-size:12pt;}
+.TagTree .TopTag h3 a {
+	display:block;
+	padding:0 10px 0 0;
+}
+.fixed{position:fixed;top:10px;}
+.AllProjectList .TagTree
+.TagTree h3 a {background: url('/img/down.gif') no-repeat right center;}
+.TagTree .opened h3 a {background: url('/img/up2.gif') no-repeat right center;}
+.TagTree .closed ul {display:none;}
+
+.TagTree .TopTag ul {margin:10px 0 20px 10px;font-size:10pt;}
+.TagTree .TopTag ul li {overflow:hidden;margin:0 0 5px 0;}
+.TagTree .TopTag ul li a {display:block;}
+.TagTree .TopTag ul li a:hover {color:#40AA53;}
+.TagTree .TopTag ul li em {
+	float:right;
+	font-style:normal;
+	color:#666;	
+    background: #f2f2f2;
+	padding:1px 2px;
+    font-size: 9pt;
+    font-style: normal;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+}
+.TagTree .TopTag ul li a.current {color:#40AA53;font-weight:bold;}
+.TagTree .TopTag ul li a.current em {background:#40AA53;color:#fff;}
+.TagTree .TopTag ul li a:hover em {background:#40AA53;color:#fff;}
+
+
+.SoftwareBody .RecommendList {margin:0 0 10px 0;background:#fafcff;}
+.SoftwareBody .HotList {margin:0 0 20px 0;background:#fafcff;}
+
+.SoftwareBody .RecommendList ul {overflow:hidden;font-size:10.5pt;margin:10px;line-height:28px;}		
+.SoftwareBody .RecommendList ul li {float:left; width: 350px;}
+.SoftwareBody .RecommendList ul li a {background:url('/img/a3.gif') no-repeat left center; padding-left:16px;text-decoration:none;}
+.SoftwareBody .RecommendList ul li a em {font-style:normal;color:#336;}
+.SoftwareBody .RecommendList ul li a:hover em {color:#C00;}
+
+.SoftwareBody .HotList ul {overflow:hidden;margin:10px;font-size:10.5pt;}
+.SoftwareBody .HotList ul li {float:left;width:350px;height:36px;overflow:hidden;}
+.SoftwareBody .HotList ul li img {float:left;width:32px;height:32px;}
+.SoftwareBody .HotList ul li span {float:left; margin:3px 0 0 10px;}
+.SoftwareBody .HotList ul li a em {font-style:normal;color:#336;}
+.SoftwareBody .HotList ul li a:hover em {color:#C00;}
+
+.RightNewsList .List li {overflow:hidden;background:url('/img/a2.gif') no-repeat left center;padding-left:16px;overflow:hidden;line-height:24px;}
+.RightNewsList .List h3 {font-size:10.5pt; float:left; font-weight:normal;}
+.RightNewsList .List .date {float:right;color:#666;}
+.RightNewsList .List li em {font-style:normal;color:#A00;margin:0 2px;} 
+
+
+.ProjectPage {overflow:hidden;}
+.ProjectPage .ProjectMain {float:left; width:732px;}
+.ProjectPage .ProjectRight {float:right; width:258px;}
+
+.ProjectPage .Project {border:1px solid #ddd; background:#fff;}
+.ProjectPage .Recommend {
+	background:#fff url('/img/recomm.gif') no-repeat 640px 5px;
+}
+.ProjectPage .Project h1.PN {overflow:hidden;margin:15px 0 10px 10px;font-size:16pt;}
+.ProjectPage .Project h1.PN img {float:left; height:48px;}
+.ProjectPage .Project h1.PN .name {float:left; margin-left:10px;}
+.ProjectPage .Project h1.PN .name a.h1 {text-decoration:none;color:#000; line-height:44px;}
+.ProjectPage .Project h1.PN .name i {font-weight:normal;font-style:normal;font-size:8pt;display:block;color:#888;}
+.ProjectPage .Project h1.PN a.edit {float:left; font-weight:normal; font-size:9pt;margin-left:10px;border:1px solid #eee; padding:3px 5px;text-decoration:none;}
+.ProjectPage .Project h1.PN a.edit:hover {background:#ffe}
+.ProjectPage .Project .Body img {max-width:700px;}
+.ProjectPage .Project .Body .detail {margin:10px;overflow:hidden;font-size:10pt;}
+.ProjectPage .Project .Body .detail p {margin-bottom:10px;}
+
+.ProjectPage .Project .ProjectEdit {overflow:hidden;border-top:1px dashed #ccc;margin:10px 0;}
+.ProjectPage .Project .ProjectEdit a {float:right;padding:2px 5px;background:#40AA53;color:#fff;text-decoration:none;margin:5px 10px 0 0;}
+.ProjectPage .Project .GithubEmbed {margin:0 10px;}
+.ProjectPage .Project .ProjectNews {margin:10px;}
+.ProjectPage .Project .ProjectNews strong {font-size:10.5pt;}
+.ProjectPage .Project .ProjectNews strong em {font-style:normal;color:#A00;margin:0 5px 0 2px;}
+
+.ProjectPage .Project .ProjectNews ul {margin:10px 0;line-height:20px;font-size:10pt;}
+.ProjectPage .Project .ProjectNews ul li {border-bottom:1px dashed #ccc;overflow:hidden;background:url('/img/a3.gif') no-repeat left center;padding-left:16px;}
+.ProjectPage .Project .ProjectNews ul li a {text-decoration:none;float:left; width:440px;}
+.ProjectPage .Project .ProjectNews ul li .stat {float:left;font-size:9pt;color:#666;width:120px;}
+.ProjectPage .Project .ProjectNews ul li .date {float:right;color:#666;font-size:9pt; width:120px; text-align:right;}
+.ProjectPage .Project .google_ads {margin-left:1px;}
+.ProjectPage .Project .attrs {
+	background:#f6f6f6;
+	border:1px solid #eee;
+	padding:5px 10px;
+	margin:0 10px;
+	font-weight:bold;
+	line-height:22px;
+}
+.ProjectPage .Project .attrs a {font-weight: normal;}
+.ProjectPage .Project .urls {margin:20px 10px;height: 30px;}
+.ProjectPage .Project .urls li {float: left;width:120px;margin-right:20px;}
+.ProjectPage .Project .urls a {
+	background:#557DBA;
+	color:#fff;
+	float:left;
+	width:120px;
+	height:30px;
+	line-height:28px;
+	font-size:12pt;
+	text-decoration:none;
+	text-align:center;
+}
+.ProjectPage .Project .urls a:hover {background:#3F669C;}
+
+
+.ProjectPosts {margin:20px 0;}
+.ProjectThreads {margin:0 10px 20px 10px;}
+.ProjectThreads table {width:100%;}
+.ProjectThreads table td {vertical-align:top;padding:10px 0 5px 0;border-bottom:1px dashed #ccc;}
+.ProjectThreads h4 {font-size:10.5pt;}
+.ProjectThreads h4 a {text-decoration:none;}
+.ProjectThreads h4 a:hover {text-decoration:underline;}
+.ProjectThreads h4 a .highlight {color:#A00;}
+.ProjectThreads h4 .stat {color:#666;font-size:9pt;margin-left:10px;font-weight:normal;float:right;}
+.ProjectThreads h4 em {color:#A00;font-style:normal;margin:0 3px 0 1px;}
+
+.ProjectThreads .portrait {width:45px;vertical-align:top;}
+.ProjectThreads .portrait img {width:32px;height:32px;border:1px solid #eee;padding:2px;background:#fff;}
+.ProjectThreads .portrait a:hover img {border:1px solid #40AA53;}
+
+.ProjectThreads .Tags {margin:5px 0;}
+
+.ProjectThreads #PopularTags {border-bottom:1px solid #fff;padding:0 0 10px 0;}
+.ProjectThreads #PopularTags th {width:20px;padding:0 0 0 2px;background:#40AA53;color:#fff;align:center;}
+.ProjectThreads #PopularTags td {padding:2px 5px;border:1px solid #40AA53;border-left:0;background:#ffc;}
+.ProjectThreads #PopularTags a {background:#eee;border-bottom:1px solid #999;}
+.ProjectThreads #PopularTags a:hover {color:#40AA53;}
+.ProjectThreads #PopularTags a:hover em {color:#40AA53;}
+
+.ProjectThreads .topic p {font-size:9pt;color:#666;}
+
+.ProjectThreads .qstat {width:140px;text-align:right;}
+.ProjectThreads .qstat a {text-decoration:none;}
+.ProjectThreads .qstat ul li {
+	float:left;
+	font-size:9pt;
+	text-align:center;
+	margin-left:3px;
+	width:42px;
+	padding:0 0 3px 0;
+}
+.ProjectThreads .qstat ul li.answer {background:#628d5a;color:#fff;}
+.ProjectThreads .qstat ul li.answer0 {color:#A00;}
+.ProjectThreads .qstat ul li.HasBestAnswer {color:#ff6;}
+.ProjectThreads .qstat ul li.vote {color:#000;}
+.ProjectThreads .qstat ul li.view {color:#666;}
+.ProjectThreads .qstat ul li em {
+	display:block;
+	padding:3px 0;
+	font-style:normal;
+	font-family:Verdana ;
+	font-weight:bold;
+	font-size:12pt;
+}
+
+.ProjectThreads a.more {float:right;margin-top:10px;color:#A00;}
+
+.ProjectObjects {margin: 20px 0;}
+.ProjectObjects ul.List {margin:10px;}
+.ProjectObjects ul.List li h3 {margin-top:20px;}
+.ProjectObjects ul.List li .outline {margin:5px 0 10px 0;font-size:9pt;color:#666;}
+.ProjectObjects ul.List li .detail {font-size:9pt;color:#666;line-height:22px;margin:5px 0 10px 0;}
+.ProjectObjects ul.List li .detail a {margin-top:10px;}
+
+.ProjectPage .ProjectRight .RightProjectList {margin-top:20px;}
+
+.ProjectPage .ProjectRight #QuestionWizard {
+	font-size:12pt;
+	text-align:center;
+	padding:8px 10px;
+	border:1px solid #ccc;
+	margin:0px 0 10px 0;
+	color:#666;
+	background:#fff;
+	overflow:hidden;
+}
+.ProjectPage .ProjectRight #QuestionWizard em {font-style:normal;color:#A00;font-weight:bold;}
+.ProjectPage .ProjectRight #QuestionWizard a {text-decoration:none;}
+.ProjectPage .ProjectRight #QuestionWizard a.rndbutton {margin:10px 10px 0 0 ;font-weight:normal;font-size:10.5pt;}
+.ProjectPage .ProjectRight #QuestionWizard img {width:50px;height:50px;}
+.ProjectPage .ProjectRight #QuestionWizard .FollowIt {margin:8px 0 0 0;font-size:10.5pt;}
+.ProjectPage .ProjectRight #QuestionWizard .FollowIt span {margin:0;padding:0;float:left;}
+
+
+.ProjectEditor {width:100%;margin-bottom:20px;}
+.ProjectEditor .notes {border:1px solid #ccc;background:#ffc;padding:10px;margin-bottom:10px;}
+.ProjectEditor .notes h3 {font-size:10.5pt;margin:5px 0 10px 0;}
+.ProjectEditor .notes ul {margin:0 20px;color:#006;list-style:disc;}
+.ProjectEditor td,.ProjectEditor th {padding:5px;}
+.ProjectEditor .tags label {margin-right:5px;}
+.ProjectEditor .tags label.SELECTED {color:#C00;}
+
+
+#DynaInfo {margin:0 0 10px 0;}
+#DynaInfo form {
+	margin:0 0 10px 0;
+	overflow:hidden;
+	position:relative;
+	border:1px solid #40AA53;
+	background:#40AA53;
+}
+#DynaInfo textarea {float:left;width:211px;height:36px;padding:2px;resize:none;overflow:auto;font-size:9pt;border:0;}
+#DynaInfo textarea:focus {border:0;}
+#DynaInfo input {float:left;width:37px;height:36px;background:#40AA53;color:#fff;border:0;}
+#DynaInfo input:hover {color:#ff0;cursor:pointer;}
+#DynaInfo #DivPubStatus {text-align:center;position:absolute;top:10px;left:80px;font-size:12pt;color:#060;display:none;}
+#DynaInfo ul.TopTweets li {margin:0 0 5px 0;padding:0 0 8px 0;border-bottom:1px dashed #ddd;}
+#DynaInfo ul.TopTweets li .portrait {float:left;width:35px;padding-top:3px;}		
+#DynaInfo ul.TopTweets li .portrait img {width:24px;height:24px;border:1px solid #ccc;padding:1px;background:#fff;}		
+#DynaInfo ul.TopTweets li .body {float:left;width:220px;overflow:hidden;font-size:9pt;}	
+#DynaInfo ul.TopTweets li .user a {color:#6cabe1;}
+#DynaInfo ul.TopTweets li .log {color:#666;word-break: break-all;}
+#DynaInfo ul.TopTweets li .log a {color:#6cabe1;word-break: break-all;}
+#DynaInfo ul.TopTweets li .log img {vertical-align:middle;}
+#DynaInfo ul.TopTweets li .time {display:block;color:#9A9A9A;margin:5px 0 0 0;}
+#DynaInfo ul.TopTweets li .time a {color:#9A9A9A;text-decoration:none;}
+#DynaInfo ul.TopTweets li .time a:hover {color:#6cabe1;}	
+#DynaInfo .pager li a {font-size:9pt;}
+
+.TopUsers ul li {float:left; width:54px; height:50px; overflow:hidden;text-align:center;margin:0 5px 10px 5px;}
+.TopUsers ul li img {width:32px;height:32px;}
+.TopUsers ul li a.name {display:block;font-size:9pt;}
+
+.ad_banner{
+	margin-bottom: 10px;
+}
+</style>
+
+<script type='text/javascript'>
+function toggle_tag(domid){
+	var dom = $('#'+domid);
+	dom.toggle();
+	dom.parent().toggleClass('opened');
+}
+</script>
+<div id='SoftwareChannel' class='Channel'>
+<div class='SoftwareBody'>	
+	<div class='RecommendList panel'>
+		<h3 class='header'>
+            <a href='/project/recomms' class='more'>更多 &raquo;</a>最新推荐软件
+        </h3>
+				<ul>
+						<li><a href="http://www.oschina.net/p/camel" target="_blank">大众点评的软负载管理中间件 <em>Camel</em></a></li>
+						<li><a href="http://www.oschina.net/p/phxrpc" target="_blank">RPC框架 <em>PhxRPC</em></a></li>
+						<li><a href="http://www.oschina.net/p/phxsql" target="_blank">高可用强一致的MySQL集群 <em>PhxSQL</em></a></li>
+						<li><a href="http://www.oschina.net/p/BluetoothKit" target="_blank">Android蓝牙通信框架 <em>BluetoothKit</em></a></li>
+						<li><a href="http://www.oschina.net/p/alipayzerosdk" target="_blank">最轻量的支付宝转账工具类 <em>AlipayZeroSdk</em></a></li>
+						<li><a href="http://www.oschina.net/p/alloylever" target="_blank">Web 开发调试工具 <em>AlloyLever</em></a></li>
+						<li><a href="http://www.oschina.net/p/QuickKV" target="_blank">Android 键值数据库 <em>QuickKV</em></a></li>
+						<li><a href="http://www.oschina.net/p/bark" target="_blank">数据质量管理方案 <em>Bark</em></a></li>
+						<li><a href="http://www.oschina.net/p/workq" target="_blank">作业调度服务器 <em>Workq</em></a></li>
+						<li><a href="http://www.oschina.net/p/ezdb" target="_blank">LevelDB 的 Java 封装 <em>EZDB</em></a></li>
+						<li><a href="http://www.oschina.net/p/pickadate" target="_blank">jQuery 日期选择插件 <em>pickadate.js</em></a></li>
+						<li><a href="http://www.oschina.net/p/powershell" target="_blank">命令行外壳和脚本环境 <em>PowerShell</em></a></li>
+						<li><a href="http://www.oschina.net/p/alibababeehive" target="_blank">iOS 模块化编程框架 <em>BeeHive</em></a></li>
+						<li><a href="http://www.oschina.net/p/recharts" target="_blank">React 和 D3 构建的图表库 <em>Recharts</em></a></li>
+						<li><a href="http://www.oschina.net/p/UI-Recorder" target="_blank">自动化测试解决方案 <em>UI Recorder</em></a></li>
+						<li><a href="http://www.oschina.net/p/ayoactivitynomanifest" target="_blank">Activity 代理框架 <em>AyoActivityNoManifest</em></a></li>
+						<li><a href="http://www.oschina.net/p/shiftjs" target="_blank">Swift转译JavaScript工具 <em>ShiftJS</em></a></li>
+						<li><a href="http://www.oschina.net/p/pfs" target="_blank">容器化的数据池 <em>Pachyderm</em></a></li>
+						<li><a href="http://www.oschina.net/p/mgjrequestmanager" target="_blank">iOS 网络库 <em>MGJRequestManager</em></a></li>
+						<li><a href="http://www.oschina.net/p/luban-android" target="_blank">Android 图片压缩工具 <em>Luban(鲁班)</em></a></li>
+					</ul>
+	</div>
+	
+						<div style='margin-bottom:10px;'>
+		<a name="project_banner_one"/>
+		<a href="http://whd.hostucan.cn/conference/xm16" target="_blank" title="IDC">
+			<img src="http://static.oschina.net/uploads/space/2016/0902/172227_2AmM_2686220.jpg" width="730" height="50">
+		</a>
+		 </div>
+		
+	<div class='HotList panel'>
+		<h3 class='header'>今日热门软件 Top 20</h3>
+				<ul>
+						<li>
+				<a href="http://www.oschina.net/p/checkup" target="_blank">
+        		        		<img src="/img/logo/default.gif?t=1451964198000"/>
+        						<span>分布式无锁站点健康检查工具 <em>Checkup</em></span>
+				</a>
+			</li>
+						<li>
+				<a href="http://www.oschina.net/p/dos-orm" target="_blank">
+        		                    <img src="http://static.oschina.net/uploads/logo/dos-orm_hbEux.png" alt="Dos.ORM logo" title="Dos.ORM logo"/>
+        						<span>.Net轻量级开源ORM框架 <em>Dos.ORM</em></span>
+				</a>
+			</li>
+						<li>
+				<a href="http://www.oschina.net/p/mpush" target="_blank">
+        		        		<img src="/img/logo/default.gif?t=1451964198000"/>
+        						<span>实时消息推送系统 <em>MPUSH</em></span>
+				</a>
+			</li>
+						<li>
+				<a href="http://www.oschina.net/p/d3" target="_blank">
+        		                    <img src="http://static.oschina.net/uploads/logo/d3_XYXI0.png" alt="D3.js logo" title="D3.js logo"/>
+        						<span>可视化库 <em>D3.js</em></span>
+				</a>
+			</li>
+						<li>
+				<a href="http://www.oschina.net/p/jeesite" target="_blank">
+        		        		<img src="/img/logo/default.gif?t=1451964198000"/>
+        						<span>企业信息化快速开发平台 <em>JeeSite</em></span>
+				</a>
+			</li>
+						<li>
+				<a href="http://www.oschina.net/p/mina" target="_blank">
+        		                    <img src="/img/logo/mina.png?t=1451964198000" alt="MINA logo" title="MINA logo"/>
+        						<span>高性能Java网络框架 <em>MINA</em></span>
+				</a>
+			</li>
+						<li>
+				<a href="http://www.oschina.net/p/recharts" target="_blank">
+        		        		<img src="/img/logo/default.gif?t=1451964198000"/>
+        						<span>React 和 D3 构建的图表库 <em>Recharts</em></span>
+				</a>
+			</li>
+						<li>
+				<a href="http://www.oschina.net/p/spring" target="_blank">
+        		                    <img src="/img/logo/spring.png?t=1451964198000" alt="Spring logo" title="Spring logo"/>
+        						<span>J2EE框架 <em>Spring</em></span>
+				</a>
+			</li>
+						<li>
+				<a href="http://www.oschina.net/p/angularjs" target="_blank">
+        		                    <img src="http://static.oschina.net/uploads/logo/angularjs_vkzUR.png" alt="AngularJS logo" title="AngularJS logo"/>
+        						<span>HTML的Web框架 <em>AngularJS</em></span>
+				</a>
+			</li>
+						<li>
+				<a href="http://www.oschina.net/p/jfinal" target="_blank">
+        		                    <img src="/img/logo/jfinal.gif?t=1451964198000" alt="JFinal logo" title="JFinal logo"/>
+        						<span>JAVA 极速WEB+ORM框架 <em>JFinal</em></span>
+				</a>
+			</li>
+						<li>
+				<a href="http://www.oschina.net/p/dubbo" target="_blank">
+        		                    <img src="/img/logo/dubbo.gif?t=1451964198000" alt="Dubbo logo" title="Dubbo logo"/>
+        						<span>服务框架 <em>Dubbo</em></span>
+				</a>
+			</li>
+						<li>
+				<a href="http://www.oschina.net/p/weui" target="_blank">
+        		                    <img src="http://static.oschina.net/uploads/logo/weui_DFqpP.png" alt="WeUI logo" title="WeUI logo"/>
+        						<span>专为微信设计的 UI 库 <em>WeUI</em></span>
+				</a>
+			</li>
+						<li>
+				<a href="http://www.oschina.net/p/github" target="_blank">
+        		                    <img src="/img/logo/github.gif?t=1451964198000" alt="Github logo" title="Github logo"/>
+        						<span>代码托管服务 <em>Github</em></span>
+				</a>
+			</li>
+						<li>
+				<a href="http://www.oschina.net/p/nfine" target="_blank">
+        		        		<img src="/img/logo/default.gif?t=1451964198000"/>
+        						<span>.NET快速开发平台 <em>NFine.Framework</em></span>
+				</a>
+			</li>
+						<li>
+				<a href="http://www.oschina.net/p/mysql-sync" target="_blank">
+        		        		<img src="/img/logo/default.gif?t=1451964198000"/>
+        						<span><em>MySQL-Sync</em></span>
+				</a>
+			</li>
+						<li>
+				<a href="http://www.oschina.net/p/paddlepaddle" target="_blank">
+        		        		<img src="/img/logo/default.gif?t=1451964198000"/>
+        						<span>深度学习平台 <em>PaddlePaddle</em></span>
+				</a>
+			</li>
+						<li>
+				<a href="http://www.oschina.net/p/dwz" target="_blank">
+        		                    <img src="/img/logo/dwz.gif?t=1451964198000" alt="DWZ logo" title="DWZ logo"/>
+        						<span>国产jQuery UI框架 (jUI) <em>DWZ</em></span>
+				</a>
+			</li>
+						<li>
+				<a href="http://www.oschina.net/p/dubbox" target="_blank">
+        		        		<img src="/img/logo/default.gif?t=1451964198000"/>
+        						<span>Dubbo 扩展 <em>Dubbox</em></span>
+				</a>
+			</li>
+						<li>
+				<a href="http://www.oschina.net/p/spring-rest-docs" target="_blank">
+        		        		<img src="/img/logo/default.gif?t=1451964198000"/>
+        						<span>RESTful 服务文档 <em>Spring REST Docs</em></span>
+				</a>
+			</li>
+						<li>
+				<a href="http://www.oschina.net/p/magnolia" target="_blank">
+        		                    <img src="http://static.oschina.net/uploads/logo/magnolia_QwxeH.png" alt="Magnolia logo" title="Magnolia logo"/>
+        						<span>Web内容管理系统 <em>Magnolia</em></span>
+				</a>
+			</li>
+					</ul>
+	</div>
+	
+        <div class='CATALOGS panel'>	
+    	<h3 class='header'>开源软件分类</h3>
+    	<div class='LANGS TOP_TAG'>
+    		<h3>编程语言</h3>
+    		<ul>
+    			    			<li><a href="/project/lang/19/java">Java</a></li>
+    			    			<li><a href="/project/lang/21/c">C/C++</a></li>
+    			    			<li><a href="/project/lang/341/objc">Objective-C</a></li>
+    			    			<li><a href="/project/lang/22/php">PHP</a></li>
+    			    			<li><a href="/project/lang/24/perl">Perl</a></li>
+    			    			<li><a href="/project/lang/25/python">Python</a></li>
+    			    			<li><a href="/project/lang/26/ruby">Ruby</a></li>
+    			    			<li><a href="/project/lang/194/csharp">C#</a></li>
+    			    			<li><a href="/project/lang/20/dotnet">.NET</a></li>
+    			    			<li><a href="/project/lang/23/asp">ASP</a></li>
+    			    			<li><a href="/project/lang/358/go">Google Go</a></li>
+    			    			<li><a href="/project/lang/210/dlang">D语言</a></li>
+    			    			<li><a href="/project/lang/213/groovy">Groovy</a></li>
+    			    			<li><a href="/project/lang/261/scala">Scala</a></li>
+    			    			<li><a href="/project/lang/28/javascript">JavaScript</a></li>
+    			    			<li><a href="/project/lang/460/typescript">TypeScript</a></li>
+    			    			<li><a href="/project/lang/269/html-css">HTML/CSS</a></li>
+    			    			<li><a href="/project/lang/29/actionscript">ActionScript</a></li>
+    			    			<li><a href="/project/lang/30/vbscript">VBScript</a></li>
+    			    			<li><a href="/project/lang/31/delphi">Delphi/Pascal</a></li>
+    			    			<li><a href="/project/lang/32/basic">Basic</a></li>
+    			    			<li><a href="/project/lang/34/erlang">ErLang</a></li>
+    			    			<li><a href="/project/lang/158/cobol">COBOL</a></li>
+    			    			<li><a href="/project/lang/159/fortran">Fortran</a></li>
+    			    			<li><a href="/project/lang/160/lua">Lua</a></li>
+    			    			<li><a href="/project/lang/209/shell">SHELL</a></li>
+    			    			<li><a href="/project/lang/161/smalltalk">Smalltalk</a></li>
+    			    			<li><a href="/project/lang/162/asm">汇编</a></li>
+    			    			<li><a href="/project/lang/343/sliverlight">Sliverlight</a></li>
+    			    			<li><a href="/project/lang/348/lisp">Lisp</a></li>
+    			    			<li><a href="/project/lang/436/swift">Swift</a></li>
+    			    			<li><a href="/project/lang/449/vala">Vala</a></li>
+    			    			<li><a href="/project/lang/448/rust">Rust</a></li>
+    			    			<li><a href="/project/lang/450/hack">Hack</a></li>
+    			    			<li><a href="/project/lang/451/dart">Dart</a></li>
+    			    		</ul>
+    	</div>
+    	    	<div class='TOP_TAG'>
+    		    		<h3>Web应用开发</h3>
+						    		<ul>
+    			    			<li><a href="/project/tag/354/spdy-libs">SPDY开发包</a><em>(13)</em></li>
+    			    			<li><a href="/project/tag/355/html5">HTML5开发相关</a><em>(119)</em></li>
+    			    			<li><a href="/project/tag/359/pjax">Pjax相关项目</a><em>(4)</em></li>
+    			    			<li><a href="/project/tag/360/webapi">网站API</a><em>(100)</em></li>
+    			    			<li><a href="/project/tag/403/restful">REST/RESTful项目</a><em>(76)</em></li>
+    			    			<li><a href="/project/tag/405/responsive-framework">响应式 Web 框架</a><em>(35)</em></li>
+    			    			<li><a href="/project/tag/418/weixin">微信相关软件</a><em>(78)</em></li>
+    			    			<li><a href="/project/tag/421/javascript-mvc">JavaScript MVC 框架</a><em>(53)</em></li>
+    			    			<li><a href="/project/tag/429/webdav">WebDAV 开源软件</a><em>(31)</em></li>
+    			    			<li><a href="/project/tag/443/angularjs-plugins">AngularJS 扩展</a><em>(74)</em></li>
+    			    			<li><a href="/project/tag/461/microservice">微服务框架</a><em>(15)</em></li>
+    			    			<li><a href="/project/tag/311/google-api">Google相关API</a><em>(24)</em></li>
+    			    			<li><a href="/project/tag/205/webtools">网页开发工具</a><em>(258)</em></li>
+    			    			<li><a href="/project/tag/127/webframework">Web框架</a><em>(1059)</em></li>
+    			    			<li><a href="/project/tag/166/j2ee">J2EE框架</a><em>(54)</em></li>
+    			    			<li><a href="/project/tag/131/ajax">AJAX框架/RIA</a><em>(185)</em></li>
+    			    			<li><a href="/project/tag/139/fileupload">文件上传组件</a><em>(50)</em></li>
+    			    			<li><a href="/project/tag/228/json">JSON/BSON开发包</a><em>(193)</em></li>
+    			    			<li><a href="/project/tag/318/odata">OData开发包</a><em>(9)</em></li>
+    			    			<li><a href="/project/tag/236/html-parser">HTML解析器</a><em>(75)</em></li>
+    			    			<li><a href="/project/tag/257/flash-libs">Flash开发包</a><em>(49)</em></li>
+    			    			<li><a href="/project/tag/165/javascript-utils">常用JavaScript包</a><em>(968)</em></li>
+    			    			<li><a href="/project/tag/296/javascript-engine">浏览器/JS引擎</a><em>(44)</em></li>
+    			    			<li><a href="/project/tag/265/syntaxhighlighter">语法着色和高亮</a><em>(51)</em></li>
+    			    			<li><a href="/project/tag/172/wysiwyg">可视化HTML编辑器</a><em>(116)</em></li>
+    			    			<li><a href="/project/tag/268/html-components">网页组件</a><em>(110)</em></li>
+    			    			<li><a href="/project/tag/138/webservices">WEB服务/SOAP/SOA</a><em>(131)</em></li>
+    			    			<li><a href="/project/tag/347/xmlrpc">RPC/XMLRPC项目</a><em>(57)</em></li>
+    			    			<li><a href="/project/tag/137/rsslib">RSS/ATOM相关</a><em>(43)</em></li>
+    			    			<li><a href="/project/tag/233/sso">单点登录框架</a><em>(29)</em></li>
+    			    			<li><a href="/project/tag/272/js-server">服务器端JavaScript</a><em>(23)</em></li>
+    			    			<li><a href="/project/tag/334/nodejs-extends">Node.js 扩展</a><em>(252)</em></li>
+    			    			<li><a href="/project/tag/321/websocket">WebSocket开发包</a><em>(47)</em></li>
+    			    			<li><a href="/project/tag/306/openid">OpenID开发包</a><em>(31)</em></li>
+    			    			<li><a href="/project/tag/307/oauth">OAuth开发包</a><em>(67)</em></li>
+    			    			<li><a href="/project/tag/199/taglib">标签库(Taglib)</a><em>(35)</em></li>
+    			    			<li><a href="/project/tag/310/css-framework">CSS框架</a><em>(246)</em></li>
+    			    			<li><a href="/project/tag/248/captcha">验证码(Captcha)</a><em>(39)</em></li>
+    			    			<li><a href="/project/tag/335/web-player">Web多媒体播放器</a><em>(31)</em></li>
+    			    		</ul>
+    	</div>
+    	    	<div class='TOP_TAG'>
+    		    		<h3>手机/移动开发</h3>
+						    		<ul>
+    			    			<li><a href="/project/tag/342/android-ui">Android UI 组件</a><em>(253)</em></li>
+    			    			<li><a href="/project/tag/455/react-native">React Native 相关</a><em>(18)</em></li>
+    			    			<li><a href="/project/tag/456/website-app">网站客户端</a><em>(26)</em></li>
+    			    			<li><a href="/project/tag/457/nativescript-plugins">NativeScript 插件</a><em>(18)</em></li>
+    			    			<li><a href="/project/tag/336/iphone-dev-tools">iPhone/iPad开发工具</a><em>(19)</em></li>
+    			    			<li><a href="/project/tag/337/wp7-dev-tools">WP7开发工具</a><em>(22)</em></li>
+    			    			<li><a href="/project/tag/155/mobile-development-t">手机开发工具</a><em>(197)</em></li>
+    			    			<li><a href="/project/tag/322/mobile-web">手机Web开发框架</a><em>(120)</em></li>
+    			    			<li><a href="/project/tag/169/mobile-devlibs">手机开发包</a><em>(255)</em></li>
+    			    			<li><a href="/project/tag/13/mobile-software">手机相关软件</a><em>(457)</em></li>
+    			    			<li><a href="/project/tag/87/mobile-games">手机游戏</a><em>(58)</em></li>
+    			    			<li><a href="/project/tag/218/mobile-os">手机操作系统</a><em>(48)</em></li>
+    			    			<li><a href="/project/tag/339/ios-libs">iOS/iPhone/iPad开发包</a><em>(31)</em></li>
+    			    		</ul>
+    	</div>
+    	    	<div class='TOP_TAG'>
+    		    		<h3>iOS代码库</h3>
+						    		<ul>
+    			    			<li><a href="/project/tag/409/ios-activity">Activity</a><em>(36)</em></li>
+    			    			<li><a href="/project/tag/412/ios-pull-to-refresh">下拉刷新(pull-to-refresh)</a><em>(63)</em></li>
+    			    			<li><a href="/project/tag/413/ios-menu">菜单 (Menu)</a><em>(158)</em></li>
+    			    			<li><a href="/project/tag/426/ios-gps">位置信息(GPS/Location)</a><em>(25)</em></li>
+    			    			<li><a href="/project/tag/431/ios-form">iOS 表单</a><em>(26)</em></li>
+    			    			<li><a href="/project/tag/435/ios-notification">提醒 (Notification)</a><em>(86)</em></li>
+    			    			<li><a href="/project/tag/439/ios-database">iOS 数据库</a><em>(15)</em></li>
+    			    			<li><a href="/project/tag/365/ios-button">按钮(Button)</a><em>(185)</em></li>
+    			    			<li><a href="/project/tag/366/ios-table">列表(Table)</a><em>(306)</em></li>
+    			    			<li><a href="/project/tag/367/ios-image">图像(Image)</a><em>(365)</em></li>
+    			    			<li><a href="/project/tag/368/ios-scrollview">滚动视图(ScrollView)</a><em>(174)</em></li>
+    			    			<li><a href="/project/tag/369/ios-picker">选择器(Picker)</a><em>(178)</em></li>
+    			    			<li><a href="/project/tag/370/ios-label">标签(Label)</a><em>(128)</em></li>
+    			    			<li><a href="/project/tag/371/ios-map">地图(Map)</a><em>(78)</em></li>
+    			    			<li><a href="/project/tag/372/ios-navigation-bar">导航条(Navigation Bar)</a><em>(72)</em></li>
+    			    			<li><a href="/project/tag/373/ios-progress">进度条(Progress)</a><em>(116)</em></li>
+    			    			<li><a href="/project/tag/374/ios-hud">指示器(HUD)</a><em>(71)</em></li>
+    			    			<li><a href="/project/tag/375/ios-switch">开关(Switch)</a><em>(28)</em></li>
+    			    			<li><a href="/project/tag/376/ios-slider">滑杆(Slider)</a><em>(76)</em></li>
+    			    			<li><a href="/project/tag/377/ios-tabbar">选项卡(Tab Bar)</a><em>(90)</em></li>
+    			    			<li><a href="/project/tag/423/ios-statusbar">状态栏(StatusBar)</a><em>(16)</em></li>
+    			    			<li><a href="/project/tag/378/ios-segment">分段选择(Segment)</a><em>(43)</em></li>
+    			    			<li><a href="/project/tag/379/ios-webview">网页(Webview)</a><em>(48)</em></li>
+    			    			<li><a href="/project/tag/380/ios-text">文字视图(Text)</a><em>(208)</em></li>
+    			    			<li><a href="/project/tag/381/ios-view-layout">视图布局(View Layout)</a><em>(295)</em></li>
+    			    			<li><a href="/project/tag/382/ios-view-transition">视图切换(View Transition)</a><em>(293)</em></li>
+    			    			<li><a href="/project/tag/383/ios-popup-view">弹出视图(Popup View)</a><em>(192)</em></li>
+    			    			<li><a href="/project/tag/384/ios-gesture">手势交互(Gesture)</a><em>(58)</em></li>
+    			    			<li><a href="/project/tag/385/ios-drawing">绘图(Drawing)</a><em>(56)</em></li>
+    			    			<li><a href="/project/tag/386/ios-animation">动画(Animation)</a><em>(192)</em></li>
+    			    			<li><a href="/project/tag/397/ios-charting">图表(Charting)</a><em>(83)</em></li>
+    			    			<li><a href="/project/tag/387/ios-audio">音频声效(Audio)</a><em>(91)</em></li>
+    			    			<li><a href="/project/tag/399/ios-video">视频(Video)</a><em>(52)</em></li>
+    			    			<li><a href="/project/tag/389/ios-network">网络(Networking)</a><em>(116)</em></li>
+    			    			<li><a href="/project/tag/390/ios-advanced-ui">高级UI组件(Advanced)</a><em>(244)</em></li>
+    			    			<li><a href="/project/tag/393/ios-keyboard">键盘(Keyboard)</a><em>(66)</em></li>
+    			    			<li><a href="/project/tag/391/ios-gaming">游戏(Gaming)</a><em>(49)</em></li>
+    			    			<li><a href="/project/tag/422/ios-payment">支付(Payment)</a><em>(12)</em></li>
+    			    			<li><a href="/project/tag/388/ios-others">其他(Others)</a><em>(1063)</em></li>
+    			    		</ul>
+    	</div>
+    	    	<div class='TOP_TAG'>
+    		    		<h3>程序开发</h3>
+									<div class='TAG_LINKS'>
+												<a href="/p/struts" target="_blank">
+					Struts				</a>
+																<a href="/p/lwuit" target="_blank">
+					LWUIT(手机UI)				</a>
+																<a href="/p/tinymce" target="_blank">
+					TinyMCE				</a>
+																<a href="/p/mina" target="_blank">
+					MINA				</a>
+																<a href="/p/jfreechart" target="_blank">
+					JFreeChart				</a>
+																<a href="/p/ikanalyzer" target="_blank">
+					中文分词IKAnalyzer				</a>
+																<a href="/p/ffmpeg" target="_blank">
+					FFmpeg				</a>
+											</div>
+			    		<ul>
+    			    			<li><a href="/project/tag/326/scripting">脚本编程语言</a><em>(122)</em></li>
+    			    			<li><a href="/project/tag/338/map">地图相关</a><em>(40)</em></li>
+    			    			<li><a href="/project/tag/349/epub">Epub电子图书工具</a><em>(7)</em></li>
+    			    			<li><a href="/project/tag/392/uikit">UI组件库</a><em>(114)</em></li>
+    			    			<li><a href="/project/tag/407/code-generator">代码生成工具</a><em>(26)</em></li>
+    			    			<li><a href="/project/tag/420/svg">SVG开发包</a><em>(27)</em></li>
+    			    			<li><a href="/project/tag/424/recommended-engine">推荐引擎</a><em>(19)</em></li>
+    			    			<li><a href="/project/tag/440/finger-print">指纹识别</a><em>(4)</em></li>
+    			    			<li><a href="/project/tag/446/pinyin">拼音转换工具包</a><em>(25)</em></li>
+    			    			<li><a href="/project/tag/447/bluetooth">蓝牙开发</a><em>(25)</em></li>
+    			    			<li><a href="/project/tag/458/spring-data">Spring Data 扩展</a><em>(14)</em></li>
+    			    			<li><a href="/project/tag/178/gui">GUI开发框架</a><em>(304)</em></li>
+    			    			<li><a href="/project/tag/324/swing-dev">Swing开发包</a><em>(35)</em></li>
+    			    			<li><a href="/project/tag/143/utils">常用工具包</a><em>(1293)</em></li>
+    			    			<li><a href="/project/tag/133/report,chart">报表/图表制作</a><em>(267)</em></li>
+    			    			<li><a href="/project/tag/136/template-engine">模板引擎</a><em>(216)</em></li>
+    			    			<li><a href="/project/tag/130/search-engine">搜索引擎</a><em>(169)</em></li>
+    			    			<li><a href="/project/tag/264/segment">中文分词库</a><em>(56)</em></li>
+    			    			<li><a href="/project/tag/132/cachesystem">缓存系统</a><em>(97)</em></li>
+    			    			<li><a href="/project/tag/145/networklib">网络工具包</a><em>(523)</em></li>
+    			    			<li><a href="/project/tag/352/network-libs">高性能网络开发库</a><em>(117)</em></li>
+    			    			<li><a href="/project/tag/404/concurrent ">并发/并行处理框架</a><em>(63)</em></li>
+    			    			<li><a href="/project/tag/140/connectionpool">数据库连接池</a><em>(33)</em></li>
+    			    			<li><a href="/project/tag/327/task-schedule">作业/任务调度</a><em>(60)</em></li>
+    			    			<li><a href="/project/tag/141/imagelib">图形/图像处理</a><em>(343)</em></li>
+    			    			<li><a href="/project/tag/316/opencv">计算机视觉库/人脸识别</a><em>(66)</em></li>
+    			    			<li><a href="/project/tag/312/3d">3D图形处理库</a><em>(66)</em></li>
+    			    			<li><a href="/project/tag/142/multimedialib">多媒体处理</a><em>(263)</em></li>
+    			    			<li><a href="/project/tag/255/pdf-tools">PDF工具包</a><em>(118)</em></li>
+    			    			<li><a href="/project/tag/258/excel-tools">Excel开发包</a><em>(66)</em></li>
+    			    			<li><a href="/project/tag/135/xmltools">XML相关工具</a><em>(180)</em></li>
+    			    			<li><a href="/project/tag/144/logging">日志工具(Logging)</a><em>(162)</em></li>
+    			    			<li><a href="/project/tag/270/osgi">OSGi 框架</a><em>(19)</em></li>
+    			    			<li><a href="/project/tag/126/orm">ORM/持久层框架</a><em>(354)</em></li>
+    			    			<li><a href="/project/tag/128/service-framework">服务框架/平台</a><em>(102)</em></li>
+    			    			<li><a href="/project/tag/129/workflow">工作流引擎</a><em>(92)</em></li>
+    			    			<li><a href="/project/tag/231/rule-engine">业务规则引擎</a><em>(29)</em></li>
+    			    			<li><a href="/project/tag/173/aop">面向方面AOP/IoC</a><em>(106)</em></li>
+    			    			<li><a href="/project/tag/323/cryptography">加密/解密软件包</a><em>(70)</em></li>
+    			    			<li><a href="/project/tag/187/security-framework">安全相关框架</a><em>(145)</em></li>
+    			    			<li><a href="/project/tag/203/tts-speech">TTS/语音合成和处理</a><em>(52)</em></li>
+    			    			<li><a href="/project/tag/215/gamedev">游戏开发包</a><em>(219)</em></li>
+    			    			<li><a href="/project/tag/219/desktop-dev">Windows桌面开发组件</a><em>(24)</em></li>
+    			    			<li><a href="/project/tag/238/barcode">条形码/二维码</a><em>(61)</em></li>
+    			    			<li><a href="/project/tag/262/ocr">OCR开发包</a><em>(20)</em></li>
+    			    			<li><a href="/project/tag/298/regex-tools">正则表达式工具</a><em>(34)</em></li>
+    			    			<li><a href="/project/tag/303/markdown">Markdown开发包</a><em>(107)</em></li>
+    			    			<li><a href="/project/tag/304/smslib">短信彩信开发包</a><em>(23)</em></li>
+    			    			<li><a href="/project/tag/305/nlp">自然语言处理</a><em>(25)</em></li>
+    			    			<li><a href="/project/tag/239/Mathematics-computin">数学计算</a><em>(205)</em></li>
+    			    			<li><a href="/project/tag/351/mathml">MathML开发包</a><em>(14)</em></li>
+    			    			<li><a href="/project/tag/246/code-tester">代码练习</a><em>(23)</em></li>
+    			    			<li><a href="/project/tag/253/protocol">协议和规范</a><em>(94)</em></li>
+    			    			<li><a href="/project/tag/437/emoji">Emoji 表情相关</a><em>(30)</em></li>
+    			    			<li><a href="/project/tag/401/Neural-Network">神经网络/人工智能</a><em>(71)</em></li>
+    			    			<li><a href="/project/tag/186/otherdevlib">其他开发相关</a><em>(1130)</em></li>
+    			    		</ul>
+    	</div>
+    	    	<div class='TOP_TAG'>
+    		    		<h3>开发工具</h3>
+									<div class='TAG_LINKS'>
+												<a href="/p/eclipse" target="_blank">
+					Eclipse				</a>
+																<a href="/p/android" target="_blank">
+					Android SDK				</a>
+																<a href="/p/sun+jdk" target="_blank">
+					JDK				</a>
+																<a href="/p/phpeclipse" target="_blank">
+					PHPEclipse				</a>
+																<a href="/p/netbeans" target="_blank">
+					NetBeans				</a>
+																<a href="/p/carbide+cplusplus" target="_blank">
+					Carbide C++				</a>
+																<a href="/p/closure" target="_blank">
+					Closure Tools				</a>
+											</div>
+			    		<ul>
+    			    			<li><a href="/project/tag/317/decompiler">反编译工具</a><em>(29)</em></li>
+    			    			<li><a href="/project/tag/344/ci">持续集成系统</a><em>(31)</em></li>
+    			    			<li><a href="/project/tag/357/sql-injector">SQL注入工具</a><em>(19)</em></li>
+    			    			<li><a href="/project/tag/398/git-tools">Git开源工具</a><em>(168)</em></li>
+    			    			<li><a href="/project/tag/115/java-development-too">Java开发工具</a><em>(148)</em></li>
+    			    			<li><a href="/project/tag/116/dotnet-development-t">.NET开发工具</a><em>(44)</em></li>
+    			    			<li><a href="/project/tag/117/php-development-tool">PHP开发工具</a><em>(100)</em></li>
+    			    			<li><a href="/project/tag/118/c-development-tools">C/C++开发工具</a><em>(100)</em></li>
+    			    			<li><a href="/project/tag/119/ruby-development-too">Ruby/Rails开发工具</a><em>(72)</em></li>
+    			    			<li><a href="/project/tag/120/python-development-t">Python开发工具</a><em>(109)</em></li>
+    			    			<li><a href="/project/tag/121/perl-development-too">Perl开发工具</a><em>(27)</em></li>
+    			    			<li><a href="/project/tag/122/bugtracker">BUG跟踪管理</a><em>(74)</em></li>
+    			    			<li><a href="/project/tag/123/build">项目构建</a><em>(182)</em></li>
+    			    			<li><a href="/project/tag/222/unittest">单元测试工具</a><em>(203)</em></li>
+    			    			<li><a href="/project/tag/125/test-tools">测试工具</a><em>(356)</em></li>
+    			    			<li><a href="/project/tag/408/gui-test-tools">GUI 测试工具</a><em>(29)</em></li>
+    			    			<li><a href="/project/tag/157/optimization">性能测试和优化</a><em>(195)</em></li>
+    			    			<li><a href="/project/tag/259/debug-tools">程序调试工具</a><em>(148)</em></li>
+    			    			<li><a href="/project/tag/167/code-confusion">代码混淆和加密</a><em>(30)</em></li>
+    			    			<li><a href="/project/tag/177/uml">UML/模型工具</a><em>(127)</em></li>
+    			    			<li><a href="/project/tag/291/ui-design">界面原型设计工具</a><em>(21)</em></li>
+    			    			<li><a href="/project/tag/179/installer">安装制作工具</a><em>(64)</em></li>
+    			    			<li><a href="/project/tag/192/compiler">编译器</a><em>(157)</em></li>
+    			    			<li><a href="/project/tag/196/code-optimization">代码管理分析/审查/优化</a><em>(210)</em></li>
+    			    			<li><a href="/project/tag/247/doc-tools">程序文档工具</a><em>(119)</em></li>
+    			    			<li><a href="/project/tag/293/scanner-parser">语法解析工具</a><em>(34)</em></li>
+    			    			<li><a href="/project/tag/332/asm-dev-tools">汇编开发工具</a><em>(11)</em></li>
+    			    		</ul>
+    	</div>
+    	    	<div class='TOP_TAG'>
+    		    		<h3>jQuery 插件</h3>
+						    		<ul>
+    			    			<li><a href="/project/tag/329/jquery-autocomplete">jQuery自动完成插件</a><em>(25)</em></li>
+    			    			<li><a href="/project/tag/340/jquery-page-plugin">jQuery分页插件</a><em>(21)</em></li>
+    			    			<li><a href="/project/tag/356/jquery-file-upload">jQuery 文件上传</a><em>(22)</em></li>
+    			    			<li><a href="/project/tag/410/jquery-map">jQuery 地图插件</a><em>(15)</em></li>
+    			    			<li><a href="/project/tag/274/jquery-dialog">jQuery对话框</a><em>(111)</em></li>
+    			    			<li><a href="/project/tag/289/jquery-gallery">jQuery图片展示/幻灯插件</a><em>(222)</em></li>
+    			    			<li><a href="/project/tag/275/jquery-chart">jQuery图表</a><em>(33)</em></li>
+    			    			<li><a href="/project/tag/276/jquery-tabs">jQuery Tabs</a><em>(22)</em></li>
+    			    			<li><a href="/project/tag/277/jquery-ui">jQuery UI框架</a><em>(37)</em></li>
+    			    			<li><a href="/project/tag/278/jquery-calendar">jQuery日期选择/日历</a><em>(75)</em></li>
+    			    			<li><a href="/project/tag/279/jquery-menu">jQuery菜单</a><em>(90)</em></li>
+    			    			<li><a href="/project/tag/280/jquery-forms">jQuery表单及相关</a><em>(165)</em></li>
+    			    			<li><a href="/project/tag/282/jquery-tooltips">jQuery Tooltips</a><em>(72)</em></li>
+    			    			<li><a href="/project/tag/283/jquery-tree">jQuery 树形控件</a><em>(22)</em></li>
+    			    			<li><a href="/project/tag/284/jquery-image-tools">jQuery图像处理</a><em>(72)</em></li>
+    			    			<li><a href="/project/tag/285/jquery-scroll">jQuery页面滚动插件</a><em>(88)</em></li>
+    			    			<li><a href="/project/tag/286/jquery-table">jQuery表格插件</a><em>(82)</em></li>
+    			    			<li><a href="/project/tag/287/color-picker">jQuery颜色选择插件</a><em>(17)</em></li>
+    			    			<li><a href="/project/tag/288/jquery-syntax">jQuery语法着色</a><em>(10)</em></li>
+    			    			<li><a href="/project/tag/290/jquery-multimedia">jQuery多媒体插件</a><em>(26)</em></li>
+    			    			<li><a href="/project/tag/292/jquery-components">jQuery高级页面组件</a><em>(140)</em></li>
+    			    			<li><a href="/project/tag/294/jquery-cookie">jQuery的Cookie和参数处理</a><em>(4)</em></li>
+    			    			<li><a href="/project/tag/295/jquery-mobile">jQuery手机相关插件</a><em>(11)</em></li>
+    			    			<li><a href="/project/tag/297/jquery-timer">jQuery定时器插件</a><em>(8)</em></li>
+    			    			<li><a href="/project/tag/300/jquery-effects">jQuery界面效果</a><em>(126)</em></li>
+    			    			<li><a href="/project/tag/151/jquery-plugins">其他jQuery插件</a><em>(967)</em></li>
+    			    		</ul>
+    	</div>
+    	    	<div class='TOP_TAG'>
+    		    		<h3>建站系统</h3>
+						    		<ul>
+    			    			<li><a href="/project/tag/416/classifieds">分类网站程序</a><em>(10)</em></li>
+    			    			<li><a href="/project/tag/427/crowdfunding">众筹平台</a><em>(2)</em></li>
+    			    			<li><a href="/project/tag/325/group-buy">团购网站系统</a><em>(15)</em></li>
+    			    			<li><a href="/project/tag/330/qing-blog">开源轻博客系统</a><em>(8)</em></li>
+    			    			<li><a href="/project/tag/65/blog">开源博客系统</a><em>(289)</em></li>
+    			    			<li><a href="/project/tag/319/video-online">视频网站系统</a><em>(10)</em></li>
+    			    			<li><a href="/project/tag/221/microblog">开源微博工具</a><em>(93)</em></li>
+    			    			<li><a href="/project/tag/66/bbs">论坛系统BBS</a><em>(137)</em></li>
+    			    			<li><a href="/project/tag/71/cms">建站系统CMS</a><em>(587)</em></li>
+    			    			<li><a href="/project/tag/68/ecommerce">网店系统/电子商务</a><em>(190)</em></li>
+    			    			<li><a href="/project/tag/164/sns">SNS社交网络/交友平台</a><em>(144)</em></li>
+    			    			<li><a href="/project/tag/299/qa">开源问答系统</a><em>(23)</em></li>
+    			    			<li><a href="/project/tag/69/wiki">WIKI系统</a><em>(86)</em></li>
+    			    			<li><a href="/project/tag/320/pkm">个人知识管理系统</a><em>(11)</em></li>
+    			    			<li><a href="/project/tag/70/webmail">Web邮件系统(webmail)</a><em>(72)</em></li>
+    			    			<li><a href="/project/tag/67/portal">门户平台PORTAL</a><em>(52)</em></li>
+    			    			<li><a href="/project/tag/226/survey">投票系统/问卷调查</a><em>(26)</em></li>
+    			    			<li><a href="/project/tag/227/video-conferencing">网络会议/视频会议</a><em>(28)</em></li>
+    			    			<li><a href="/project/tag/197/photo-album">相册/照片/多媒体系统</a><em>(101)</em></li>
+    			    			<li><a href="/project/tag/251/help-desk">在线帮助和支持系统</a><em>(27)</em></li>
+    			    			<li><a href="/project/tag/249/online-it-service">在线IT服务网站</a><em>(47)</em></li>
+    			    			<li><a href="/project/tag/267/tinyurl">短网址服务</a><em>(18)</em></li>
+    			    			<li><a href="/project/tag/308/server-suite">服务器软件套件</a><em>(80)</em></li>
+    			    		</ul>
+    	</div>
+    	    	<div class='TOP_TAG'>
+    		    		<h3>企业应用</h3>
+									<div class='TAG_LINKS'>
+												<a href="/p/dlog4j" target="_blank">
+					DLOG4J博客				</a>
+																<a href="/p/jforum" target="_blank">
+					JForum论坛				</a>
+																<a href="/p/magento" target="_blank">
+					Magento商城				</a>
+																<a href="/p/vmukti" target="_blank">
+					视频会议VMukti				</a>
+																<a href="/p/laconica" target="_blank">
+					微博Laconica				</a>
+																<a href="/p/sugarcrm" target="_blank">
+					SugarCRM				</a>
+											</div>
+			    		<ul>
+    			    			<li><a href="/project/tag/314/ent-search">企业搜索引擎</a><em>(6)</em></li>
+    			    			<li><a href="/project/tag/333/esb">ESB企业服务总线</a><em>(21)</em></li>
+    			    			<li><a href="/project/tag/350/latex">LaTeX排版系统</a><em>(35)</em></li>
+    			    			<li><a href="/project/tag/362/pbx-voip">软电话交换机/VOIP/PBX</a><em>(32)</em></li>
+    			    			<li><a href="/project/tag/363/maillist">邮件列表管理</a><em>(9)</em></li>
+    			    			<li><a href="/project/tag/411/big-data">大数据</a><em>(58)</em></li>
+    			    			<li><a href="/project/tag/414/medical">开源医疗项目</a><em>(23)</em></li>
+    			    			<li><a href="/project/tag/419/hr">人力资源管理</a><em>(12)</em></li>
+    			    			<li><a href="/project/tag/441/home-automation">家庭自动化系统</a><em>(15)</em></li>
+    			    			<li><a href="/project/tag/453/etl">ETL工具框架</a><em>(16)</em></li>
+    			    			<li><a href="/project/tag/163/bi">BI商业智能</a><em>(58)</em></li>
+    			    			<li><a href="/project/tag/237/pos">POS系统（销售点）</a><em>(16)</em></li>
+    			    			<li><a href="/project/tag/72/oa">OA办公/协作平台</a><em>(126)</em></li>
+    			    			<li><a href="/project/tag/225/vpn">VPN/PPTP项目</a><em>(39)</em></li>
+    			    			<li><a href="/project/tag/74/erp">企业ERP/CRM</a><em>(169)</em></li>
+    			    			<li><a href="/project/tag/252/sip">开源SIP项目</a><em>(31)</em></li>
+    			    			<li><a href="/project/tag/230/addressbook">通讯录管理</a><em>(7)</em></li>
+    			    			<li><a href="/project/tag/78/gis">地理信息系统GIS</a><em>(135)</em></li>
+    			    			<li><a href="/project/tag/170/dms">文档管理</a><em>(92)</em></li>
+    			    			<li><a href="/project/tag/171/project-mgr">任务/项目管理</a><em>(202)</em></li>
+    			    			<li><a href="/project/tag/207/education-software">教学科研相关</a><em>(244)</em></li>
+    			    			<li><a href="/project/tag/212/finance">金融/财务系统</a><em>(87)</em></li>
+    			    			<li><a href="/project/tag/217/electric">电子电路设计软件</a><em>(30)</em></li>
+    			    			<li><a href="/project/tag/241/cad">计算机辅助设计CAD/CAM</a><em>(37)</em></li>
+    			    			<li><a href="/project/tag/271/forensics">数据取证软件</a><em>(24)</em></li>
+    			    		</ul>
+    	</div>
+    	    	<div class='TOP_TAG'>
+    		    		<h3>服务器软件</h3>
+									<div class='TAG_LINKS'>
+												<a href="/project/tag/37/linux?lang=3&os=0&sort=view#projects" target="_blank">
+					Linux				</a>
+																<a href="/p/nginx" target="_blank">
+					Nginx				</a>
+																<a href="/p/squid" target="_blank">
+					Squid				</a>
+																<a href="/p/memcached" target="_blank">
+					Memcached				</a>
+																<a href="/p/subversion" target="_blank">
+					Subversion				</a>
+																<a href="/p/resin" target="_blank">
+					Resin				</a>
+																<a href="/p/activemq" target="_blank">
+					ActiveMQ				</a>
+																<a href="/p/openldap" target="_blank">
+					OpenLDAP				</a>
+											</div>
+			    		<ul>
+    			    			<li><a href="/project/tag/153/apache-module">Apache模块</a><em>(76)</em></li>
+    			    			<li><a href="/project/tag/345/nginx-modules">Nginx扩展模块</a><em>(63)</em></li>
+    			    			<li><a href="/project/tag/402/radius">Radius相关</a><em>(14)</em></li>
+    			    			<li><a href="/project/tag/406/paas">PaaS系统/容器</a><em>(114)</em></li>
+    			    			<li><a href="/project/tag/428/service-decovery">服务发现/注册和协调</a><em>(35)</em></li>
+    			    			<li><a href="/project/tag/445/dockerfile">Docker 扩展</a><em>(23)</em></li>
+    			    			<li><a href="/project/tag/454/docker-image">Docker 映像</a><em>(9)</em></li>
+    			    			<li><a href="/project/tag/101/appserver">应用服务器</a><em>(90)</em></li>
+    			    			<li><a href="/project/tag/106/httpserver">HTTP服务器</a><em>(209)</em></li>
+    			    			<li><a href="/project/tag/302/fastcgi">FastCGI 服务器</a><em>(11)</em></li>
+    			    			<li><a href="/project/tag/105/ftpserver">文件服务器（FTP）</a><em>(59)</em></li>
+    			    			<li><a href="/project/tag/107/mailserver">邮件服务器</a><em>(103)</em></li>
+    			    			<li><a href="/project/tag/109/cacheserver">缓存服务器</a><em>(60)</em></li>
+    			    			<li><a href="/project/tag/110/vcs">版本控制系统</a><em>(185)</em></li>
+    			    			<li><a href="/project/tag/113/firewall">路由器/防火墙</a><em>(98)</em></li>
+    			    			<li><a href="/project/tag/102/proxyserver">代理服务器软件</a><em>(145)</em></li>
+    			    			<li><a href="/project/tag/112/communications">电话/通讯/IM聊天</a><em>(129)</em></li>
+    			    			<li><a href="/project/tag/245/web-cache">Web加速缓存软件</a><em>(9)</em></li>
+    			    			<li><a href="/project/tag/114/terminal-server">终端服务器/远程连接</a><em>(43)</em></li>
+    			    			<li><a href="/project/tag/240/virtual-machine">虚拟机</a><em>(71)</em></li>
+    			    			<li><a href="/project/tag/168/synchronize">文件同步</a><em>(42)</em></li>
+    			    			<li><a href="/project/tag/188/loadbalancer">集群/负载均衡</a><em>(75)</em></li>
+    			    			<li><a href="/project/tag/191/distributed-and-grid">分布式应用/网格</a><em>(165)</em></li>
+    			    			<li><a href="/project/tag/180/ldap">目录服务LDAP</a><em>(56)</em></li>
+    			    			<li><a href="/project/tag/111/streaming">流媒体服务器</a><em>(47)</em></li>
+    			    			<li><a href="/project/tag/108/dnsserver">DNS服务器</a><em>(76)</em></li>
+    			    			<li><a href="/project/tag/104/storage">存储系统</a><em>(163)</em></li>
+    			    			<li><a href="/project/tag/103/message-server">JMS/消息中间件</a><em>(148)</em></li>
+    			    			<li><a href="/project/tag/315/xmpp">XMPP即时通讯</a><em>(20)</em></li>
+    			    			<li><a href="/project/tag/220/cloud">云计算</a><em>(132)</em></li>
+    			    			<li><a href="/project/tag/301/dhcp">DHCP软件</a><em>(14)</em></li>
+    			    			<li><a href="/project/tag/328/tomcat-extend">Tomcat 扩展项目</a><em>(7)</em></li>
+    			    		</ul>
+    	</div>
+    	    	<div class='TOP_TAG'>
+    		    		<h3>数据库相关</h3>
+									<div class='TAG_LINKS'>
+												<a href="/p/mysql" target="_blank">
+					MySQL				</a>
+																<a href="/p/mysql+workbench" target="_blank">
+					MySQL Workbench				</a>
+																<a href="/p/navicat+lite" target="_blank">
+					Navicat Lite				</a>
+																<a href="/p/phpmyadmin" target="_blank">
+					phpMyAdmin				</a>
+																<a href="/p/jtds" target="_blank">
+					jTDS				</a>
+																<a href="/p/mysqloa" target="_blank">
+					MySQL优化				</a>
+																<a href="/p/c-jdbc" target="_blank">
+					C-JDBC				</a>
+											</div>
+			    		<ul>
+    			    			<li><a href="/project/tag/79/dbserver">数据库服务器</a><em>(117)</em></li>
+    			    			<li><a href="/project/tag/235/nosql">NoSQL数据库</a><em>(247)</em></li>
+    			    			<li><a href="/project/tag/244/mysql-derivative">MySQL衍生版</a><em>(18)</em></li>
+    			    			<li><a href="/project/tag/263/xml-database">开源XML数据库</a><em>(6)</em></li>
+    			    			<li><a href="/project/tag/80/db-mgr-tools">数据库管理工具</a><em>(340)</em></li>
+    			    			<li><a href="/project/tag/81/db-optimization">数据库调整和优化</a><em>(128)</em></li>
+    			    			<li><a href="/project/tag/82/db-drivers">数据库驱动程序</a><em>(283)</em></li>
+    			    			<li><a href="/project/tag/83/db-model">数据库建模</a><em>(42)</em></li>
+    			    		</ul>
+    	</div>
+    	    	<div class='TOP_TAG'>
+    		    		<h3>应用工具</h3>
+									<div class='TAG_LINKS'>
+												<a href="/p/imagemagick" target="_blank">
+					ImageMagick				</a>
+																<a href="/p/empathy" target="_blank">
+					Empathy				</a>
+																<a href="/p/openvpn" target="_blank">
+					OpenVPN				</a>
+																<a href="/p/7-zip" target="_blank">
+					7-Zip				</a>
+																<a href="/p/mplayer" target="_blank">
+					MPlayer				</a>
+																<a href="http://www.oschina.net/project/tag/254/freemind-software" target="_blank">
+					思维导图				</a>
+																<a href="/p/filezilla" target="_blank">
+					FileZilla				</a>
+																<a href="/p/putty" target="_blank">
+					PuTTY				</a>
+											</div>
+			    		<ul>
+    			    			<li><a href="/project/tag/254/freemind-software">思维导图软件</a><em>(22)</em></li>
+    			    			<li><a href="/project/tag/346/blog-tools">博客客户端</a><em>(10)</em></li>
+    			    			<li><a href="/project/tag/353/hacker">加密/解密/破解</a><em>(20)</em></li>
+    			    			<li><a href="/project/tag/91/browser">浏览器</a><em>(138)</em></li>
+    			    			<li><a href="/project/tag/182/mailtool">邮件工具</a><em>(84)</em></li>
+    			    			<li><a href="/project/tag/92/text-editor">文档/文本编辑</a><em>(379)</em></li>
+    			    			<li><a href="/project/tag/93/antivirus">杀毒软件</a><em>(31)</em></li>
+    			    			<li><a href="/project/tag/60/rlogin">终端/远程登录</a><em>(187)</em></li>
+    			    			<li><a href="/project/tag/58/im">IM/聊天/语音工具</a><em>(215)</em></li>
+    			    			<li><a href="/project/tag/97/download-tools">下载工具</a><em>(85)</em></li>
+    			    			<li><a href="/project/tag/174/file-transfer-tools">文件传输工具</a><em>(69)</em></li>
+    			    			<li><a href="/project/tag/176/p2p">P2P/BT</a><em>(103)</em></li>
+    			    			<li><a href="/project/tag/181/imagetools">图形和图像工具</a><em>(294)</em></li>
+    			    			<li><a href="/project/tag/223/icontool">图标制作工具</a><em>(32)</em></li>
+    			    			<li><a href="/project/tag/96/multimedia">多媒体工具</a><em>(591)</em></li>
+    			    			<li><a href="/project/tag/94/zip">压缩、解压缩</a><em>(109)</em></li>
+    			    			<li><a href="/project/tag/229/personal-assistant">个人助理软件</a><em>(233)</em></li>
+    			    			<li><a href="/project/tag/64/spider">网络爬虫</a><em>(116)</em></li>
+    			    			<li><a href="/project/tag/184/disk-tools">磁盘/光驱工具</a><em>(138)</em></li>
+    			    			<li><a href="/project/tag/193/filemanager">文件管理器</a><em>(145)</em></li>
+    			    			<li><a href="/project/tag/195/rss-tools">RSS/Atom工具</a><em>(82)</em></li>
+    			    			<li><a href="/project/tag/206/r_d_tools">科研计算工具</a><em>(100)</em></li>
+    			    			<li><a href="/project/tag/216/ostools">操作系统工具</a><em>(477)</em></li>
+    			    		</ul>
+    	</div>
+    	    	<div class='TOP_TAG'>
+    		    		<h3>插件和扩展</h3>
+									<div class='TAG_LINKS'>
+												<a href="/p/firebug" target="_blank">
+					FireBug				</a>
+																<a href="/p/jquery+ui" target="_blank">
+					jQuery UI				</a>
+																<a href="/p/thickbox" target="_blank">
+					ThickBox				</a>
+																<a href="/p/subclipse" target="_blank">
+					SVN插件Subclipse				</a>
+																<a href="/p/buddypress" target="_blank">
+					BuddyPress				</a>
+																<a href="/p/mod_jk" target="_blank">
+					mod_jk				</a>
+																<a href="/p/mod_perl" target="_blank">
+					mod_perl				</a>
+											</div>
+			    		<ul>
+    			    			<li><a href="/project/tag/148/eclipse-plugins">Eclipse插件</a><em>(392)</em></li>
+    			    			<li><a href="/project/tag/149/firefox-plugins">FireFox插件</a><em>(2551)</em></li>
+    			    			<li><a href="/project/tag/150/ie-plugins">IE插件</a><em>(14)</em></li>
+    			    			<li><a href="/project/tag/152/prototype">Prototype扩展</a><em>(19)</em></li>
+    			    			<li><a href="/project/tag/214/chrome-plugins">Chrome插件/扩展</a><em>(235)</em></li>
+    			    			<li><a href="/project/tag/224/wordpress-plugins">WordPress插件</a><em>(74)</em></li>
+    			    			<li><a href="/project/tag/232/netbeans-plugins">NetBeans插件</a><em>(33)</em></li>
+    			    			<li><a href="/project/tag/260/idea-plugins">IDEA插件</a><em>(18)</em></li>
+    			    			<li><a href="/project/tag/432/xcode-plugins">Xcode 插件</a><em>(29)</em></li>
+    			    			<li><a href="/project/tag/438/vs-plugins">Visual Studio 插件</a><em>(33)</em></li>
+    			    			<li><a href="/project/tag/459/sublime-text-plugin">Sublime Text 扩展</a><em>(19)</em></li>
+    			    		</ul>
+    	</div>
+    	    	<div class='TOP_TAG'>
+    		    		<h3>游戏/娱乐</h3>
+									<div class='TAG_LINKS'>
+												<a href="/p/g3d" target="_blank">
+					3D游戏引擎				</a>
+																<a href="/p/robocode" target="_blank">
+					坦克机器人				</a>
+																<a href="/p/nexuiz" target="_blank">
+					射击游戏Nexuiz				</a>
+																<a href="/p/tiled" target="_blank">
+					游戏地图编辑				</a>
+																<a href="/p/dimensionex" target="_blank">
+					DimensioneX				</a>
+																<a href="/p/scummvm" target="_blank">
+					ScummVM				</a>
+											</div>
+			    		<ul>
+    			    			<li><a href="/project/tag/85/casual-games">休闲游戏</a><em>(227)</em></li>
+    			    			<li><a href="/project/tag/86/network-games">网络游戏</a><em>(125)</em></li>
+    			    			<li><a href="/project/tag/88/pc-games">单机游戏</a><em>(89)</em></li>
+    			    			<li><a href="/project/tag/90/games-simulator">游戏模拟器/工具/引擎</a><em>(225)</em></li>
+    			    		</ul>
+    	</div>
+    	    	<div class='TOP_TAG'>
+    		    		<h3>管理和监控</h3>
+									<div class='TAG_LINKS'>
+												<a href="/p/cacti" target="_blank">
+					流量检测Cacti				</a>
+																<a href="/p/awstats" target="_blank">
+					AWStats				</a>
+																<a href="/p/nagios" target="_blank">
+					企业监控Nagios				</a>
+																<a href="/p/xtrabackup " target="_blank">
+					XtraBackup				</a>
+																<a href="/p/wepcrack" target="_blank">
+					无线WEP破解				</a>
+																<a href="/p/winpcap" target="_blank">
+					WinPcap抓包				</a>
+											</div>
+			    		<ul>
+    			    			<li><a href="/project/tag/146/system-monitor">系统监控</a><em>(357)</em></li>
+    			    			<li><a href="/project/tag/147/log-analyzer">日志分析和统计</a><em>(97)</em></li>
+    			    			<li><a href="/project/tag/185/perf-optimization">性能优化</a><em>(10)</em></li>
+    			    			<li><a href="/project/tag/198/backup">数据备份</a><em>(87)</em></li>
+    			    			<li><a href="/project/tag/201/nms">网管运维工具</a><em>(438)</em></li>
+    			    			<li><a href="/project/tag/243/wireless-tools">无线网络工具</a><em>(57)</em></li>
+    			    			<li><a href="/project/tag/361/loophole-tools">漏洞检测扫描和评估</a><em>(65)</em></li>
+    			    			<li><a href="/project/tag/452/sdn">SDN/OpenFlow</a><em>(44)</em></li>
+    			    			<li><a href="/project/tag/15/security-system">安全相关</a><em>(224)</em></li>
+    			    		</ul>
+    	</div>
+    	    	<div class='TOP_TAG'>
+    		    		<h3>其他开源</h3>
+									<div class='TAG_LINKS'>
+												<a href="/p/ffdshow" target="_blank">
+					DirectShow编解码				</a>
+																<a href="/p/wenquanyi" target="_blank">
+					文泉驿				</a>
+																<a href="/p/ntfs-3g" target="_blank">
+					NTFS-3G				</a>
+																<a href="/p/ubuntu+tweak" target="_blank">
+					Ubuntu Tweak				</a>
+																<a href="/p/dosbox" target="_blank">
+					DOSBox				</a>
+																<a href="/p/grub" target="_blank">
+					启动管理器GRUB				</a>
+											</div>
+			    		<ul>
+    			    			<li><a href="/project/tag/98/driver">硬件驱动/工具</a><em>(231)</em></li>
+    			    			<li><a href="/project/tag/99/linux-kernel">Linux内核</a><em>(27)</em></li>
+    			    			<li><a href="/project/tag/202/desktop-environment">桌面环境</a><em>(102)</em></li>
+    			    			<li><a href="/project/tag/204/fonts">开源字体</a><em>(42)</em></li>
+    			    			<li><a href="/project/tag/234/embed-os">嵌入式操作系统</a><em>(65)</em></li>
+    			    			<li><a href="/project/tag/250/input-method">输入法</a><em>(34)</em></li>
+    			    			<li><a href="/project/tag/396/opensource-hardware">开源硬件</a><em>(123)</em></li>
+    			    			<li><a href="/project/tag/400/opensource-book">开源图书</a><em>(77)</em></li>
+    			    			<li><a href="/project/tag/415/household">开源家居</a><em>(6)</em></li>
+    			    			<li><a href="/project/tag/417/iot">物联网</a><em>(33)</em></li>
+    			    			<li><a href="/project/tag/425/bitcoin">开源货币/比特币</a><em>(89)</em></li>
+    			    			<li><a href="/project/tag/430/nasa-opensource">NASA 开源项目</a><em>(35)</em></li>
+    			    			<li><a href="/project/tag/434/wireless-firmware">无线路由固件</a><em>(12)</em></li>
+    			    			<li><a href="/project/tag/444/opensource-car">开源汽车/车载系统</a><em>(15)</em></li>
+    			    			<li><a href="/project/tag/462/vr">虚拟现实/增强现实</a><em>(5)</em></li>
+    			    			<li><a href="/project/tag/463/blockchain">区块链</a><em>(6)</em></li>
+    			    		</ul>
+    	</div>
+    	    </div>
+</div>
+<div class='SoftwareRight'>
+	<div class='RightBlock'>
+		
+<strong class='RightTitle'>
+	本周推荐 Recharts
+</strong>
+<div id="ProjectText"><p><a target="_blank" href="http://www.oschina.net/p/recharts">Recharts</a> 是一个用 React 和 D3构建的重新定义的图表库。这个库能帮助你在 React 应用中轻易绘制图表。</p><p style="margin:10px 0;"><a target="_blank" href="http://www.oschina.net/p/recharts"><img src="http://static.oschina.net/uploads/space/2016/0828/075254_SXvg_12.png" width="265"/></a></p></div>
+<div id="HistoryRecommend">
+<ul>
+<li><a style=" text-decoration: none;" href="/p/UI-Recorder">2. 自动化测试解决方案 UI Recorder</a> &raquo;</li>
+<li><a style=" text-decoration: none;" href="/p/pfs">3. 容器化的数据池 Pachyderm</a> &raquo;</li>
+<li><a style=" text-decoration: none;" href="/p/apache+ranger">4. Hadoop集群权限框架 Apache Ranger</a> &raquo;</li>
+<li><a style=" text-decoration: none;" href="/p/eventql">5. 分布式列数据库 EventQL</a> &raquo;</li>
+</ul>
+<p style='margin:0 10px 5px 0;font-size:9pt;'>
+<a href="/project/weekly_projects" style='color:#A00;'>更多以往推荐&nbsp;&raquo;</a>
+</p>
+</div>	</div>
+	<div class='RightBlock RightProjectList'>
+		<div class="RightTitle"><span class='right'><a href="/project/list">更多&raquo;</a></span>最新收录的软件 </div>
+        <ul>
+        <li><a href="/p/slardar" target="_blank">HTTP 负载均衡器 <span class='name'>Slardar</span></a><p>Slardar是一个基于Nginx和 lua-nginx-module模块的HTTP负载均衡器，你可以通过它来更新你的上游列表，并...</p></li><li><a href="/p/lua-resty-checkups" target="_blank">基于Lua的upstream管理和健康检查模块 <span class='name'>Lua-Resty-Checkups</span></a><p>Lua-Resty-Checkups是一个基于lua的upstream管理和健康检查模块，由又拍云开源。 特点： 支持周期性ups...</p></li><li><a href="/p/usb4java" target="_blank">Java USB 类库 <span class='name'>usb4java</span></a><p>跨平台的基于 libusb 1.0 开发的 Java USB 类库，通过 usb4java-javax extension 支持  javax-usb...</p></li><li><a href="/p/springblade" target="_blank">快速开发框架 <span class='name'>SpringBlade</span></a><p>SpringBlade，是基于多个优秀的开源项目（spring+springmvc+beetl+beetlsql+shiro），高度整合封装而成的...</p></li><li><a href="/p/CookPHP" target="_blank">轻量级PHP开发框架 <span class='name'>CookPHP</span></a><p>CookPHP 开发框架是一个基于PHP7的自由、免费开源、快速、简单的面向对象的轻量级PHP开发框架。 CookPH...</p></li><li><a href="/p/camel" target="_blank">大众点评的软负载管理中间件 <span class='name'>Camel</span></a><p>Camel 是大众点评开发的软负载一体解决方案，承担了F5硬负载层后的软负载工作。Camel已成为大众点评网络...</p></li><li><a href="/p/lightgallery-js" target="_blank">全能的 LightBox 插件 <span class='name'>LightGallery.js</span></a><p>简介 lightgallery.js 是一款功能齐全的纯 JavaScript lightbox 组件，它有以下特点： 支持响应式 模块化...</p></li><li><a href="/p/Leek" target="_blank">智能实时选股系统 <span class='name'>Leek</span></a><p>Leek — 韭菜的自我救赎         Leek是一款基于分布式的简易版智能实时选股系统，计算能力超强，代...</p></li><li><a href="/p/HDAlertView" target="_blank">类似 iOS alertView 弹窗组件 <span class='name'>HDAlertView</span></a><p>HDAlertView是一个类似系统alertView弹窗。 系统自带UIAlertView有常见BUG, 比如和系统键盘动画冲突等等...</p></li><li><a href="/p/Young" target="_blank">Python开发的开源论坛 <span class='name'>Young</span></a><p>Young是一个用Python写的功能丰富的、小清新的开源论坛。主要功能 话题按主题分类，你可以查看某一主题的...</p></li>        </ul>
+	</div>
+	<div class="RightNewsList RightBlock">
+		<div class="RightTitle"><span class='right'><a href="/news?show=project">进入&raquo;</a></span>热门软件新闻</div>
+        <ul class='List'>
+				<li><a target="_blank" href="/news/76600/windows-10-build-14915" title="Windows 10 “红石2” 预览版 Build 14915 曝光">Windows 10 “红石2” 预览...</a><span class='date'>5天前</span></li>
+				<li><a target="_blank" href="/news/76537/release-of-deepin-image-viewer-v1-0" title="深度看图  V1.0 发布——生活，就是为了美！">深度看图  V1.0 发布——生...</a><span class='date'>1周前</span></li>
+				<li><a target="_blank" href="/news/76506/grpc-1-0-released" title="Google 高性能 RPC 框架 gRPC 1.0.0 发布">Google 高性能 RPC 框架 gR...</a><span class='date'>1周前</span></li>
+				<li><a target="_blank" href="/news/76696/android-7-0-release" title="谷歌发布 Android 7.0，带来 250 多项新特性">谷歌发布 Android 7.0，带来...</a><span class='date'>2天前</span></li>
+				<li><a target="_blank" href="/news/76677/wide-1-5-1" title="基于 Web 的 Go 语言 IDE - Wide 1.5.1 发布">基于 Web 的 Go 语言 IDE ...</a><span class='date'>3天前</span></li>
+				<li><a target="_blank" href="/news/76540/qt-creator-4-1-0" title="Qt Creator 4.1.0 发布，新增两款扁平化主题">Qt Creator 4.1.0 发布，新...</a><span class='date'>1周前</span></li>
+				<li><a target="_blank" href="/news/76678/nutzwk-3-2-5" title="NutzWk 3.2.5 最终版，Java 企业级开源开发框架">NutzWk 3.2.5 最终版，Jav...</a><span class='date'>3天前</span></li>
+				<li><a target="_blank" href="/news/76747/pisi-linux-2-0-beta-2" title="Pisi Linux 操作系统2.0 Beta2 版发布">Pisi Linux 操作系统2.0 B...</a><span class='date'>1天前</span></li>
+				<li><a target="_blank" href="/news/76704/apache-mina-2-0-14" title="高性能 Java 网络框架 Apache MINA 2.0.14">高性能 Java 网络框架 Apac...</a><span class='date'>2天前</span></li>
+				<li><a target="_blank" href="/news/76544/pengye-go-1-0-released" title="朋也社区 1.0 发布，Go语言版本">朋也社区 1.0 发布，Go语言...</a><span class='date'>1周前</span></li>
+		<div class='clear'></div>
+        </ul>
+		<div class='clear'></div>
+	</div>
+    <p><a href="/project/rss" style='text-decoration:none;'><img src='/img/rss2.gif?t=1451964198000' border='0' alt='RSS' align='absmiddle'/>&nbsp;&nbsp;最新开源软件</a></p><br/>
+    <p><a href="/news/rss?show=project" style='text-decoration:none;'><img src='/img/rss2.gif?t=1451964198000' border='0' alt='RSS' align='absmiddle'/>&nbsp;&nbsp;软件更新资讯</a></p><br/>
+    <p><a href="/project/rss?show=recomms" style='text-decoration:none;'><img src='/img/rss2.gif?t=1451964198000' border='0' alt='RSS' align='absmiddle'/>&nbsp;&nbsp;推荐软件列表</a></p>
+</div>
+</div>
+<div class='clear'></div></div>
+	<div id="OSC_Footer" class='CenterDiv'><style>
+.oscapp {text-align:left; width:220px;}
+.oscapp span {float:left;width:140px;}
+.oscapp a {float:left;text-indent:-9999em;width:16px;margin-left:8px;}
+.oscapp a.android {background:url('/img/android.gif') no-repeat left center;}
+.oscapp a.iphone {background:url('/img/iphone.gif') no-repeat left center;}
+.oscapp a.wp7 {background:url('/img/wp7.gif') no-repeat left center;}
+</style>
+<table width='100%'><tr>
+<td align='left'>&copy; 开源中国(OSChina.NET) | <a href="http://www.oschina.net/home/aboutosc">关于我们</a> | <a href="mailto:market@oschina.cn">广告联系</a> | <a href="http://weibo.com/oschina2010" target="_blank">@新浪微博</a> | <a href="http://m.oschina.net/">开源中国手机版</a> | <a href='http://www.miitbeian.gov.cn/' target='_blank' style='color:#737573;text-decoration:none;'>粤ICP备12009483号-3</a></td>
+<td class='oscapp'>
+	<span>开源中国手机客户端：</span>
+	<a href="http://www.oschina.net/app" class='android' title='Android客户端'>Android</a>
+	<a href="http://www.oschina.net/app" class='iphone' title='iPhone 客户端'>iPhone</a>
+	<a href="http://www.oschina.net/app" class='wp7' title='Windows Phone 客户端'>WP7</a>
+</td>
+</tr>
+<tr>
+<td colspan='2' align='left'>开源中国社区(OSChina.net)是工信部 <a href='http://www.copu.org.cn/' target='_blank'>开源软件推进联盟</a> 指定的官方社区</td>
+</tr>
+</table>
+<script type='text/javascript'>
+<!--
+if (top.location != self.location)top.location=self.location;
+//-->
+</script></div>
+</div>
+</body>
+</html>
+<!-- Generated by OsChina.NET (init:0[ms],page:19[ms],ip:27.115.12.210) -->

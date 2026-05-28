@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+<channel>
+<title><![CDATA[流浪的龙－个人知识管理]]></title> 
+<link>http://i.renjihe.com/blog/index.php</link> 
+<description><![CDATA[]]></description> 
+<language>zh-cn</language> 
+<copyright><![CDATA[流浪的龙－个人知识管理]]></copyright>
+<item>
+<link>http://i.renjihe.com/blog/read.php?</link>
+<title><![CDATA[Nodejs之require加载机制（模块可以污染全局空间）]]></title> 
+<author>renjihe1988 &lt;admin@yourname.com&gt;</author>
+<category><![CDATA[web]]></category>
+<pubDate>Wed, 24 Aug 2016 11:36:46 +0000</pubDate> 
+<guid>http://i.renjihe.com/blog/read.php?</guid> 
+<description>
+<![CDATA[ 
+	
+]]>
+</description>
+</item><item>
+<link>http://i.renjihe.com/blog/read.php?#blogcomment</link>
+<title><![CDATA[[评论] Nodejs之require加载机制（模块可以污染全局空间）]]></title> 
+<author> &lt;user@domain.com&gt;</author>
+<category><![CDATA[评论]]></category>
+<pubDate>Thu, 01 Jan 1970 00:00:00 +0000</pubDate> 
+<guid>http://i.renjihe.com/blog/read.php?#blogcomment</guid> 
+<description>
+<![CDATA[ 
+	
+]]>
+</description>
+</item>
+</channel>
+</rss>

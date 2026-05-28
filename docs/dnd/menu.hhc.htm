@@ -1,0 +1,4501 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>菜单</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', 'Microsoft YaHei', sans-serif;
+            padding: 0px;
+            background: white;
+        }
+
+        .tree-container {
+            padding: 4px 6px;
+        }
+
+        .tree {
+            list-style: none;
+            padding-left: 10px;
+        }
+
+        .tree > li {
+            margin: 2px 0;
+        }
+
+        .tree ul {
+            list-style: none;
+            padding-left: 25px;
+            display: none;
+            border-left: 1px dashed #e0e0e0;
+            margin-left: 8px;
+        }
+
+        .tree ul.expanded {
+            display: block;
+        }
+
+        .tree-node {
+            display: flex;
+            align-items: center;
+            padding: 4px 6px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .tree-node:hover {
+            background: #f0f4ff;
+        }
+
+        .tree-node.active {
+            background: #e3f2fd;
+        }
+
+        .toggle-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            color: #999;
+            font-size: 12px;
+            transition: transform 0.2s ease;
+        }
+
+        .toggle-icon.expanded {
+            transform: rotate(90deg);
+            color: #667eea;
+        }
+
+        .toggle-icon.leaf {
+            width: 20px;
+            margin-right: 8px;
+        }
+
+        .node-icon {
+            margin-right: 10px;
+            font-size: 16px;
+            color: #667eea;
+        }
+
+        .node-icon.folder {
+            color: #ffc107;
+        }
+
+        .node-icon.folder-open {
+            color: #ff9800;
+        }
+
+        .node-icon.leaf {
+            color: #4caf50;
+        }
+
+        .node-text {
+            flex: 1;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .node-text:hover {
+            color: #667eea;
+        }
+
+        .node-text.has-url {
+            text-decoration: underline;
+            text-decoration-color: transparent;
+            transition: text-decoration-color 0.2s ease;
+        }
+
+        .node-text.has-url:hover {
+            text-decoration-color: #667eea;
+        }
+
+        /* 加载动画 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tree ul {
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* 滚动条样式 */
+        .tree-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .tree-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .tree-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="tree-container">
+        <ul id="treeRoot" class="tree"></ul>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // 树形数据结构
+            const treeData = JSON.parse(`[
+    {
+        "id": 1,
+        "name": "前言及版权声明",
+        "icon": "fa-file-alt",
+        "isLeaf": true,
+        "url": "新建文件夹%20(2)/新建文件夹%20(7)/新建文件夹%20(2)/前言及版权声明.htm"
+    },
+    {
+        "id": 2,
+        "name": "fr系列",
+        "icon": "fa-folder",
+        "leafIcon": "fa-file-alt",
+        "children": [
+            {
+                "id": 23,
+                "name": "光辉南方",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 233,
+                        "name": "专长魔法",
+                        "icon": "fa-folder",
+                        "leafIcon": "fa-file-alt",
+                        "children": [
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 《光辉南方》法术详述",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/光辉南方/专长魔法/纯美苹果园%20-%20《光辉南方》法术详述.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 光辉南方《Shining South》专长",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/光辉南方/专长魔法/纯美苹果园%20-%20光辉南方《Shining%20South》专长.htm"
+                            }
+                        ]
+                    },
+                    {
+                        "id": 233,
+                        "name": "其他",
+                        "icon": "fa-folder",
+                        "leafIcon": "fa-file-alt",
+                        "children": [
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 丹布拉斯（Dambrath）",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/光辉南方/其他/纯美苹果园%20-%20丹布拉斯（Dambrath）.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 独眼巨人[Giant,cyclops]",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/光辉南方/其他/纯美苹果园%20-%20独眼巨人[Giant,cyclops].htm"
+                            }
+                        ]
+                    },
+                    {
+                        "id": 233,
+                        "name": "种族",
+                        "icon": "fa-folder",
+                        "leafIcon": "fa-file-alt",
+                        "children": [
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 斯理克林人（Thri-kreen）",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/光辉南方/种族/纯美苹果园%20-%20斯理克林人（Thri-kreen）.htm"
+                            }
+                        ]
+                    },
+                    {
+                        "id": 233,
+                        "name": "进阶",
+                        "icon": "fa-folder",
+                        "leafIcon": "fa-file-alt",
+                        "children": [
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 光辉南方职业进阶：灾祸少女 Scourge Maiden",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/光辉南方/进阶/纯美苹果园%20-%20光辉南方职业进阶：灾祸少女%20Scourge%20Maiden.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 光辉南方进阶职：亚达玛之手",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/光辉南方/进阶/纯美苹果园%20-%20光辉南方进阶职：亚达玛之手.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 光辉南方进阶职：克伶提阴影劫掠者",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/光辉南方/进阶/纯美苹果园%20-%20光辉南方进阶职：克伶提阴影劫掠者.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 光辉南方进阶职：哈鲁阿猎巫者",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/光辉南方/进阶/纯美苹果园%20-%20光辉南方进阶职：哈鲁阿猎巫者.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 光辉南方进阶职：哈鲁阿长老",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/光辉南方/进阶/纯美苹果园%20-%20光辉南方进阶职：哈鲁阿长老.htm"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 23,
+                "name": "失落的费伦帝国",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 233,
+                        "name": "专长法术",
+                        "icon": "fa-folder",
+                        "leafIcon": "fa-file-alt",
+                        "children": [
+                            {
+                                "id": 2333,
+                                "name": "最深的地下城 UNDERTOPIA - 《费伦失落帝国》专长",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/失落的费伦帝国/专长法术/最深的地下城%20UNDERTOPIA%20-%20《费伦失落帝国》专长.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "最深的地下城 UNDERTOPIA - 《费伦失落帝国》法术详述",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/失落的费伦帝国/专长法术/最深的地下城%20UNDERTOPIA%20-%20《费伦失落帝国》法术详述.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "最深的地下城 UNDERTOPIA - 《费伦失落帝国》迷锁Mythal",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/失落的费伦帝国/专长法术/最深的地下城%20UNDERTOPIA%20-%20《费伦失落帝国》迷锁Mythal.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 《费伦失落帝国》传奇法术种子",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/失落的费伦帝国/专长法术/纯美苹果园%20-%20《费伦失落帝国》传奇法术种子.htm"
+                            }
+                        ]
+                    },
+                    {
+                        "id": 233,
+                        "name": "进阶",
+                        "icon": "fa-folder",
+                        "leafIcon": "fa-file-alt",
+                        "children": [
+                            {
+                                "id": 2333,
+                                "name": "最深的地下城 UNDERTOPIA - 进阶职业—法师领主 (Magelord)",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/失落的费伦帝国/进阶/最深的地下城%20UNDERTOPIA%20-%20进阶职业—法师领主%20(Magelord).htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "最深的地下城 UNDERTOPIA - 进阶职业—荣光侍者 Glorious Servitor",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/失落的费伦帝国/进阶/最深的地下城%20UNDERTOPIA%20-%20进阶职业—荣光侍者%20Glorious%20Servitor.htm"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 23,
+                "name": "巨蛇王国",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 233,
+                        "name": "怪物",
+                        "icon": "fa-folder",
+                        "leafIcon": "fa-file-alt",
+                        "children": [
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 《Serpent Kingdoms》——巫虺族Sarrukh",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/巨蛇王国/怪物/纯美苹果园%20-%20《Serpent%20Kingdoms》——巫虺族Sarrukh.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 《Serpent Kingdoms》第五章 撒鲁克巫虺",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/巨蛇王国/怪物/纯美苹果园%20-%20《Serpent%20Kingdoms》第五章%20撒鲁克巫虺.htm"
+                            }
+                        ]
+                    },
+                    {
+                        "id": 233,
+                        "name": "法术",
+                        "icon": "fa-folder",
+                        "leafIcon": "fa-file-alt",
+                        "children": [
+                            {
+                                "id": 2333,
+                                "name": "最深的地下城 UNDERTOPIA - 《巨蛇王国》法术详述",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/巨蛇王国/法术/最深的地下城%20UNDERTOPIA%20-%20《巨蛇王国》法术详述.htm"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 23,
+                "name": "毁灭仆从与英勇卫士",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 233,
+                        "name": "最深的地下城 UNDERTOPIA - 《Champions of Ruin》传奇法术",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/fr系列/毁灭仆从与英勇卫士/最深的地下城%20UNDERTOPIA%20-%20《Champions%20of%20Ruin》传奇法术.htm"
+                    },
+                    {
+                        "id": 233,
+                        "name": "最深的地下城 UNDERTOPIA - 《Champions of Ruin》法术详述",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/fr系列/毁灭仆从与英勇卫士/最深的地下城%20UNDERTOPIA%20-%20《Champions%20of%20Ruin》法术详述.htm"
+                    },
+                    {
+                        "id": 233,
+                        "name": "最深的地下城 UNDERTOPIA - 《Champions of Valor》法术详述",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/fr系列/毁灭仆从与英勇卫士/最深的地下城%20UNDERTOPIA%20-%20《Champions%20of%20Valor》法术详述.htm"
+                    },
+                    {
+                        "id": 233,
+                        "name": "最深的地下城 UNDERTOPIA - 《Champions of Valor》法术详述",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/fr系列/毁灭仆从与英勇卫士/最深的地下城%20UNDERTOPIA%20-%20《Champions%20of%20Valor》法术详述I~V.htm"
+                    }
+                ]
+            },
+            {
+                "id": 23,
+                "name": "深水城",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 233,
+                        "name": "法术",
+                        "icon": "fa-folder",
+                        "leafIcon": "fa-file-alt",
+                        "children": [
+                            {
+                                "id": 2333,
+                                "name": "最深的地下城 UNDERTOPIA - 《光辉之城：深水城》法术详述",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/深水城/法术/最深的地下城%20UNDERTOPIA%20-%20《光辉之城：深水城》法术详述.htm"
+                            }
+                        ]
+                    },
+                    {
+                        "id": 233,
+                        "name": "进阶",
+                        "icon": "fa-folder",
+                        "leafIcon": "fa-file-alt",
+                        "children": [
+                            {
+                                "id": 2333,
+                                "name": "最深的地下城 UNDERTOPIA - 进阶职业—太阳魂武僧",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/深水城/进阶/最深的地下城%20UNDERTOPIA%20-%20进阶职业—太阳魂武僧.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "最深的地下城 UNDERTOPIA - 进阶职业—灰掌执法者",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/深水城/进阶/最深的地下城%20UNDERTOPIA%20-%20进阶职业—灰掌执法者.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "最深的地下城 UNDERTOPIA - 进阶职业—蓝月骑士",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/深水城/进阶/最深的地下城%20UNDERTOPIA%20-%20进阶职业—蓝月骑士.htm"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 23,
+                "name": "玩家手册",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 233,
+                        "name": "专长法术其他",
+                        "icon": "fa-folder",
+                        "leafIcon": "fa-file-alt",
+                        "children": [
+                            {
+                                "id": 2333,
+                                "name": "百度_d&d吧_◇被遗忘国度战役设定集◇ / 被遗忘国度跑团必备资料   您查询的关键词是：lightfoot halflings",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/新建文件夹%20(5)/被遗忘国度战役设定集.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 《费伦玩家手册》善良与邪恶",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/玩家手册/专长法术其他/纯美苹果园%20-%20《费伦玩家手册》善良与邪恶.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 《费伦玩家指南》传奇法术",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/玩家手册/专长法术其他/纯美苹果园%20-%20《费伦玩家指南》传奇法术.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 坑填好了：费伦玩家手册专长部分",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/玩家手册/专长法术其他/纯美苹果园%20-%20坑填好了：费伦玩家手册专长部分…….htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 费伦玩家手册-领域与法术-法术",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/玩家手册/专长法术其他/纯美苹果园%20-%20费伦玩家手册-领域与法术-法术.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 费伦玩家指南《Player's Guide to Faer&ucirc;n》入信者专长",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/玩家手册/专长法术其他/纯美苹果园%20-%20费伦玩家指南《Player's%20Guide%20to%20Faer&ucirc;n》入信者专长.htm"
+                            }
+                        ]
+                    },
+                    {
+                        "id": 233,
+                        "name": "进阶",
+                        "icon": "fa-folder",
+                        "leafIcon": "fa-file-alt",
+                        "children": [
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 《费伦玩家手册》善良与邪恶",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/玩家手册/进阶/《费伦玩家手册》善良与邪恶%20伊尔玛特的殉教勇士.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 《费伦玩家手册》善良与邪恶",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/玩家手册/进阶/《费伦玩家手册》善良与邪恶%20痛苦少女.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 《费伦玩家手册》善良与邪恶",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/玩家手册/进阶/《费伦玩家手册》善良与邪恶%20黑血猎人.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 《费伦玩家手册》善良与邪恶 （１５禁）",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/玩家手册/进阶/纯美苹果园%20-%20《费伦玩家手册》善良与邪恶%20（１５禁）.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 史莱姆领主　Slime Lord （《费伦玩家手册》善良与邪恶 ）",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/玩家手册/进阶/纯美苹果园%20-%20史莱姆领主　Slime%20Lord%20（《费伦玩家手册》善良与邪恶%20）.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 死灵祭司（Yathrinshee）",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/玩家手册/进阶/纯美苹果园%20-%20死灵祭司（Yathrinshee）.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 符文师（runecaster）",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/玩家手册/进阶/纯美苹果园%20-%20符文师（runecaster）.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 紫龙骑士（Purple Dragon Knight）",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/玩家手册/进阶/纯美苹果园%20-%20紫龙骑士（Purple%20Dragon%20Knight）.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 费伦玩家手册-进阶职业-心灵盗贼",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/玩家手册/进阶/纯美苹果园%20-%20费伦玩家手册-进阶职业-心灵盗贼.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 费伦玩家手册-进阶职业-散塔林会间谍",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/玩家手册/进阶/纯美苹果园%20-%20费伦玩家手册-进阶职业-散塔林会间谍.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 费伦玩家手册-进阶职业-爱弗列斯卡古墓卫士",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/玩家手册/进阶/纯美苹果园%20-%20费伦玩家手册-进阶职业-爱弗列斯卡古墓卫士.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 费伦玩家手册：安姆影贼（Shadow Thieves of Amn）",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/玩家手册/进阶/纯美苹果园%20-%20费伦玩家手册：安姆影贼（Shadow%20Thieves%20of%20Amn）.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 费伦玩家手册：竖琴手斥候 （Harper Agent）",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/玩家手册/进阶/纯美苹果园%20-%20费伦玩家手册：竖琴手斥候%20（Harper%20Agent）.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 费伦玩家指南: 银月城法术守卫",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/玩家手册/进阶/纯美苹果园%20-%20费伦玩家指南%20银月城法术守卫.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 费伦玩家指南：哈斯兰；夏亚猎人和荷鲁斯雷之眼",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/玩家手册/进阶/纯美苹果园%20-%20费伦玩家指南：哈斯兰；夏亚猎人和荷鲁斯雷之眼.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 费伦玩家指南：幽影导师",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/玩家手册/进阶/纯美苹果园%20-%20费伦玩家指南：幽影导师.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 费伦玩家指南：神力斗士，神力信徒和神力寻者",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/玩家手册/进阶/纯美苹果园%20-%20费伦玩家指南：神力斗士，神力信徒和神力寻者.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 费伦角色指南进阶职业•奥术皈依者",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/玩家手册/进阶/纯美苹果园%20-%20费伦角色指南进阶职业·奥术皈依者.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 费伦角色指南进阶职业•超魔咒使",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/玩家手册/进阶/纯美苹果园%20-%20费伦角色指南进阶职业·超魔咒使.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 费轮玩家手册：摩拉丁之锤（Hammer of Moradin）",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/玩家手册/进阶/纯美苹果园%20-%20费轮玩家手册：摩拉丁之锤（Hammer%20of%20Moradin）.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 费轮玩家手册：永亡僧侣（Monk of the long death）",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/玩家手册/进阶/纯美苹果园%20-%20费轮玩家手册：永亡僧侣（Monk%20of%20the%20long%20death）.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 费轮玩家手册：泰尔的正义审判者（Justiciar of Tyr）",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/玩家手册/进阶/纯美苹果园%20-%20费轮玩家手册：泰尔的正义审判者（Justiciar%20of%20Tyr）.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 费轮玩家手册：洛山达的晨曦之主（Morninglord of Lathander）",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/玩家手册/进阶/纯美苹果园%20-%20费轮玩家手册：洛山达的晨曦之主（Morninglord%20of%20Lathander）.htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> 《费伦玩家手册》善良与邪恶",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/玩家手册/进阶/费伦玩家手册》善良与邪恶%20竖琴手精英.htm"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 23,
+                "name": "绝境东域",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 233,
+                        "name": "其他",
+                        "icon": "fa-folder",
+                        "leafIcon": "fa-file-alt",
+                        "children": [
+                            {
+                                "id": 2333,
+                                "name": "最深的地下城 UNDERTOPIA - 模板—阴影行者（Shadow Walker）",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/绝境东域/其他/最深的地下城%20UNDERTOPIA%20-%20模板—阴影行者（Shadow%20Walker）.htm"
+                            }
+                        ]
+                    },
+                    {
+                        "id": 233,
+                        "name": "法术",
+                        "icon": "fa-folder",
+                        "leafIcon": "fa-file-alt",
+                        "children": [
+                            {
+                                "id": 2333,
+                                "name": "最深的地下城 UNDERTOPIA - 《绝境东域》法术详述",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/绝境东域/法术/最深的地下城%20UNDERTOPIA%20-%20《绝境东域》法术详述.htm"
+                            }
+                        ]
+                    },
+                    {
+                        "id": 233,
+                        "name": "进阶",
+                        "icon": "fa-folder",
+                        "leafIcon": "fa-file-alt",
+                        "children": [
+                            {
+                                "id": 2333,
+                                "name": "最深的地下城 UNDERTOPIA - 进阶职业—洛玛萨战斗法师 (Raumathari Battlemage)",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/绝境东域/进阶/最深的地下城%20UNDERTOPIA%20-%20进阶职业—洛玛萨战斗法师%20(Raumathari%20Battlemage).htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "最深的地下城 UNDERTOPIA - 进阶职业—纳尔缚魔师(Nar Demonbinder)",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/绝境东域/进阶/最深的地下城%20UNDERTOPIA%20-%20进阶职业—纳尔缚魔师(Nar%20Demonbinder).htm"
+                            },
+                            {
+                                "id": 2333,
+                                "name": "纯美苹果园 -> [绝境东域]翔之门徒（Shou Disciple）",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/扩展2/fr系列/绝境东域/进阶/纯美苹果园%20-%20[绝境东域]翔之门徒（Shou%20Disciple）.htm"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 23,
+                "name": "费伦巨龙志",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 233,
+                        "name": "最深的地下城 UNDERTOPIA - 《Dragons of Faerun》法术详述",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(5)/最深的地下城%20UNDERTOPIA%20-%20《Dragons%20of%20Faerun》法术详述.htm"
+                    },
+                    {
+                        "id": 233,
+                        "name": "最深的地下城 UNDERTOPIA - 《Dragons of Faerun》传奇法术",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/fr系列/费伦巨龙志/最深的地下城%20UNDERTOPIA%20-%20《Dragons%20of%20Faerun》传奇法术.htm"
+                    },
+                    {
+                        "id": 233,
+                        "name": "最深的地下城 UNDERTOPIA - 《Dragons of Faerun》法术详述",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/fr系列/费伦巨龙志/最深的地下城%20UNDERTOPIA%20-%20《Dragons%20of%20Faerun》法术详述.htm"
+                    },
+                    {
+                        "id": 233,
+                        "name": "纯美苹果园 -> 提亚玛特的选民——察斯萨（Tchazzar）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/fr系列/费伦巨龙志/纯美苹果园%20-%20提亚玛特的选民——察斯萨（Tchazzar）.htm"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "name": "hero of battle",
+        "icon": "fa-folder",
+        "leafIcon": "fa-file-alt",
+        "children": [
+            {
+                "id": 34,
+                "name": "纯美苹果园 -> heroes of battle进阶——恐怖突袭者",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/hero%20of%20battle/纯美苹果园%20-%20heroes%20of%20battle进阶——恐怖突袭者.htm"
+            },
+            {
+                "id": 34,
+                "name": "纯美苹果园 -> 战地护士——heroes of battle进阶",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/hero%20of%20battle/纯美苹果园%20-%20战地护士——heroes%20of%20battle进阶.htm"
+            },
+            {
+                "id": 34,
+                "name": "纯美苹果园 -> 织奥之梭——heroes of battle进阶",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/hero%20of%20battle/纯美苹果园%20-%20织奥之梭——heroes%20of%20battle进阶.htm"
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "name": "hero of horror",
+        "icon": "fa-folder",
+        "leafIcon": "fa-file-alt",
+        "children": [
+            {
+                "id": 45,
+                "name": "专长",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 455,
+                        "name": "纯美苹果园 -> [HoH]专长",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/hero%20of%20horror/专长/纯美苹果园%20-%20[HoH]专长.htm"
+                    }
+                ]
+            },
+            {
+                "id": 45,
+                "name": "其他",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 455,
+                        "name": "纯美苹果园 -> [HoH] 惊悚和恐惧",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/hero%20of%20horror/其他/纯美苹果园%20-%20[HoH]%20惊悚和恐惧.htm"
+                    },
+                    {
+                        "id": 455,
+                        "name": "纯美苹果园 -> [HoH]夢境冒險",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/hero%20of%20horror/其他/纯美苹果园%20-%20[HoH]夢境冒險.htm"
+                    },
+                    {
+                        "id": 455,
+                        "name": "纯美苹果园 -> [HoH]怨恨之主:卡斯",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/hero%20of%20horror/其他/纯美苹果园%20-%20[HoH]怨恨之主卡斯.htm"
+                    },
+                    {
+                        "id": 455,
+                        "name": "纯美苹果园 -> [HoH]恐怖战役规则",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/hero%20of%20horror/其他/纯美苹果园%20-%20[HoH]恐怖战役规则.htm"
+                    }
+                ]
+            },
+            {
+                "id": 45,
+                "name": "进阶",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 455,
+                        "name": "纯美苹果园 -> [HoH]污化学者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/hero%20of%20horror/进阶/纯美苹果园%20-%20[HoH]污化学者.htm"
+                    },
+                    {
+                        "id": 455,
+                        "name": "纯美苹果园 -> Heroes of Horror -- Corrupt Avenger",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/hero%20of%20horror/进阶/纯美苹果园%20-%20Heroes%20of%20Horror%20--%20Corrupt%20Avenger.htm"
+                    },
+                    {
+                        "id": 455,
+                        "name": "纯美苹果园 -> Heros of Horror•Class•Archivist",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/hero%20of%20horror/进阶/纯美苹果园%20-%20Heros%20of%20Horror·Class·Archivist.htm"
+                    },
+                    {
+                        "id": 455,
+                        "name": "纯美苹果园 -> heros of horror基础职业：恐惧死灵师",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/hero%20of%20horror/进阶/纯美苹果园%20-%20heros%20of%20horror基础职业：恐惧死灵师.htm"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "name": "magic of incarnum",
+        "icon": "fa-folder",
+        "leafIcon": "fa-file-alt",
+        "children": [
+            {
+                "id": 56,
+                "name": "基础",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 566,
+                        "name": "纯美苹果园 -> Magic of incarnum 基础职业——图腾师",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/magic%20of%20incarnum/基础/纯美苹果园%20-%20Magic%20of%20incarnum%20基础职业——图腾师.htm"
+                    },
+                    {
+                        "id": 566,
+                        "name": "纯美苹果园 -> Magic of Incarnum基础职业——魂能师",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/magic%20of%20incarnum/基础/纯美苹果园%20-%20Magic%20of%20Incarnum基础职业——魂能师.htm"
+                    },
+                    {
+                        "id": 566,
+                        "name": "纯美苹果园 -> magic of Incarnum基础职业概述",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/magic%20of%20incarnum/基础/纯美苹果园%20-%20magic%20of%20Incarnum基础职业概述.htm"
+                    },
+                    {
+                        "id": 566,
+                        "name": "纯美苹果园 -> 天魂者——magic of incarnum基础职业",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/magic%20of%20incarnum/基础/纯美苹果园%20-%20天魂者——magic%20of%20incarnum基础职业.htm"
+                    }
+                ]
+            },
+            {
+                "id": 56,
+                "name": "魂能",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 566,
+                        "name": "纯美苹果园 -> 魂能范例——魂能详述A部分",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/magic%20of%20incarnum/魂能/纯美苹果园%20-%20魂能范例——魂能详述A部分.htm"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "name": "planar handbook",
+        "icon": "fa-folder",
+        "leafIcon": "fa-file-alt",
+        "children": [
+            {
+                "id": 67,
+                "name": "种族",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 677,
+                        "name": "纯美苹果园 -> Planar Handbook Chapter 1: Races节译",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/planar%20handbook/种族/纯美苹果园%20-%20Planar%20Handbook%20Chapter%201%20Races节译.htm"
+                    }
+                ]
+            },
+            {
+                "id": 67,
+                "name": "进阶",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 677,
+                        "name": "纯美苹果园 -> ELEMENTAL WARRIOR",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/planar%20handbook/进阶/纯美苹果园%20-%20ELEMENTAL%20WARRIOR.htm"
+                    },
+                    {
+                        "id": 677,
+                        "name": "纯美苹果园 -> FATEMAKER",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/planar%20handbook/进阶/纯美苹果园%20-%20FATEMAKER.htm"
+                    },
+                    {
+                        "id": 677,
+                        "name": "纯美苹果园 -> 意识之眼（THE MIND’S EYE）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/planar%20handbook/进阶/纯美苹果园%20-%20意识之眼（THE%20MIND’S%20EYE）.htm"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 7,
+        "name": "PHB2",
+        "icon": "fa-folder",
+        "leafIcon": "fa-file-alt",
+        "children": [
+            {
+                "id": 78,
+                "name": "专长",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 788,
+                        "name": "纯美苹果园 -> PHB 2 General Feat",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/PHB2/专长/纯美苹果园%20-%20PHB%202%20General%20Feat.htm"
+                    },
+                    {
+                        "id": 788,
+                        "name": "纯美苹果园 -> PHB 2•Divine Feat",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/PHB2/专长/纯美苹果园%20-%20PHB%202·Divine%20Feat.htm"
+                    },
+                    {
+                        "id": 788,
+                        "name": "纯美苹果园 -> PHB 2•Feat•A-B",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/PHB2/专长/纯美苹果园%20-%20PHB%202·Feat·A-B.htm"
+                    },
+                    {
+                        "id": 788,
+                        "name": "纯美苹果园 -> PHB2 - Ceremony Feat",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/PHB2/专长/纯美苹果园%20-%20PHB2%20-%20Ceremony%20Feat.htm"
+                    },
+                    {
+                        "id": 788,
+                        "name": "纯美苹果园 -> PHB2 Tactic Feats",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/PHB2/专长/纯美苹果园%20-%20PHB2%20Tactic%20Feats.htm"
+                    },
+                    {
+                        "id": 788,
+                        "name": "纯美苹果园 -> PHB2- Metamagic Feat",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/PHB2/专长/纯美苹果园%20-%20PHB2-%20Metamagic%20Feat.htm"
+                    },
+                    {
+                        "id": 788,
+                        "name": "纯美苹果园 -> PHB2-Combat Feat",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/PHB2/专长/纯美苹果园%20-%20PHB2-Combat%20Feat.htm"
+                    },
+                    {
+                        "id": 788,
+                        "name": "纯美苹果园 -> PHB2-Heritage Feat",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/PHB2/专长/纯美苹果园%20-%20PHB2-Heritage%20Feat.htm"
+                    }
+                ]
+            },
+            {
+                "id": 78,
+                "name": "变体职业",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 788,
+                        "name": "纯美苹果园 -> PHB2中提供的野蛮人新职业特性",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/PHB2/变体职业/纯美苹果园%20-%20PHB2中提供的野蛮人新职业特性.htm"
+                    },
+                    {
+                        "id": 788,
+                        "name": "纯美苹果园 -> 德鲁伊的PHB2新职业能力",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/PHB2/变体职业/纯美苹果园%20-%20德鲁伊的PHB2新职业能力.htm"
+                    },
+                    {
+                        "id": 788,
+                        "name": "纯美苹果园 -> 战士的PHB2新职业能力",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/PHB2/变体职业/纯美苹果园%20-%20战士的PHB2新职业能力.htm"
+                    },
+                    {
+                        "id": 788,
+                        "name": "纯美苹果园 -> 武僧，圣武士，巡林客的新职业能力",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/PHB2/变体职业/纯美苹果园%20-%20武僧，圣武士，巡林客的新职业能力.htm"
+                    },
+                    {
+                        "id": 788,
+                        "name": "纯美苹果园 -> 法师术士的新职业能力",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/PHB2/变体职业/纯美苹果园%20-%20法师术士的新职业能力.htm"
+                    },
+                    {
+                        "id": 788,
+                        "name": "纯美苹果园 -> 诗人，牧师的PHB2新职业特性",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/PHB2/变体职业/纯美苹果园%20-%20诗人，牧师的PHB2新职业特性.htm"
+                    }
+                ]
+            },
+            {
+                "id": 78,
+                "name": "新增职业",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 788,
+                        "name": "纯美苹果园 -> (Player‘s Handbook II)基础职业：欺愚者(Beguiler)",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/PHB2/新增职业/纯美苹果园%20-%20(Player‘s%20Handbook%20II)基础职业：欺愚者(Beguiler).htm"
+                    },
+                    {
+                        "id": 788,
+                        "name": "纯美苹果园 -> Favored soul（天佑者）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/PHB2/新增职业/纯美苹果园%20-%20Favored%20soul（天佑者）.htm"
+                    },
+                    {
+                        "id": 788,
+                        "name": "纯美苹果园 -> Knight",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/PHB2/新增职业/纯美苹果园%20-%20Knight.htm"
+                    },
+                    {
+                        "id": 788,
+                        "name": "纯美苹果园 -> PHB2职业扮演指南--魔剑士",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/PHB2/新增职业/纯美苹果园%20-%20PHB2职业扮演指南--魔剑士.htm"
+                    },
+                    {
+                        "id": 788,
+                        "name": "纯美苹果园 -> phbII基础职业——龙之撒满",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/PHB2/新增职业/纯美苹果园%20-%20phbII基础职业——龙之撒满.htm"
+                    },
+                    {
+                        "id": 788,
+                        "name": "纯美苹果园 -> ＰＨＢ２基础职业，暮刃（DuskBlade）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/PHB2/新增职业/纯美苹果园%20-%20ＰＨＢ２基础职业，暮刃（DuskBlade）.htm"
+                    }
+                ]
+            },
+            {
+                "id": 78,
+                "name": "法术",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 788,
+                        "name": "纯美苹果园 -> PHB II 法术导言 + 详细法术说明（A-C，H-O）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/PHB2/法术/纯美苹果园%20-%20PHB%20II%20法术导言%20+%20详细法术说明（A-C，H-O）.htm"
+                    },
+                    {
+                        "id": 788,
+                        "name": "纯美苹果园 -> Players Handbook II法术详述－全",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/PHB2/法术/纯美苹果园%20-%20Players%20Handbook%20II法术详述－全.htm"
+                    },
+                    {
+                        "id": 788,
+                        "name": "纯美苹果园 -> ＰＨＢ２法术列表",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/PHB2/法术/纯美苹果园%20-%20ＰＨＢ２法术列表.htm"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 8,
+        "name": "pink",
+        "icon": "fa-folder",
+        "leafIcon": "fa-file-alt",
+        "children": [
+            {
+                "id": 89,
+                "name": "粉红之书xd",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 899,
+                        "name": "搜索Book Of Erotic Fantasy不小心发现的",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/pink/粉红之书xd/搜索Book%20Of%20Erotic%20Fantasy不小心发现的．．．%20萌动力%20网络游戏论坛%20-%20powered%20by%20phpwind_net.htm"
+                    },
+                    {
+                        "id": 899,
+                        "name": "纯美苹果园 -> 添乱之贴2——粉红法术列表",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/pink/粉红之书xd/纯美苹果园%20-%20添乱之贴2——粉红法术列表.htm"
+                    },
+                    {
+                        "id": 899,
+                        "name": "纯美苹果园 -> 添乱之贴——粉红专长试译",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/pink/粉红之书xd/纯美苹果园%20-%20添乱之贴——粉红专长试译.htm"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 9,
+        "name": "九剑",
+        "icon": "fa-folder",
+        "leafIcon": "fa-file-alt",
+        "children": [
+            {
+                "id": 910,
+                "name": "天诛之剑（crusader）",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/crusader.htm"
+            },
+            {
+                "id": 910,
+                "name": "军道之剑（Warblade）",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/Warblade.htm"
+            },
+            {
+                "id": 910,
+                "name": "一般专长",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/一般专长.htm"
+            },
+            {
+                "id": 910,
+                "name": "九剑宗师（Master of nine）",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/九剑宗师（Master%20of%20nine）.htm"
+            },
+            {
+                "id": 910,
+                "name": "前言",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/前言.htm"
+            },
+            {
+                "id": 910,
+                "name": "后记",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/后记.htm"
+            },
+            {
+                "id": 910,
+                "name": "基础职业",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/基础职业.htm"
+            },
+            {
+                "id": 910,
+                "name": "影手流武术",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/影手流武术.htm"
+            },
+            {
+                "id": 910,
+                "name": "影日忍者（Shadow Sun Ninja）",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/影日忍者（Shadow%20Sun%20Ninja）.htm"
+            },
+            {
+                "id": 910,
+                "name": "战术专长",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/战术专长.htm"
+            },
+            {
+                "id": 910,
+                "name": "技能与专长",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/技能与专长.htm"
+            },
+            {
+                "id": 910,
+                "name": "技能的新用法",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/技能的新用法.htm"
+            },
+            {
+                "id": 910,
+                "name": "暮日流武术",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/暮日流武术.htm"
+            },
+            {
+                "id": 910,
+                "name": "暴血之刃（Bloodstorm Blade）",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/暴血之刃（Bloodstorm%20Blade）.htm"
+            },
+            {
+                "id": 910,
+                "name": "武术流派",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/武术流派.htm"
+            },
+            {
+                "id": 910,
+                "name": "永恒之刃（Eternal Blade）",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/永恒之刃（Eternal%20Blade）.htm"
+            },
+            {
+                "id": 910,
+                "name": "流派：白鸦",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/流派：白鸦.htm"
+            },
+            {
+                "id": 910,
+                "name": "流派：钢魂",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/流派：钢魂.htm"
+            },
+            {
+                "id": 910,
+                "name": "深石哨兵（Deepstone Sentinel）",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/深石哨兵（Deepstone%20Sentinel）.htm"
+            },
+            {
+                "id": 910,
+                "name": "漠风流武术",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/漠风流武术.htm"
+            },
+            {
+                "id": 910,
+                "name": "技能的新用法",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/独孤九剑技能的新用法.htm"
+            },
+            {
+                "id": 910,
+                "name": "玉凤法师（Jade Phoenix Mage）",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/玉凤法师（Jade%20Phoenix%20Mage）.htm"
+            },
+            {
+                "id": 910,
+                "name": "石龙流武术",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/石龙流武术.htm"
+            },
+            {
+                "id": 910,
+                "name": "红玉卫（Ruby knight vindicator）",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/红玉卫（Ruby%20knight%20vindicator）.htm"
+            },
+            {
+                "id": 910,
+                "name": "职业",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/职业.htm"
+            },
+            {
+                "id": 910,
+                "name": "虎爪流武术",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/虎爪流武术.htm"
+            },
+            {
+                "id": 910,
+                "name": "虔心流武术",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/虔心流武术.htm"
+            },
+            {
+                "id": 910,
+                "name": "血爪大师（Bloodclaw Master）",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/血爪大师.htm"
+            },
+            {
+                "id": 910,
+                "name": "贤者之剑（Swordsage）",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/贤者之剑（Swordsage）.htm"
+            },
+            {
+                "id": 910,
+                "name": "贤者问答",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/贤者问答.htm"
+            },
+            {
+                "id": 910,
+                "name": "进阶职业",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/进阶职业.htm"
+            },
+            {
+                "id": 910,
+                "name": "铁心流武术",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/九剑/铁心流武术.htm"
+            }
+        ]
+    },
+    {
+        "id": 10,
+        "name": "灵能",
+        "icon": "fa-folder",
+        "leafIcon": "fa-file-alt",
+        "children": [
+            {
+                "id": 1011,
+                "name": "灵能专长说明",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/灵能/灵能专长说明.htm"
+            },
+            {
+                "id": 1011,
+                "name": "第一章-种族",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/灵能/第一章-种族.htm"
+            },
+            {
+                "id": 1011,
+                "name": "第三章-技能与专长",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/灵能/第三章-技能与专长.htm"
+            },
+            {
+                "id": 1011,
+                "name": "第二章-职业",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/灵能/第二章-职业.htm"
+            },
+            {
+                "id": 1011,
+                "name": "第五章(下)-异能详述O-T",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/灵能/第五章(下)-异能详述O-T.htm"
+            },
+            {
+                "id": 1011,
+                "name": "第五章-异能详述A-E",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/灵能/第五章-异能详述A-E.htm"
+            },
+            {
+                "id": 1011,
+                "name": "第五章(中)-异能详述F-N",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/灵能/第五章-异能详述F-N.htm"
+            },
+            {
+                "id": 1011,
+                "name": "第四章-灵能综述",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/灵能/第四章-灵能综述.htm"
+            }
+        ]
+    },
+    {
+        "id": 11,
+        "name": "崇善之书",
+        "icon": "fa-folder",
+        "leafIcon": "fa-file-alt",
+        "children": [
+            {
+                "id": 1112,
+                "name": "专长魔法",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 111212,
+                        "name": "最深的地下城 UNDERTOPIA - 崇善之书-创生圣言",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/崇善之书/专长魔法/最深的地下城%20UNDERTOPIA%20-%20崇善之书-创生圣言.htm"
+                    },
+                    {
+                        "id": 111212,
+                        "name": "最深的地下城 UNDERTOPIA - 第四章 专长",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/崇善之书/专长魔法/最深的地下城%20UNDERTOPIA%20-%20第四章%20专长.htm"
+                    }
+                ]
+            },
+            {
+                "id": 1112,
+                "name": "其他",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 111212,
+                        "name": "最深的地下城 UNDERTOPIA - 第二章：变体规则",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/崇善之书/其他/最深的地下城%20UNDERTOPIA%20-%20第二章：变体规则.htm"
+                    }
+                ]
+            },
+            {
+                "id": 1112,
+                "name": "进阶",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 111212,
+                        "name": "最深的地下城 UNDERTOPIA - 进阶职业-俄拉萨沃之预言者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/崇善之书/进阶/最深的地下城%20UNDERTOPIA%20-%20进阶职业-俄拉萨沃之预言者.htm"
+                    },
+                    {
+                        "id": 111212,
+                        "name": "最深的地下城 UNDERTOPIA - 进阶职业-卡拉什之行者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/崇善之书/进阶/最深的地下城%20UNDERTOPIA%20-%20进阶职业-卡拉什之行者.htm"
+                    },
+                    {
+                        "id": 111212,
+                        "name": "最深的地下城 UNDERTOPIA - 进阶职业-和平使徒",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/崇善之书/进阶/最深的地下城%20UNDERTOPIA%20-%20进阶职业-和平使徒.htm"
+                    },
+                    {
+                        "id": 111212,
+                        "name": "最深的地下城 UNDERTOPIA - 进阶职业-圣油骑士",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/崇善之书/进阶/最深的地下城%20UNDERTOPIA%20-%20进阶职业-圣油骑士.htm"
+                    },
+                    {
+                        "id": 111212,
+                        "name": "最深的地下城 UNDERTOPIA - 进阶职业-塔里丝德之狮",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/崇善之书/进阶/最深的地下城%20UNDERTOPIA%20-%20进阶职业-塔里丝德之狮.htm"
+                    },
+                    {
+                        "id": 111212,
+                        "name": "最深的地下城 UNDERTOPIA - 进阶职业-复活殉道者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/崇善之书/进阶/最深的地下城%20UNDERTOPIA%20-%20进阶职业-复活殉道者.htm"
+                    },
+                    {
+                        "id": 111212,
+                        "name": "最深的地下城 UNDERTOPIA - 进阶职业-多梅尔之杀手",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/崇善之书/进阶/最深的地下城%20UNDERTOPIA%20-%20进阶职业-多梅尔之杀手.htm"
+                    },
+                    {
+                        "id": 111212,
+                        "name": "最深的地下城 UNDERTOPIA - 进阶职业-天界秘奥师",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/崇善之书/进阶/最深的地下城%20UNDERTOPIA%20-%20进阶职业-天界秘奥师.htm"
+                    },
+                    {
+                        "id": 111212,
+                        "name": "最深的地下城 UNDERTOPIA - 进阶职业-天空之主",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/崇善之书/进阶/最深的地下城%20UNDERTOPIA%20-%20进阶职业-天空之主.htm"
+                    },
+                    {
+                        "id": 111212,
+                        "name": "最深的地下城 UNDERTOPIA - 进阶职业-天鹅之女",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/崇善之书/进阶/最深的地下城%20UNDERTOPIA%20-%20进阶职业-天鹅之女.htm"
+                    },
+                    {
+                        "id": 111212,
+                        "name": "最深的地下城 UNDERTOPIA - 进阶职业-奇迹创造者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/崇善之书/进阶/最深的地下城%20UNDERTOPIA%20-%20进阶职业-奇迹创造者.htm"
+                    },
+                    {
+                        "id": 111212,
+                        "name": "最深的地下城 UNDERTOPIA - 进阶职业-崇圣奥法者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/崇善之书/进阶/最深的地下城%20UNDERTOPIA%20-%20进阶职业-崇圣奥法者.htm"
+                    },
+                    {
+                        "id": 111212,
+                        "name": "最深的地下城 UNDERTOPIA - 进阶职业-巴哈姆特之封臣",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/崇善之书/进阶/最深的地下城%20UNDERTOPIA%20-%20进阶职业-巴哈姆特之封臣.htm"
+                    },
+                    {
+                        "id": 111212,
+                        "name": "最深的地下城 UNDERTOPIA - 进阶职业-巴哈瑞之守卫者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/崇善之书/进阶/最深的地下城%20UNDERTOPIA%20-%20进阶职业-巴哈瑞之守卫者.htm"
+                    },
+                    {
+                        "id": 111212,
+                        "name": "最深的地下城 UNDERTOPIA - 进阶职业-巴拉切尔之密使",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/崇善之书/进阶/最深的地下城%20UNDERTOPIA%20-%20进阶职业-巴拉切尔之密使.htm"
+                    },
+                    {
+                        "id": 111212,
+                        "name": "最深的地下城 UNDERTOPIA - 进阶职业-拉泽尔之拳",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/崇善之书/进阶/最深的地下城%20UNDERTOPIA%20-%20进阶职业-拉泽尔之拳.htm"
+                    },
+                    {
+                        "id": 111212,
+                        "name": "最深的地下城 UNDERTOPIA - 进阶职业-星之歌者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/崇善之书/进阶/最深的地下城%20UNDERTOPIA%20-%20进阶职业-星之歌者.htm"
+                    },
+                    {
+                        "id": 111212,
+                        "name": "最深的地下城 UNDERTOPIA - 进阶职业-格永哈维夫的斗士",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/崇善之书/进阶/最深的地下城%20UNDERTOPIA%20-%20进阶职业-格永哈维夫的斗士.htm"
+                    },
+                    {
+                        "id": 111212,
+                        "name": "最深的地下城 UNDERTOPIA - 进阶职业-正义之剑",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/崇善之书/进阶/最深的地下城%20UNDERTOPIA%20-%20进阶职业-正义之剑.htm"
+                    },
+                    {
+                        "id": 111212,
+                        "name": "最深的地下城 UNDERTOPIA - 进阶职业-瓦拉伦的爱人",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/崇善之书/进阶/最深的地下城%20UNDERTOPIA%20-%20进阶职业-瓦拉伦的爱人.htm"
+                    },
+                    {
+                        "id": 111212,
+                        "name": "最深的地下城 UNDERTOPIA - 进阶职业-皮斯提丝索菲亚之初信者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/崇善之书/进阶/最深的地下城%20UNDERTOPIA%20-%20进阶职业-皮斯提丝索菲亚之初信者.htm"
+                    },
+                    {
+                        "id": 111212,
+                        "name": "最深的地下城 UNDERTOPIA - 进阶职业-西特尔之保卫者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/崇善之书/进阶/最深的地下城%20UNDERTOPIA%20-%20进阶职业-西特尔之保卫者.htm"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 12,
+        "name": "Complete Mage 果园翻译版",
+        "icon": "fa-folder",
+        "leafIcon": "fa-file-alt",
+        "children": [
+            {
+                "id": 1213,
+                "name": "专长法术及其他",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 121313,
+                        "name": "纯美苹果园 -> [CM]法储专长(Reserve Feats)",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/Complete%20Mage%20果园翻译版/专长法术及其他/纯美苹果园%20-%20[CM]法储专长(Reserve%20Feats).htm"
+                    },
+                    {
+                        "id": 121313,
+                        "name": "纯美苹果园 -> [CM]血脉专长   您查询的关键词是：纯美苹果园 cm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/Complete%20Mage%20果园翻译版/专长法术及其他/纯美苹果园%20-%20[CM]血脉专长.htm"
+                    },
+                    {
+                        "id": 121313,
+                        "name": "纯美苹果园 -> CM一般专长   您查询的关键词是：纯美苹果园 cm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/Complete%20Mage%20果园翻译版/专长法术及其他/纯美苹果园%20-%20CM一般专长.htm"
+                    },
+                    {
+                        "id": 121313,
+                        "name": "纯美苹果园 -> CM战术专长   您查询的关键词是：纯美苹果园 cm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/Complete%20Mage%20果园翻译版/专长法术及其他/纯美苹果园%20-%20CM战术专长.htm"
+                    },
+                    {
+                        "id": 121313,
+                        "name": "纯美苹果园 -> 新邪术",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/Complete%20Mage%20果园翻译版/专长法术及其他/纯美苹果园%20-%20新邪术.htm"
+                    },
+                    {
+                        "id": 121313,
+                        "name": "纯美苹果园 -> 法储专长的两个补充",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/Complete%20Mage%20果园翻译版/专长法术及其他/纯美苹果园%20-%20法储专长的两个补充.htm"
+                    },
+                    {
+                        "id": 121313,
+                        "name": "纯美苹果园 -> 炼金术物品",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/Complete%20Mage%20果园翻译版/专长法术及其他/纯美苹果园%20-%20炼金术物品.htm"
+                    }
+                ]
+            },
+            {
+                "id": 1213,
+                "name": "进阶",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 121313,
+                        "name": "庞西瓦发表于: Oct 24 2006, 02:01 PM",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹/纯美苹果园%20-%20否决之刃——CM进阶.htm"
+                    },
+                    {
+                        "id": 121313,
+                        "name": "纯美苹果园 -> 启迪之魂——CM进阶   您查询的关键词是：纯美苹果园 cm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/Complete%20Mage%20果园翻译版/进阶/纯美苹果园%20-%20启迪之魂——CM进阶.htm"
+                    },
+                    {
+                        "id": 121313,
+                        "name": "纯美苹果园 -> 奥咏之弦——CM进阶   您查询的关键词是：纯美苹果园 cm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/Complete%20Mage%20果园翻译版/进阶/纯美苹果园%20-%20奥咏之弦——CM进阶.htm"
+                    },
+                    {
+                        "id": 121313,
+                        "name": "纯美苹果园 -> 奥术追随者——CM进阶",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/Complete%20Mage%20果园翻译版/进阶/纯美苹果园%20-%20奥术追随者——CM进阶.htm"
+                    },
+                    {
+                        "id": 121313,
+                        "name": "纯美苹果园 -> 学派大师——CM进阶   您查询的关键词是：纯美苹果园 cm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/Complete%20Mage%20果园翻译版/进阶/纯美苹果园%20-%20学派大师——CM进阶.htm"
+                    },
+                    {
+                        "id": 121313,
+                        "name": "纯美苹果园 -> 无踪先知——CM进阶   您查询的关键词是：纯美苹果园 cm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/Complete%20Mage%20果园翻译版/进阶/纯美苹果园%20-%20无踪先知——CM进阶.htm"
+                    },
+                    {
+                        "id": 121313,
+                        "name": "纯美苹果园 -> 梦魇编织者——CM进阶   您查询的关键词是：纯美苹果园 cm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/Complete%20Mage%20果园翻译版/进阶/纯美苹果园%20-%20梦魇编织者——CM进阶.htm"
+                    },
+                    {
+                        "id": 121313,
+                        "name": "纯美苹果园 -> 神圣鞭笞者——CM进阶   您查询的关键词是：纯美苹果园 cm",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/Complete%20Mage%20果园翻译版/进阶/纯美苹果园%20-%20神圣鞭笞者——CM进阶.htm"
+                    },
+                    {
+                        "id": 121313,
+                        "name": "纯美苹果园 -> 魔焰信徒——CM进阶",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/Complete%20Mage%20果园翻译版/进阶/纯美苹果园%20-%20魔焰信徒——CM进阶.htm"
+                    },
+                    {
+                        "id": 121313,
+                        "name": "纯美苹果园 -> 魔焰术师——CM进阶",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/Complete%20Mage%20果园翻译版/进阶/纯美苹果园%20-%20魔焰术师——CM进阶.htm"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 13,
+        "name": "完美冒险",
+        "icon": "fa-folder",
+        "leafIcon": "fa-file-alt",
+        "children": [
+            {
+                "id": 1314,
+                "name": "基础职业",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 131414,
+                        "name": "忍者（Ninja）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/基础职业/Ninja%20忍者.htm"
+                    },
+                    {
+                        "id": 131414,
+                        "name": "斥候（Scout）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/基础职业/Scout%20斥候.htm"
+                    },
+                    {
+                        "id": 131414,
+                        "name": "盗法者（Spellthief）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/基础职业/Spellthief%20盗法者.htm"
+                    }
+                ]
+            },
+            {
+                "id": 1314,
+                "name": "工具和装备",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 131414,
+                        "name": "精制乐器（Masterwork Instruments）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/工具和装备/Masterwork%20Instruments%20精制乐器.htm"
+                    },
+                    {
+                        "id": 131414,
+                        "name": "新武器（New Weapons）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/工具和装备/New%20Weapons%20新武器.htm"
+                    }
+                ]
+            },
+            {
+                "id": 1314,
+                "name": "技能和专长",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 131414,
+                        "name": "吟唱专长（Bardic Music Feats）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/技能和专长/Bardic%20Music%20Feats%20吟唱专长.htm"
+                    },
+                    {
+                        "id": 131414,
+                        "name": "普通专长（Normal Feats）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/技能和专长/Normal%20Feats%20普通专长.htm"
+                    },
+                    {
+                        "id": 131414,
+                        "name": "荒野专长（Wild Feat）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/技能和专长/Wild%20Feat%20荒野专长.htm"
+                    }
+                ]
+            },
+            {
+                "id": 1314,
+                "name": "法术",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 131414,
+                        "name": "迅捷动作与直觉动作（Swift Actions And Immediate Actions）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/法术/Swift%20Actions%20And%20Immediate%20Actions%20迅捷动作和直觉动作.htm"
+                    }
+                ]
+            },
+            {
+                "id": 1314,
+                "name": "进阶职业",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 131414,
+                        "name": "动物之主（Animal Lord）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/进阶职业/Animal%20Lord%20动物之主.htm"
+                    },
+                    {
+                        "id": 131414,
+                        "name": "万兽王（Beastmaster）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/进阶职业/Beastmaster%20万兽王.htm"
+                    },
+                    {
+                        "id": 131414,
+                        "name": "侦探（Bloodhound）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/进阶职业/Bloodhound%20侦探.htm"
+                    },
+                    {
+                        "id": 131414,
+                        "name": "匕咒法师（Daggerspell Mage）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/进阶职业/Daggerspell%20Mage%20匕咒法师.htm"
+                    },
+                    {
+                        "id": 131414,
+                        "name": "匕咒变形者（Daggerspell Shaper）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/进阶职业/Daggerspell%20Shaper%20匕咒变形者.htm"
+                    },
+                    {
+                        "id": 131414,
+                        "name": "恐怖海盗（Dread Pirate）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/进阶职业/Dread%20Pirate%20恐怖海盗.htm"
+                    },
+                    {
+                        "id": 131414,
+                        "name": "地城探险者（Dungeon Delver）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/进阶职业/Dungeon%20Delver%20地城探险者.htm"
+                    },
+                    {
+                        "id": 131414,
+                        "name": "获选者（Exemplar）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/进阶职业/Exemplar%20获选者.htm"
+                    },
+                    {
+                        "id": 131414,
+                        "name": "佛克路坎七弦琴手（Fochlucan lyrist）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/进阶职业/Fochlucan%20lyrist%20佛克路坎七弦琴手.htm"
+                    },
+                    {
+                        "id": 131414,
+                        "name": "鬼面杀手（Ghost-Faced Killer）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/进阶职业/Ghost-Faced%20Killer%20鬼面杀手.htm"
+                    },
+                    {
+                        "id": 131414,
+                        "name": "高地潜行者（Highland Stalker）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/进阶职业/Highland%20Stalker%20高地潜行者.htm"
+                    },
+                    {
+                        "id": 131414,
+                        "name": "梅斯塔（Maester）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/进阶职业/Maester%20梅斯塔.htm"
+                    },
+                    {
+                        "id": 131414,
+                        "name": "变相怪杰（Master of Many Forms）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/进阶职业/Master%20of%20Many%20Forms%20变相怪杰.htm"
+                    },
+                    {
+                        "id": 131414,
+                        "name": "夜歌执法者（Nightsong Enforcer）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/进阶职业/Nightsong%20Enforcer%20夜歌执法者.htm"
+                    },
+                    {
+                        "id": 131414,
+                        "name": "夜歌渗透者（Nighsong Infiltrator）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/进阶职业/Nightsong%20Infiltrator%20夜歌滲透者.htm"
+                    },
+                    {
+                        "id": 131414,
+                        "name": "奥兰（Ollam）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/进阶职业/Ollam%20奥兰.htm"
+                    },
+                    {
+                        "id": 131414,
+                        "name": "影敌审判官（Shadowbane Inquisitor）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/进阶职业/Shadowbane%20Inquisitor%20影敌审判官.htm"
+                    },
+                    {
+                        "id": 131414,
+                        "name": "影敌行者（Shadowbane Stalker）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/进阶职业/Shadowbane%20Stalker%20影敌行者.htm"
+                    },
+                    {
+                        "id": 131414,
+                        "name": "影念者(Shadowmind)",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/进阶职业/Shadowmind%20影念者.htm"
+                    },
+                    {
+                        "id": 131414,
+                        "name": "间谍大师（Spymaster）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/进阶职业/Spymaster%20间谍大师.htm"
+                    },
+                    {
+                        "id": 131414,
+                        "name": "街头霸王（Streetfighter）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/进阶职业/Streetfighter%20街头霸王.htm"
+                    },
+                    {
+                        "id": 131414,
+                        "name": "暴风战士（Tempest）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/进阶职业/Tempest%20暴风战士.htm"
+                    },
+                    {
+                        "id": 131414,
+                        "name": "飞贼（Thief-Arcrobat）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/进阶职业/Thief-Acrobat%20飞贼.htm"
+                    },
+                    {
+                        "id": 131414,
+                        "name": "义务警员（Vigilante）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/进阶职业/Vigilante%20义务警员.htm"
+                    },
+                    {
+                        "id": 131414,
+                        "name": "表演家（virtuoso）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/进阶职业/virtuoso%20表演家.htm"
+                    },
+                    {
+                        "id": 131414,
+                        "name": "荒野骠骑（Wild Plains Outrider）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美冒险/进阶职业/Wild%20Plains%20Outrider%20荒野骠骑.htm"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 14,
+        "name": "完美战力（CW）",
+        "icon": "fa-folder",
+        "leafIcon": "fa-file-alt",
+        "children": [
+            {
+                "id": 1415,
+                "name": "专长法术及其他",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> [Complete Warrior]Epic专长",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/专长法术及其他/纯美苹果园%20-%20[Complete%20Warrior]Epic专长.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> [Complete Warrior]技能",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/专长法术及其他/纯美苹果园%20-%20[Complete%20Warrior]技能.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> [Complete Warrior]新领域",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/专长法术及其他/纯美苹果园%20-%20[Complete%20Warrior]新领域.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> [Complete Warrior]法术详述",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/专长法术及其他/纯美苹果园%20-%20[Complete%20Warrior]法术详述.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 勇士和武器",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/专长法术及其他/纯美苹果园%20-%20勇士和武器.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 奇幻战争",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/专长法术及其他/纯美苹果园%20-%20奇幻战争.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 守护者魔宠 Guardian Familiars",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/专长法术及其他/纯美苹果园%20-%20守护者魔宠%20Guardian%20Familiars.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 完美战力专长一览",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/专长法术及其他/纯美苹果园%20-%20完美战力专长一览.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 神祗与战士",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/专长法术及其他/纯美苹果园%20-%20神祗与战士.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 竞技比赛",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/专长法术及其他/纯美苹果园%20-%20竞技比赛.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 魔剑客法术列表",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/专长法术及其他/纯美苹果园%20-%20魔剑客法术列表.htm"
+                    }
+                ]
+            },
+            {
+                "id": 1415,
+                "name": "基础职业",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 变体规则：无施法能力的圣武士和巡林客",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/基础职业/纯美苹果园%20-%20变体规则：无施法能力的圣武士和巡林客.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 武士（Ｓａｍｕｒａｉ）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/基础职业/纯美苹果园%20-%20武士（Ｓａｍｕｒａｉ）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 游荡剑客（Swashbuckler）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/基础职业/纯美苹果园%20-%20游荡剑客（Swashbuckler）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 魔剑客（Hexblade）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/基础职业/纯美苹果园%20-%20魔剑客（Hexblade）.htm"
+                    }
+                ]
+            },
+            {
+                "id": 1415,
+                "name": "进阶",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 亡灵猎手（Ｈｕｎｔｅｒ　ｏｆ　ｔｈｅ　Ｄｅａｄ）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20亡灵猎手（Ｈｕｎｔｅｒ　ｏｆ　ｔｈｅ　Ｄｅａｄ）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 侏儒巨人杀戮者（Ｇｎｏｍｅ　Ｇｒａｎｔ－Ｓｌａｙｅｒ）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20侏儒巨人杀戮者（Ｇｎｏｍｅ　Ｇｒａｎｔ－Ｓｌａｙｅｒ）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 剑圣（Kensai）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20剑圣（Kensai）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 半身人开路骑兵（Ｈａｌｆｌｉｎｇ　Ｏｕｔｒｉｄｅｒ）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20半身人开路骑兵（Ｈａｌｆｌｉｎｇ　Ｏｕｔｒｉｄｅｒ）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 咏剑士（bladesinger）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20咏剑士（bladesinger）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 咒剑士（Ｓｐｅｌｌｓｗｏｒｄ）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20咒剑士（Ｓｐｅｌｌｓｗｏｒｄ）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 圣杯骑士（knight of the chalice）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20圣杯骑士（knight%20of%20the%20chalice）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 塞尔骑士（Thayan Knight）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20塞尔骑士（Thayan%20Knight）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 夺命铁拳（Reaping Mauler）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20夺命铁拳（Reaping%20Mauler）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 异种武器大师（Ｅｘｔｉｃ　Ｗｅａｐｏｎ　Ｍａｓｔｅｒ）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20异种武器大师（Ｅｘｔｉｃ　Ｗｅａｐｏｎ　Ｍａｓｔｅｒ）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 弓道部初心者（Order of the Bow Initiate）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20弓道部初心者（Order%20of%20the%20Bow%20Initiate）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 战之歌者（ＷＡＲ　ＣＨＡＮＴＥＲ）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20战之歌者（ＷＡＲ　ＣＨＡＮＴＥＲ）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 战争变形者（Warshaper）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20战争变形者（Warshaper）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 执法者（justiciar）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20执法者（justiciar）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 投石巨人（Ｈｕｌｋｉｎｇ　Ｈｕｒｌｅｒ）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20投石巨人（Ｈｕｌｋｉｎｇ　Ｈｕｒｌｅｒ）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 无踪短刃（Ｉｎｖｉｓｉｂｌｅ　Ｂｌａｄｅ）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20无踪短刃（Ｉｎｖｉｓｉｂｌｅ　Ｂｌａｄｅ）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 暗器大师（Ｍａｓｔｅｒ　Ｔｈｒｏｗｅｒ）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20暗器大师（Ｍａｓｔｅｒ　Ｔｈｒｏｗｅｒ）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 暗林行者（Ｄａｒｋｗｏｏｄ　Ｓｔａｌｋｅｒ）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20暗林行者（Ｄａｒｋｗｏｏｄ　Ｓｔａｌｋｅｒ）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 格乌什之眼（Eye of Gruumsh）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20格乌什之眼（Eye%20of%20Gruumsh）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 毁灭者（Ravager）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20毁灭者（Ravager）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 法师杀手（Occult Slayer）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20法师杀手（Occult%20Slayer）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 浪人（Ronin）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20浪人（Ronin）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 熊战士（ＢＥＡＲ　ＷＡＲＲＩＯＲ）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20熊战士（ＢＥＡＲ　ＷＡＲＲＩＯＲ）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 狂战士（Frenzied Berserker）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20狂战士（Frenzied%20Berserker）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 狂暴法师（Rage Mage）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20狂暴法师（Rage%20Mage）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 狂舞僧（Ｄｅｒｖｉｓｈ）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20狂舞僧（Ｄｅｒｖｉｓｈ）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 猛兽侠（Ｎａｔｕｒｅ’ｓ　Ｗａｒｒｉｏｒ）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20猛兽侠（Ｎａｔｕｒｅ’ｓ　Ｗａｒｒｉｏｒ）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 石之领主（Ｓｔｏｎｅｌｏｒｄ）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20石之领主（Ｓｔｏｎｅｌｏｒｄ）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 窥心者（Mindspy）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20窥心者（Mindspy）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 精英骑士（cavalier）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20精英骑士（cavalier）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 紫龙骑士（Purple Dragon Knight）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20紫龙骑士（Purple%20Dragon%20Knight）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 纹身武僧（Ｔａｔｔｏｏｅｄ　Ｍｏｎｋ）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20纹身武僧（Ｔａｔｔｏｏｅｄ　Ｍｏｎｋ）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 近卫骑士（Knight Protector）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20近卫骑士（Knight%20Protector）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 进阶职业导言",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20进阶职业导言.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 醉拳大师（Ｄｒｕｎｋｅｎ　Ｍａｓｔｅｒ）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20醉拳大师（Ｄｒｕｎｋｅｎ　Ｍａｓｔｅｒ）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 魔手之主（Master of the Unseen Hand）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20魔手之主（Master%20of%20the%20Unseen%20Hand）.htm"
+                    },
+                    {
+                        "id": 141515,
+                        "name": "纯美苹果园 -> 黑暗猎人（Dark Hunter）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美战力（CW）/进阶/纯美苹果园%20-%20黑暗猎人（Dark%20Hunter）.htm"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 15,
+        "name": "完美奥术（CA）",
+        "icon": "fa-folder",
+        "leafIcon": "fa-file-alt",
+        "children": [
+            {
+                "id": 1516,
+                "name": "专长法术及其他",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 151616,
+                        "name": "专长",
+                        "icon": "fa-folder",
+                        "leafIcon": "fa-file-alt",
+                        "children": [
+                            {
+                                "id": 15161616,
+                                "name": "纯美苹果园 -> CA專長-龍脈專長系列",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美奥术（CA）/专长法术及其他/专长/纯美苹果园%20-%20CA專長-龍脈專長系列.htm"
+                            },
+                            {
+                                "id": 15161616,
+                                "name": "纯美苹果园 -> CA第三章-奥术专长",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美奥术（CA）/专长法术及其他/专长/纯美苹果园%20-%20CA第三章-奥术专长.htm"
+                            }
+                        ]
+                    },
+                    {
+                        "id": 151616,
+                        "name": "纯美苹果园 -> CA第七章——arcane campaigns 第一部分",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美奥术（CA）/专长法术及其他/纯美苹果园%20-%20CA第七章——arcane%20campaigns%20第一部分.htm"
+                    },
+                    {
+                        "id": 151616,
+                        "name": "纯美苹果园 -> Magic Item部分翻译",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美奥术（CA）/专长法术及其他/纯美苹果园%20-%20Magic%20Item部分翻译.htm"
+                    },
+                    {
+                        "id": 151616,
+                        "name": "纯美苹果园 -> 完美奥术•法术介绍",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美奥术（CA）/专长法术及其他/纯美苹果园%20-%20完美奥术·法术介绍.htm"
+                    },
+                    {
+                        "id": 151616,
+                        "name": "纯美苹果园 -> 完美奥术•法术列表",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美奥术（CA）/专长法术及其他/纯美苹果园%20-%20完美奥术·法术列表.htm"
+                    },
+                    {
+                        "id": 151616,
+                        "name": "纯美苹果园 -> 第四章起始部分•Weaponlike Spell",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美奥术（CA）/专长法术及其他/纯美苹果园%20-%20第四章起始部分·Weaponlike%20Spell.htm"
+                    },
+                    {
+                        "id": 151616,
+                        "name": "邪术部分",
+                        "icon": "fa-folder",
+                        "leafIcon": "fa-file-alt",
+                        "children": [
+                            {
+                                "id": 15161616,
+                                "name": "纯美苹果园 -> 邪术师邪术列表",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美奥术（CA）/专长法术及其他/邪术部分/纯美苹果园%20-%20邪术师邪术列表.htm"
+                            },
+                            {
+                                "id": 15161616,
+                                "name": "纯美苹果园 -> 邪术师邪术说明",
+                                "icon": "fa-file-alt",
+                                "isLeaf": true,
+                                "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美奥术（CA）/专长法术及其他/邪术部分/纯美苹果园%20-%20邪术师邪术说明.htm"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 1516,
+                "name": "基础",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 151616,
+                        "name": "纯美苹果园 -> CA基础职业——Warlock",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美奥术（CA）/基础/纯美苹果园%20-%20CA基础职业——Warlock.htm"
+                    },
+                    {
+                        "id": 151616,
+                        "name": "纯美苹果园 -> CA基础职业——Warmage",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美奥术（CA）/基础/纯美苹果园%20-%20CA基础职业——Warmage.htm"
+                    },
+                    {
+                        "id": 151616,
+                        "name": "纯美苹果园 -> CA基础职业－－－WU JEN",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美奥术（CA）/基础/纯美苹果园%20-%20CA基础职业－－－WU%20JEN.htm"
+                    }
+                ]
+            },
+            {
+                "id": 1516,
+                "name": "进阶",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 151616,
+                        "name": "纯美苹果园 -> CA进阶职业——乐之追寻者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美奥术（CA）/进阶/纯美苹果园%20-%20CA进阶职业——乐之追寻者.htm"
+                    },
+                    {
+                        "id": 151616,
+                        "name": "纯美苹果园 -> CA进阶职业——元素学者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美奥术（CA）/进阶/纯美苹果园%20-%20CA进阶职业——元素学者.htm"
+                    },
+                    {
+                        "id": 151616,
+                        "name": "纯美苹果园 -> CA进阶职业——几何学者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美奥术（CA）/进阶/纯美苹果园%20-%20CA进阶职业——几何学者.htm"
+                    },
+                    {
+                        "id": 151616,
+                        "name": "纯美苹果园 -> CA进阶职业——变形大师",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美奥术（CA）/进阶/纯美苹果园%20-%20CA进阶职业——变形大师.htm"
+                    },
+                    {
+                        "id": 151616,
+                        "name": "纯美苹果园 -> CA进阶职业——启迪之拳",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美奥术（CA）/进阶/纯美苹果园%20-%20CA进阶职业——启迪之拳.htm"
+                    },
+                    {
+                        "id": 151616,
+                        "name": "纯美苹果园 -> CA进阶职业——天运法师",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美奥术（CA）/进阶/纯美苹果园%20-%20CA进阶职业——天运法师.htm"
+                    },
+                    {
+                        "id": 151616,
+                        "name": "纯美苹果园 -> CA进阶职业——奥法尖兵",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美奥术（CA）/进阶/纯美苹果园%20-%20CA进阶职业——奥法尖兵.htm"
+                    },
+                    {
+                        "id": 151616,
+                        "name": "纯美苹果园 -> CA进阶职业——奥法联合会法师",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美奥术（CA）/进阶/纯美苹果园%20-%20CA进阶职业——奥法联合会法师.htm"
+                    },
+                    {
+                        "id": 151616,
+                        "name": "纯美苹果园 -> CA进阶职业——导途者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美奥术（CA）/进阶/纯美苹果园%20-%20CA进阶职业——导途者.htm"
+                    },
+                    {
+                        "id": 151616,
+                        "name": "纯美苹果园 -> CA进阶职业——曲心者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美奥术（CA）/进阶/纯美苹果园%20-%20CA进阶职业——曲心者.htm"
+                    },
+                    {
+                        "id": 151616,
+                        "name": "纯美苹果园 -> CA进阶职业——植皮者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美奥术（CA）/进阶/纯美苹果园%20-%20CA进阶职业——植皮者.htm"
+                    },
+                    {
+                        "id": 151616,
+                        "name": "纯美苹果园 -> CA进阶职业——翡翠星大师",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美奥术（CA）/进阶/纯美苹果园%20-%20CA进阶职业——翡翠星大师.htm"
+                    },
+                    {
+                        "id": 151616,
+                        "name": "纯美苹果园 -> CA进阶职业——虹彩学徒",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美奥术（CA）/进阶/纯美苹果园%20-%20CA进阶职业——虹彩学徒.htm"
+                    },
+                    {
+                        "id": 151616,
+                        "name": "纯美苹果园 -> CA进阶职业——超凡之弦",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美奥术（CA）/进阶/纯美苹果园%20-%20CA进阶职业——超凡之弦.htm"
+                    },
+                    {
+                        "id": 151616,
+                        "name": "纯美苹果园 -> CA进阶职业——银白学者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美奥术（CA）/进阶/纯美苹果园%20-%20CA进阶职业——银白学者.htm"
+                    },
+                    {
+                        "id": 151616,
+                        "name": "纯美苹果园 -> CA进阶职业——雕象大师",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美奥术（CA）/进阶/纯美苹果园%20-%20CA进阶职业——雕象大师.htm"
+                    },
+                    {
+                        "id": 151616,
+                        "name": "纯美苹果园 ->",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美奥术（CA）/进阶/纯美苹果园%20-%20形學者.htm"
+                    },
+                    {
+                        "id": 151616,
+                        "name": "纯美苹果园 -> 血灵师/血灵法师/血魔师/血灵术士/血滴子/血头",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美奥术（CA）/进阶/纯美苹果园%20-%20血灵师-血灵法师-血魔师-血灵术士-血滴子-血头__.htm"
+                    },
+                    {
+                        "id": 151616,
+                        "name": "纯美苹果园 -> 错乱法师－wild mage",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(7)/完美奥术（CA）/进阶/纯美苹果园%20-%20错乱法师－wild%20mage.htm"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 16,
+        "name": "完美圣斗士（cc）",
+        "icon": "fa-folder",
+        "leafIcon": "fa-file-alt",
+        "children": [
+            {
+                "id": 1617,
+                "name": "专长法术及其他",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 161717,
+                        "name": "纯美苹果园 -> [组织]苍翠守卫(CC, Guardian of Green)",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美圣斗士（cc）/专长法术及其他/纯美苹果园%20-%20[组织]苍翠守卫(CC,%20Guardian%20of%20Green).htm"
+                    },
+                    {
+                        "id": 161717,
+                        "name": "纯美苹果园 -> CC组织,培罗影卫",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美圣斗士（cc）/专长法术及其他/纯美苹果园%20-%20CC组织,培罗影卫.htm"
+                    },
+                    {
+                        "id": 161717,
+                        "name": "纯美苹果园 -> Complete Champion 专长详述",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美圣斗士（cc）/专长法术及其他/纯美苹果园%20-%20Complete%20Champion%20专长详述.htm"
+                    }
+                ]
+            },
+            {
+                "id": 1617,
+                "name": "进阶",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 161717,
+                        "name": "纯美苹果园 -> [进阶]林地守望者(CC, Holt Warden)",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美圣斗士（cc）/进阶/纯美苹果园%20-%20[进阶]林地守望者(CC,%20Holt%20Warden).htm"
+                    },
+                    {
+                        "id": 161717,
+                        "name": "纯美苹果园 -> [进阶]森林之拳(CC, Fist of the Forest)",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美圣斗士（cc）/进阶/纯美苹果园%20-%20[进阶]森林之拳(CC,%20Fist%20of%20the%20Forest).htm"
+                    },
+                    {
+                        "id": 161717,
+                        "name": "纯美苹果园 -> complete champion进阶——神话沿循者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美圣斗士（cc）/进阶/纯美苹果园%20-%20complete%20champion进阶——神话沿循者.htm"
+                    },
+                    {
+                        "id": 161717,
+                        "name": "纯美苹果园 -> 天命斗士ORDAINED CHAMPION-Complete Champion进阶职业",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美圣斗士（cc）/进阶/纯美苹果园%20-%20天命斗士ORDAINED%20CHAMPION-Complete%20Champion进阶职业.htm"
+                    },
+                    {
+                        "id": 161717,
+                        "name": "纯美苹果园 -> 完美圣斗士进阶，暗影间谍（Shadowspy）和影袭者(Shadowstriker)",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美圣斗士（cc）/进阶/纯美苹果园%20-%20完美圣斗士进阶，暗影间谍（Shadowspy）和影袭者(Shadowstriker).htm"
+                    },
+                    {
+                        "id": 161717,
+                        "name": "纯美苹果园 -> 精英使徒——C Champion进阶",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美圣斗士（cc）/进阶/纯美苹果园%20-%20精英使徒——C%20Champion进阶.htm"
+                    },
+                    {
+                        "id": 161717,
+                        "name": "纯美苹果园 -> 精英魔战——C Champion进阶",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美圣斗士（cc）/进阶/纯美苹果园%20-%20精英魔战——C%20Champion进阶.htm"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 17,
+        "name": "完美流氓（cs）",
+        "icon": "fa-folder",
+        "leafIcon": "fa-file-alt",
+        "children": [
+            {
+                "id": 1718,
+                "name": "专长法术及其他",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 171818,
+                        "name": "纯美苹果园 -> [Complete Scoundrel]一般专长",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美流氓（cs）/专长法术及其他/纯美苹果园%20-%20[Complete%20Scoundrel]一般专长.htm"
+                    },
+                    {
+                        "id": 171818,
+                        "name": "纯美苹果园 -> [Complete Scoundrel]伏击专长",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美流氓（cs）/专长法术及其他/纯美苹果园%20-%20[Complete%20Scoundrel]伏击专长.htm"
+                    },
+                    {
+                        "id": 171818,
+                        "name": "纯美苹果园 -> [Complete Scoundrel]吟唱专长",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美流氓（cs）/专长法术及其他/纯美苹果园%20-%20[Complete%20Scoundrel]吟唱专长.htm"
+                    },
+                    {
+                        "id": 171818,
+                        "name": "纯美苹果园 -> [Complete Scoundrel]技法",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美流氓（cs）/专长法术及其他/纯美苹果园%20-%20[Complete%20Scoundrel]技法.htm"
+                    },
+                    {
+                        "id": 171818,
+                        "name": "纯美苹果园 -> [Complete Scoundrel]新法术",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美流氓（cs）/专长法术及其他/纯美苹果园%20-%20[Complete%20Scoundrel]新法术.htm"
+                    },
+                    {
+                        "id": 171818,
+                        "name": "纯美苹果园 -> 幸运专长",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美流氓（cs）/专长法术及其他/纯美苹果园%20-%20幸运专长.htm"
+                    },
+                    {
+                        "id": 171818,
+                        "name": "纯美苹果园 -> 幸运专长",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美流氓（cs）/专长法术及其他/纯美苹果园%20-%20幸运专长补充.htm"
+                    }
+                ]
+            },
+            {
+                "id": 1718,
+                "name": "进阶",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 171818,
+                        "name": "纯美苹果园 -> [Complete Scondrel]进阶职业-战斗技法师",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美流氓（cs）/进阶/纯美苹果园%20-%20[Complete%20Scondrel]进阶职业-战斗技法师.htm"
+                    },
+                    {
+                        "id": 171818,
+                        "name": "纯美苹果园 -> [Complete Scoundrel]进阶职业 - 战地陷阱专家",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美流氓（cs）/进阶/纯美苹果园%20-%20[Complete%20Scoundrel]进阶职业%20-%20战地陷阱专家.htm"
+                    },
+                    {
+                        "id": 171818,
+                        "name": "纯美苹果园 -> [Complete Scoundrel]进阶职业 - 誓仇刽子手",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美流氓（cs）/进阶/纯美苹果园%20-%20[Complete%20Scoundrel]进阶职业%20-%20誓仇刽子手.htm"
+                    },
+                    {
+                        "id": 171818,
+                        "name": "纯美苹果园 -> [Complete Scoundrel]进阶职业-天灾召集者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美流氓（cs）/进阶/纯美苹果园%20-%20[Complete%20Scoundrel]进阶职业-天灾召集者.htm"
+                    },
+                    {
+                        "id": 171818,
+                        "name": "纯美苹果园 -> [Complete Scoundrel]进阶职业-离奇技法师",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美流氓（cs）/进阶/纯美苹果园%20-%20[Complete%20Scoundrel]进阶职业-离奇技法师.htm"
+                    },
+                    {
+                        "id": 171818,
+                        "name": "纯美苹果园 -> [Complete Scoundrel]进阶职业-魔法技法师",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美流氓（cs）/进阶/纯美苹果园%20-%20[Complete%20Scoundrel]进阶职业-魔法技法师.htm"
+                    },
+                    {
+                        "id": 171818,
+                        "name": "纯美苹果园 -> 幸运之友——CS进阶",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美流氓（cs）/进阶/纯美苹果园%20-%20幸运之友——CS进阶.htm"
+                    },
+                    {
+                        "id": 171818,
+                        "name": "纯美苹果园 -> 摩登大圣——CS进阶",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美流氓（cs）/进阶/纯美苹果园%20-%20摩登大圣——CS进阶.htm"
+                    },
+                    {
+                        "id": 171818,
+                        "name": "纯美苹果园 -> 灰之守卫——CS进阶",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美流氓（cs）/进阶/纯美苹果园%20-%20灰之守卫——CS进阶.htm"
+                    },
+                    {
+                        "id": 171818,
+                        "name": "纯美苹果园 -> 蒙面舞者——CS进阶",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美流氓（cs）/进阶/纯美苹果园%20-%20蒙面舞者——CS进阶.htm"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 18,
+        "name": "完美灵能（cp）",
+        "icon": "fa-folder",
+        "leafIcon": "fa-file-alt",
+        "children": [
+            {
+                "id": 1819,
+                "name": "专长法术及其他",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 181919,
+                        "name": "XPH异能详述翻译（WH出品） - The Ring of WonderPortalForumWiki",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美灵能（cp）/专长法术及其他/XPH异能详述翻译（WH出品）%20-%20The%20Ring%20of%20Wonder.htm"
+                    },
+                    {
+                        "id": 181919,
+                        "name": "XPH异能详述翻译（WH出品） - The Ring of Wonder",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美灵能（cp）/专长法术及其他/XPH异能详述翻译（WH出品）1%20-%20The%20Ring%20of%20Wonder.htm"
+                    },
+                    {
+                        "id": 181919,
+                        "name": "纯美苹果园 -> 使用灵能石里的异能列表展现异能",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美灵能（cp）/专长法术及其他/纯美苹果园%20-%20使用灵能石里的异能列表展现异能.htm"
+                    },
+                    {
+                        "id": 181919,
+                        "name": "纯美苹果园 -> 完美灵能里的传奇专长",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美灵能（cp）/专长法术及其他/纯美苹果园%20-%20完美灵能里的传奇专长.htm"
+                    },
+                    {
+                        "id": 181919,
+                        "name": "纯美苹果园 -> 灵吸传承专长（ILLITHID HERITAGE FEATS）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美灵能（cp）/专长法术及其他/纯美苹果园%20-%20灵吸传承专长（ILLITHID%20HERITAGE%20FEATS）.htm"
+                    }
+                ]
+            },
+            {
+                "id": 1819,
+                "name": "进阶",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 181919,
+                        "name": "纯美苹果园 -> Complete Psionic进阶职业：Illumine Soul",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美灵能（cp）/进阶/纯美苹果园%20-%20Complete%20Psionic进阶职业：Illumine%20Soul.htm"
+                    },
+                    {
+                        "id": 181919,
+                        "name": "纯美苹果园 -> Complete Psionic进阶职业：Soulbow",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美灵能（cp）/进阶/纯美苹果园%20-%20Complete%20Psionic进阶职业：Soulbow.htm"
+                    },
+                    {
+                        "id": 181919,
+                        "name": "纯美苹果园 -> Complete Psionic进阶职业：Storm Disciple",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美灵能（cp）/进阶/纯美苹果园%20-%20Complete%20Psionic进阶职业：Storm%20Disciple.htm"
+                    },
+                    {
+                        "id": 181919,
+                        "name": "纯美苹果园 -> 完美灵能里的Ectopic Adept（附送心灵之眼里的Constructor）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美灵能（cp）/进阶/纯美苹果园%20-%20完美灵能里的Ectopic%20Adept（附送心灵之眼里的Constructor）.htm"
+                    },
+                    {
+                        "id": 181919,
+                        "name": "纯美苹果园 -> 进阶",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美灵能（cp）/进阶/纯美苹果园%20-%20进阶……一半……Flayerspawn%20Psychic.htm"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 19,
+        "name": "完美神力（cd）",
+        "icon": "fa-folder",
+        "leafIcon": "fa-file-alt",
+        "children": [
+            {
+                "id": 1920,
+                "name": "专长法术及其他",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> Complete Divine专长",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/专长法术及其他/纯美苹果园%20-%20Complete%20Divine专长.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> New Domains 新领域",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/专长法术及其他/纯美苹果园%20-%20New%20Domains%20新领域.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 完美神力中对额外领域的说明",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/专长法术及其他/纯美苹果园%20-%20完美神力中对额外领域的说明.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 魔法物品:Relics圣物",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/专长法术及其他/纯美苹果园%20-%20魔法物品Relics圣物.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 魔法物品:Staffs法杖",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/专长法术及其他/纯美苹果园%20-%20魔法物品Staffs法杖.htm"
+                    }
+                ]
+            },
+            {
+                "id": 1920,
+                "name": "基础",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 基础职业:Favored Soul 天佑者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/基础/纯美苹果园%20-%20基础职业Favored%20Soul%20天佑者.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 基础职业:Shugenja 修验者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/基础/纯美苹果园%20-%20基础职业Shugenja%20修验者.htm"
+                    }
+                ]
+            },
+            {
+                "id": 1920,
+                "name": "进阶",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 基础职业:Spirit Shaman 灵魂萨满",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/进阶/纯美苹果园%20-%20基础职业Spirit%20Shaman%20灵魂萨满.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 进阶职业:Black Flame Zealot 黑焰狂徒",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/进阶/纯美苹果园%20-%20进阶职业Black%20Flame%20Zealot%20黑焰狂徒.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 进阶职业:Blighter 枯萎者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/进阶/纯美苹果园%20-%20进阶职业Blighter%20枯萎者.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 进阶职业:Church Inquisitor 教廷审判官",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/进阶/纯美苹果园%20-%20进阶职业Church%20Inquisitor%20教廷审判官.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 进阶职业:Consecrated Harrier 崇圣狩猎者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/进阶/纯美苹果园%20-%20进阶职业Consecrated%20Harrier%20崇圣狩猎者.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 进阶职业:Contemplative 虔心祈者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/进阶/纯美苹果园%20-%20进阶职业Contemplative%20虔心祈者.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 进阶职业:Divine Crusader 神圣十字军",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/进阶/纯美苹果园%20-%20进阶职业Divine%20Crusader%20神圣十字军.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 进阶职业:Divine Oracle神谕使",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/进阶/纯美苹果园%20-%20进阶职业Divine%20Oracle神谕使.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 进阶职业:Dweomerkeeper咒文守护者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/进阶/纯美苹果园%20-%20进阶职业Dweomerkeeper咒文守护者.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 进阶职业:Entropomancer熵空使",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/进阶/纯美苹果园%20-%20进阶职业Entropomancer熵空使.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 进阶职业:Geomancer土灵士",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/进阶/纯美苹果园%20-%20进阶职业Geomancer土灵士.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 进阶职业:Holy Liberator神圣解放者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/进阶/纯美苹果园%20-%20进阶职业Holy%20Liberator神圣解放者.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 进阶职业:Hospitaler医护骑士",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/进阶/纯美苹果园%20-%20进阶职业Hospitaler医护骑士.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 进阶职业:Master of Shrouds亡魂之主",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/进阶/纯美苹果园%20-%20进阶职业Master%20of%20Shrouds亡魂之主.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 进阶职业:Moon Guardian月之守护者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/进阶/纯美苹果园%20-%20进阶职业Moon%20Guardian月之守护者.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 进阶职业:Nightcloak夜之袍",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/进阶/纯美苹果园%20-%20进阶职业Nightcloak夜之袍.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 进阶职业:Pious Templar圣堂武士",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/进阶/纯美苹果园%20-%20进阶职业Pious%20Templar圣堂武士.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 进阶职业:Radiant Servant of Pelor培罗的光辉侍者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/进阶/纯美苹果园%20-%20进阶职业Radiant%20Servant%20of%20Pelor培罗的光辉侍者.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 进阶职业:Rainbow Servant彩虹侍者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/进阶/纯美苹果园%20-%20进阶职业Rainbow%20Servant彩虹侍者.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 进阶职业:Sacred Exorcist神圣驱魔师",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/进阶/纯美苹果园%20-%20进阶职业Sacred%20Exorcist神圣驱魔师.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 进阶职业:Sacred Fist神拳使",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/进阶/纯美苹果园%20-%20进阶职业Sacred%20Fist神拳使.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 进阶职业:Seeker of the Misty Isle雾岛寻者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/进阶/纯美苹果园%20-%20进阶职业Seeker%20of%20the%20Misty%20Isle雾岛寻者.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 进阶职业:Shining Blade of Heironeous海若尼斯的闪耀之刃",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/进阶/纯美苹果园%20-%20进阶职业Shining%20Blade%20of%20Heironeous海若尼斯的闪耀之刃.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 进阶职业:StormLord 风暴领主",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/进阶/纯美苹果园%20-%20进阶职业StormLord%20风暴领主.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 进阶职业:Temple Raider of Olidammara渥利达玛拉的神庙奇兵",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/进阶/纯美苹果园%20-%20进阶职业Temple%20Raider%20of%20Olidammara渥利达玛拉的神庙奇兵.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 进阶职业:Ur-Priest 亵渎祭司",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/进阶/纯美苹果园%20-%20进阶职业Ur-Priest%20亵渎祭司.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 进阶职业:Void Disciple虚无信徒",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/进阶/纯美苹果园%20-%20进阶职业Void%20Disciple虚无信徒.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 进阶职业:Warpriest战争司祭",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/进阶/纯美苹果园%20-%20进阶职业Warpriest战争司祭.htm"
+                    },
+                    {
+                        "id": 192020,
+                        "name": "纯美苹果园 -> 进阶职业:宣教士 Evangelist",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/完美神力（cd）/进阶/纯美苹果园%20-%20进阶职业宣教士%20Evangelist.htm"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 20,
+        "name": "龙之魔法",
+        "icon": "fa-folder",
+        "leafIcon": "fa-file-alt",
+        "children": [
+            {
+                "id": 2021,
+                "name": "基础",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 202121,
+                        "name": "纯美苹果园 -> 龙火术士——dragon magic 基础职业",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/龙之魔法/基础/纯美苹果园%20-%20龙火术士——dragon%20magic%20基础职业.htm"
+                    }
+                ]
+            },
+            {
+                "id": 2021,
+                "name": "法术",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 202121,
+                        "name": "纯美苹果园 -> 龙火术士的龙之邪术",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/龙之魔法/法术/纯美苹果园%20-%20龙火术士的龙之邪术.htm"
+                    }
+                ]
+            },
+            {
+                "id": 2021,
+                "name": "进阶",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 202121,
+                        "name": "纯美苹果园 -> dragon magic 进阶——龙之巫师",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/龙之魔法/进阶/纯美苹果园%20-%20dragon%20magic%20进阶——龙之巫师.htm"
+                    },
+                    {
+                        "id": 202121,
+                        "name": "纯美苹果园 -> dragon magic进阶——飞龙之手",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/龙之魔法/进阶/纯美苹果园%20-%20dragon%20magic进阶——飞龙之手.htm"
+                    },
+                    {
+                        "id": 202121,
+                        "name": "纯美苹果园 -> 龙之门徒——dragon magic进阶",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/龙之魔法/进阶/纯美苹果园%20-%20龙之门徒——dragon%20magic进阶.htm"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 21,
+        "name": "魔法卷册（tome of magic）",
+        "icon": "fa-folder",
+        "leafIcon": "fa-file-alt",
+        "children": [
+            {
+                "id": 2122,
+                "name": "专长魔法其他",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 212222,
+                        "name": "纯美苹果园 -> <TOM> 契约魔法专长",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/魔法卷册（tome%20of%20magic）/专长魔法其他/纯美苹果园%20-%20TOM%20契约魔法专长.htm"
+                    },
+                    {
+                        "id": 212222,
+                        "name": "纯美苹果园 -> <TOM> 契约魔法物品",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/魔法卷册（tome%20of%20magic）/专长魔法其他/纯美苹果园%20-%20TOM%20契约魔法物品.htm"
+                    },
+                    {
+                        "id": 212222,
+                        "name": "纯美苹果园 -> <TOM>契灵资料翻译汇编",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/魔法卷册（tome%20of%20magic）/专长魔法其他/纯美苹果园%20-%20TOM契灵资料翻译汇编.htm"
+                    }
+                ]
+            },
+            {
+                "id": 2122,
+                "name": "基础",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 212222,
+                        "name": "纯美苹果园 -> Tome of Magic•Binder•部分",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/魔法卷册（tome%20of%20magic）/基础/纯美苹果园%20-%20Tome%20of%20Magic·Binder·部分.htm"
+                    }
+                ]
+            },
+            {
+                "id": 2122,
+                "name": "进阶",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 212222,
+                        "name": "纯美苹果园 -> TOM进阶-灵魂法师",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/魔法卷册（tome%20of%20magic）/进阶/纯美苹果园%20-%20TOM进阶-灵魂法师.htm"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 22,
+        "name": "模型手册（miniatures handbook）",
+        "icon": "fa-folder",
+        "leafIcon": "fa-file-alt",
+        "children": [
+            {
+                "id": 2223,
+                "name": "进阶",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 222323,
+                        "name": "纯美苹果园 -> minatrue handbook进阶——浩劫法师",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/模型手册（miniatures%20handbook）/进阶/纯美苹果园%20-%20minatrue%20handbook进阶——浩劫法师.htm"
+                    },
+                    {
+                        "id": 222323,
+                        "name": "纯美苹果园 -> minature handbook进阶——亡灵猎人",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/模型手册（miniatures%20handbook）/进阶/纯美苹果园%20-%20minature%20handbook进阶——亡灵猎人.htm"
+                    },
+                    {
+                        "id": 222323,
+                        "name": "纯美苹果园 -> minature handbook进阶——元素召唤者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/模型手册（miniatures%20handbook）/进阶/纯美苹果园%20-%20minature%20handbook进阶——元素召唤者.htm"
+                    },
+                    {
+                        "id": 222323,
+                        "name": "纯美苹果园 -> minature handbook进阶——酋长",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/模型手册（miniatures%20handbook）/进阶/纯美苹果园%20-%20minature%20handbook进阶——酋长.htm"
+                    },
+                    {
+                        "id": 222323,
+                        "name": "纯美苹果园 -> minature handbook进阶——龙之武士",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/模型手册（miniatures%20handbook）/进阶/纯美苹果园%20-%20minature%20handbook进阶——龙之武士.htm"
+                    },
+                    {
+                        "id": 222323,
+                        "name": "纯美苹果园 -> 战术之盾——《模型手册》进阶",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/模型手册（miniatures%20handbook）/进阶/纯美苹果园%20-%20战术之盾——《模型手册》进阶.htm"
+                    },
+                    {
+                        "id": 222323,
+                        "name": "纯美苹果园 -> 狂战者——《miniatures handbook》进阶",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/模型手册（miniatures%20handbook）/进阶/纯美苹果园%20-%20狂战者——《miniatures%20handbook》进阶.htm"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 23,
+        "name": "死人书xd（libris mortis ）",
+        "icon": "fa-folder",
+        "leafIcon": "fa-file-alt",
+        "children": [
+            {
+                "id": 2324,
+                "name": "专长魔法其他",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> Chapter 5 Equipment 装备 Para",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/专长魔法其他/纯美苹果园%20-%20Chapter%205%20Equipment%20装备%20Para_1.htm"
+                    },
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> 《死灵之书》：法术（部分）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/专长魔法其他/纯美苹果园%20-%20《死灵之书》：法术（部分）.htm"
+                    },
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> 《死者之书》一般专长简表",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/专长魔法其他/纯美苹果园%20-%20《死者之书》一般专长简表.htm"
+                    },
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> 不死义肢",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/专长魔法其他/纯美苹果园%20-%20不死义肢.htm"
+                    },
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> 死灵之书：法术",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/专长魔法其他/纯美苹果园%20-%20死灵之书：法术.htm"
+                    },
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> 死灵之书：法术（全）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/专长魔法其他/纯美苹果园%20-%20死灵之书：法术（全）.htm"
+                    },
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> 死者之书《Libris Mortis》专长",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/专长魔法其他/纯美苹果园%20-%20死者之书《Libris%20Mortis》专长.htm"
+                    },
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> 神圣净化者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/专长魔法其他/纯美苹果园%20-%20神圣净化者.htm"
+                    }
+                ]
+            },
+            {
+                "id": 2324,
+                "name": "怪物",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> 《死灵之书》怪物-Angel of Decay腐朽天使",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/怪物/纯美苹果园%20-%20《死灵之书》怪物-Angel%20of%20Decay腐朽天使.htm"
+                    },
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> 《死灵之书》怪物-Atropal Scion萎缩者后裔",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/怪物/纯美苹果园%20-%20《死灵之书》怪物-Atropal%20Scion萎缩者后裔.htm"
+                    },
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> 《死灵之书》怪物-Dream Vestige梦痕",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/怪物/纯美苹果园%20-%20《死灵之书》怪物-Dream%20Vestige梦痕.htm"
+                    },
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> 《死灵之书》怪物-Entropic Reaper熵之收割者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/怪物/纯美苹果园%20-%20《死灵之书》怪物-Entropic%20Reaper熵之收割者.htm"
+                    },
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> 《死灵之书》怪物-Necromental负元素",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/怪物/纯美苹果园%20-%20《死灵之书》怪物-Necromental负元素.htm"
+                    },
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> 《死灵之书》怪物-Skin Kite皮风筝",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/怪物/纯美苹果园%20-%20《死灵之书》怪物-Skin%20Kite皮风筝.htm"
+                    },
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> 《死灵之书》怪物-Wheep泣妖",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/怪物/纯美苹果园%20-%20《死灵之书》怪物-Wheep泣妖.htm"
+                    },
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> 《死者之书》模板：不死演化",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/怪物/纯美苹果园%20-%20《死者之书》模板：不死演化.htm"
+                    },
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> 不死生物详述",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/怪物/纯美苹果园%20-%20不死生物详述.htm"
+                    },
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> 不死的怪物职业",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/怪物/纯美苹果园%20-%20不死的怪物职业.htm"
+                    },
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> 又一个不死的怪物",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/怪物/纯美苹果园%20-%20又一个不死的怪物.htm"
+                    },
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> 战役中的不死生物",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/怪物/纯美苹果园%20-%20战役中的不死生物.htm"
+                    },
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> 绷带大叔",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/怪物/纯美苹果园%20-%20绷带大叔…….htm"
+                    },
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> 魔魂尸",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/怪物/纯美苹果园%20-%20魔魂尸.htm"
+                    }
+                ]
+            },
+            {
+                "id": 2324,
+                "name": "进阶",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> Libris Mortis:进阶职业——哀伤咏叹者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/进阶/纯美苹果园%20-%20Libris%20Mortis进阶职业——哀伤咏叹者.htm"
+                    },
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> 《死者之书》进阶：亡魂之主（Master of Shrouds）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/进阶/纯美苹果园%20-%20《死者之书》进阶：亡魂之主（Master%20of%20Shrouds）.htm"
+                    },
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> 《死者之书》进阶：光辉掌者 Master of Radiance",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/进阶/纯美苹果园%20-%20《死者之书》进阶：光辉掌者%20Master%20of%20Radiance.htm"
+                    },
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> 《死者之书》进阶：匿踪惊骇 Lurking Terror",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/进阶/纯美苹果园%20-%20《死者之书》进阶：匿踪惊骇%20Lurking%20Terror.htm"
+                    },
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> 《死者之书》进阶：古墓门卫 Tomb Warden",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/进阶/纯美苹果园%20-%20《死者之书》进阶：古墓门卫%20Tomb%20Warden.htm"
+                    },
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> 《死者之书》进阶：暮死型范 Ephemeral Exemplar",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/进阶/纯美苹果园%20-%20《死者之书》进阶：暮死型范%20Ephemeral%20Exemplar.htm"
+                    },
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> 《死者之书》进阶：死亡获选者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/进阶/纯美苹果园%20-%20《死者之书》进阶：死亡获选者.htm"
+                    },
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> 《死者之书》进阶：真死灵师",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/进阶/纯美苹果园%20-%20《死者之书》进阶：真死灵师.htm"
+                    },
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> 《死者之书》进阶：苍白之主",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/进阶/纯美苹果园%20-%20《死者之书》进阶：苍白之主.htm"
+                    },
+                    {
+                        "id": 232424,
+                        "name": "纯美苹果园 -> 《死者之书》进阶：血族大君 Master Vampire",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/死人书xd（libris%20mortis%20）/进阶/纯美苹果园%20-%20《死者之书》进阶：血族大君%20Master%20Vampire.htm"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 24,
+        "name": "天命族裔",
+        "icon": "fa-folder",
+        "leafIcon": "fa-file-alt",
+        "children": [
+            {
+                "id": 2425,
+                "name": "技能专长法术",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 242525,
+                        "name": "纯美苹果园 -> Race of Destiny新增法术",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/天命族裔/技能专长法术/纯美苹果园%20-%20Race%20of%20Destiny新增法术.htm"
+                    },
+                    {
+                        "id": 242525,
+                        "name": "纯美苹果园 -> Races of Destiny新增法术列表",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/天命族裔/技能专长法术/纯美苹果园%20-%20Races%20of%20Destiny新增法术列表.htm"
+                    },
+                    {
+                        "id": 242525,
+                        "name": "纯美苹果园 -> skills部分",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/天命族裔/技能专长法术/纯美苹果园%20-%20skills部分.htm"
+                    },
+                    {
+                        "id": 242525,
+                        "name": "纯美苹果园 -> 天命族裔《Races of Destiny》入信者专长",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/天命族裔/技能专长法术/纯美苹果园%20-%20天命族裔《Races%20of%20Destiny》入信者专长.htm"
+                    }
+                ]
+            },
+            {
+                "id": 2425,
+                "name": "种族",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 242525,
+                        "name": "纯美苹果园 -> [Races of Destiny]种族-Doppelganger",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/天命族裔/种族/纯美苹果园%20-%20[Races%20of%20Destiny]种族-Doppelganger.htm"
+                    },
+                    {
+                        "id": 242525,
+                        "name": "纯美苹果园 -> 《Races of destiny》种族：徽民",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/天命族裔/种族/纯美苹果园%20-%20《Races%20of%20destiny》种族：徽民.htm"
+                    },
+                    {
+                        "id": 242525,
+                        "name": "纯美苹果园 -> 萨斯,人族真神",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/天命族裔/种族/纯美苹果园%20-%20萨斯,人族真神.htm"
+                    }
+                ]
+            },
+            {
+                "id": 2425,
+                "name": "进阶",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 242525,
+                        "name": "纯美苹果园 -> [Race of Density]进阶职业-幽影卫士(Shadow Sentinel)",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/天命族裔/进阶/纯美苹果园%20-%20[Race%20of%20Density]进阶职业-幽影卫士(Shadow%20Sentinel).htm"
+                    },
+                    {
+                        "id": 242525,
+                        "name": "纯美苹果园 -> Rod- Prestige Class_凶蛮武夫",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/天命族裔/进阶/纯美苹果园%20-%20Rod-%20Prestige%20Class_凶蛮武夫.htm"
+                    },
+                    {
+                        "id": 242525,
+                        "name": "纯美苹果园 -> RoD进阶职业——模仿士",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/天命族裔/进阶/纯美苹果园%20-%20RoD进阶职业——模仿士.htm"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 25,
+        "name": "石之族裔",
+        "icon": "fa-folder",
+        "leafIcon": "fa-file-alt",
+        "children": [
+            {
+                "id": 2526,
+                "name": "专长",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 252626,
+                        "name": "纯美苹果园 -> 石之族裔（Races of Stone） 专长",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/石之族裔/专长/纯美苹果园%20-%20石之族裔（Races%20of%20Stone）%20专长.htm"
+                    }
+                ]
+            },
+            {
+                "id": 2526,
+                "name": "种族",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 252626,
+                        "name": "纯美苹果园 -> race of stone种族：歌利亚",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/石之族裔/种族/纯美苹果园%20-%20race%20of%20stone种族：歌利亚.htm"
+                    },
+                    {
+                        "id": 252626,
+                        "name": "纯美苹果园 -> 《石之族裔》Races of Stone里面的某Gnome subtype",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/石之族裔/种族/纯美苹果园%20-%20《石之族裔》Races%20of%20Stone里面的某Gnome%20subtype.htm"
+                    }
+                ]
+            },
+            {
+                "id": 2526,
+                "name": "进阶",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 252626,
+                        "name": "纯美苹果园 -> races of sotne进阶——隼之跑者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/石之族裔/进阶/纯美苹果园%20-%20races%20of%20sotne进阶——隼之跑者.htm"
+                    },
+                    {
+                        "id": 252626,
+                        "name": "纯美苹果园 -> races of stone进阶——歌利亚解放者",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/石之族裔/进阶/纯美苹果园%20-%20races%20of%20stone进阶——歌利亚解放者.htm"
+                    },
+                    {
+                        "id": 252626,
+                        "name": "纯美苹果园 -> 地底守卫——races of stone进阶",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/石之族裔/进阶/纯美苹果园%20-%20地底守卫——races%20of%20stone进阶.htm"
+                    },
+                    {
+                        "id": 252626,
+                        "name": "纯美苹果园 -> 地灵师——races of stone 进阶",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/石之族裔/进阶/纯美苹果园%20-%20地灵师——races%20of%20stone%20进阶.htm"
+                    },
+                    {
+                        "id": 252626,
+                        "name": "纯美苹果园 -> 影艺法师",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/石之族裔/进阶/纯美苹果园%20-%20影艺法师.htm"
+                    },
+                    {
+                        "id": 252626,
+                        "name": "纯美苹果园 -> 石之民族的进阶职业：剑锋舞者（blade bravo）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/石之族裔/进阶/纯美苹果园%20-%20石之民族的进阶职业：剑锋舞者（blade%20bravo）.htm"
+                    },
+                    {
+                        "id": 252626,
+                        "name": "纯美苹果园 -> 石之民族的进阶职业：崖顶射手（cragtop archer）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/石之族裔/进阶/纯美苹果园%20-%20石之民族的进阶职业：崖顶射手（cragtop%20archer）.htm"
+                    },
+                    {
+                        "id": 252626,
+                        "name": "纯美苹果园 -> 石之民族的进阶职业：战争铁匠（battlesmith）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/石之族裔/进阶/纯美苹果园%20-%20石之民族的进阶职业：战争铁匠（battlesmith）.htm"
+                    },
+                    {
+                        "id": 252626,
+                        "name": "纯美苹果园 -> 神殿小丑——races of stone进阶",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/石之族裔/进阶/纯美苹果园%20-%20神殿小丑——races%20of%20stone进阶.htm"
+                    },
+                    {
+                        "id": 252626,
+                        "name": "纯美苹果园 -> 符纹法师——《石之族裔》进阶",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/石之族裔/进阶/纯美苹果园%20-%20符纹法师——《石之族裔》进阶.htm"
+                    },
+                    {
+                        "id": 252626,
+                        "name": "纯美苹果园 -> 黎明咏者——races of stone进阶",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/石之族裔/进阶/纯美苹果园%20-%20黎明咏者——races%20of%20stone进阶.htm"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 26,
+        "name": "荒野族裔",
+        "icon": "fa-folder",
+        "leafIcon": "fa-file-alt",
+        "children": [
+            {
+                "id": 2627,
+                "name": "法术",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 262727,
+                        "name": "纯美苹果园 -> Race of Wild 法术详述",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/荒野族裔/法术/纯美苹果园%20-%20Race%20of%20Wild%20法术详述.htm"
+                    },
+                    {
+                        "id": 262727,
+                        "name": "纯美苹果园 -> Race of Wild新增法术列表",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/荒野族裔/法术/纯美苹果园%20-%20Race%20of%20Wild新增法术列表.htm"
+                    }
+                ]
+            },
+            {
+                "id": 2627,
+                "name": "进阶",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 262727,
+                        "name": "纯美苹果园 -> 密语之刃——races of wild进阶",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/荒野族裔/进阶/纯美苹果园%20-%20密语之刃——races%20of%20wild进阶.htm"
+                    },
+                    {
+                        "id": 262727,
+                        "name": "纯美苹果园 -> 精灵之友——races of wild 进阶",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/荒野族裔/进阶/纯美苹果园%20-%20精灵之友——races%20of%20wild%20进阶.htm"
+                    },
+                    {
+                        "id": 262727,
+                        "name": "纯美苹果园 -> 荒原行者——《Races of wild》进阶",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/荒野族裔/进阶/纯美苹果园%20-%20荒原行者——《Races%20of%20wild》进阶.htm"
+                    },
+                    {
+                        "id": 262727,
+                        "name": "纯美苹果园 -> 野性种族进介：科瑞隆•拉瑞斯安的斗士",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/荒野族裔/进阶/纯美苹果园%20-%20野性种族进介：科瑞隆·拉瑞斯安的斗士.htm"
+                    },
+                    {
+                        "id": 262727,
+                        "name": "纯美苹果园 -> 野性种族进阶：风暴之爪",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/荒野族裔/进阶/纯美苹果园%20-%20野性种族进阶：风暴之爪.htm"
+                    },
+                    {
+                        "id": 262727,
+                        "name": "纯美苹果园 -> ＜荒野种族＞之奥术大祭司（Arcane Hierophant）（未修订版）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/荒野族裔/进阶/纯美苹果园%20-%20＜荒野种族＞之奥术大祭司（Arcane%20Hierophant）（未修订版）.htm"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 27,
+        "name": "龙之族裔",
+        "icon": "fa-folder",
+        "leafIcon": "fa-file-alt",
+        "children": [
+            {
+                "id": 2728,
+                "name": "纯美苹果园 -> race of dragon——巴哈姆特的召唤",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/龙之族裔/纯美苹果园%20-%20race%20of%20dragon——巴哈姆特的召唤.htm"
+            },
+            {
+                "id": 2728,
+                "name": "纯美苹果园 -> race of dragon——法鳞",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/龙之族裔/纯美苹果园%20-%20race%20of%20dragon——法鳞.htm"
+            },
+            {
+                "id": 2728,
+                "name": "纯美苹果园 -> 克图玛封神",
+                "icon": "fa-file-alt",
+                "isLeaf": true,
+                "url": "新建文件夹%20(2)/扩展2/龙之族裔/纯美苹果园%20-%20克图玛封神.htm"
+            }
+        ]
+    },
+    {
+        "id": 28,
+        "name": "其他扩展",
+        "icon": "fa-folder",
+        "leafIcon": "fa-file-alt",
+        "children": [
+            {
+                "id": 2829,
+                "name": "其他扩展",
+                "icon": "fa-folder",
+                "leafIcon": "fa-file-alt",
+                "children": [
+                    {
+                        "id": 282929,
+                        "name": "纯美苹果园 [Powered by Invision Power Board]   您查询的关键词是：纯美苹果园 魔弹射手",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/新建文件夹%20(4)/纯美苹果园%20[Powered%20by%20Invision%20Power%20Board].htm"
+                    },
+                    {
+                        "id": 282929,
+                        "name": "最深的地下城 UNDERTOPIA - 进阶职业—末日之主",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/其他扩展/其他扩展/最深的地下城%20UNDERTOPIA%20-%20进阶职业—末日之主.htm"
+                    },
+                    {
+                        "id": 282929,
+                        "name": "纯美苹果园 -> Savage Species《异族宝典》上的迦勒（Ghaele）",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/其他扩展/其他扩展/纯美苹果园%20-%20Savage%20Species《异族宝典》上的迦勒（Ghaele）.htm"
+                    },
+                    {
+                        "id": 282929,
+                        "name": "纯美苹果园 -> WOTC专栏职业:迅剑士",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/其他扩展/其他扩展/纯美苹果园%20-%20WOTC专栏职业迅剑士.htm"
+                    },
+                    {
+                        "id": 282929,
+                        "name": "纯美苹果园 -> 《异族宝典》",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/其他扩展/其他扩展/纯美苹果园%20-%20《异族宝典》.htm"
+                    },
+                    {
+                        "id": 282929,
+                        "name": "纯美苹果园 -> 射手Archer(游侠变体职业)",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/其他扩展/其他扩展/纯美苹果园%20-%20射手Archer(游侠变体职业).htm"
+                    },
+                    {
+                        "id": 282929,
+                        "name": "纯美苹果园 -> 异族宝典,号手神使",
+                        "icon": "fa-file-alt",
+                        "isLeaf": true,
+                        "url": "新建文件夹%20(2)/扩展2/其他扩展/其他扩展/纯美苹果园%20-%20异族宝典,号手神使.htm"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 29,
+        "name": "小天的前6级法术推荐",
+        "icon": "fa-file-alt",
+        "isLeaf": true,
+        "url": "新建文件夹%20(2)/新建文件夹%20(2)/纯美苹果园%20-%20麻烦推荐一些法师1-4环法吧.htm"
+    }
+]`);
+
+            // 构建树形结构
+            function buildTree(data, container) {
+                data.forEach(function(item) {
+                    const $li = $('<li>').appendTo(container);
+                    
+                    // 创建节点
+                    const $node = $('<div>').addClass('tree-node');
+                    
+                    // 展开/收起图标
+                    const $toggleIcon = $('<span>').addClass('toggle-icon');
+                    if (item.isLeaf || !item.children || item.children.length === 0) {
+                        $toggleIcon.addClass('leaf').html('<i class="fas fa-minus" style="opacity: 0;"></i>');
+                    } else {
+                        $toggleIcon.html('<i class="fas fa-chevron-right"></i>');
+                    }
+                    
+                    // 节点图标
+                    const $nodeIcon = $('<span>').addClass('node-icon');
+                    if (item.isLeaf || !item.children || item.children.length === 0) {
+                        const iconClass = item.icon || item.leafIcon || 'fa-file';
+                        $nodeIcon.addClass('leaf').html(`<i class="fas ${iconClass}"></i>`);
+                    } else {
+                        $nodeIcon.addClass('folder').html(`<i class="fas ${item.icon || 'fa-folder'}"></i>`);
+                    }
+                    
+                    // 如果叶子节点有URL，使用超链接方式
+                    if ((item.isLeaf || !item.children || item.children.length === 0) && item.url) {
+                        const $link = $('<a>')
+                            .attr('href', item.url)
+                            .attr('target', 'content')
+                            .addClass('node-text')
+                            .addClass('has-url')
+                            .text(item.name)
+                            .attr('title', '点击查看: ' + item.url);
+                        
+                        $node.append($toggleIcon, $nodeIcon, $link);
+                    } else {
+                        const $nodeText = $('<span>').addClass('node-text').text(item.name);
+                        $node.append($toggleIcon, $nodeIcon, $nodeText);
+                    }
+                    
+                    $li.append($node);
+                    
+                    // 如果有子节点，创建子列表
+                    if (!item.isLeaf && item.children && item.children.length > 0) {
+                        const $childList = $('<ul>').appendTo($li);
+                        buildTree(item.children, $childList);
+                        
+                        // 绑定点击事件
+                        $node.on('click', function(e) {
+                            e.stopPropagation();
+                            toggleNode($(this), $childList, $nodeIcon);
+                        });
+                    } else {
+                        // 叶子节点点击事件（仅用于选中效果，链接跳转由<a>标签自动处理）
+                        $node.on('click', function(e) {
+                            // 阻止事件冒泡
+                            e.stopPropagation();
+                            
+                            // 选中节点
+                            selectNode($(this));
+                            
+                            // 如果点击的是链接，让链接默认行为生效
+                            if ($(e.target).is('a') || $(e.target).parent().is('a')) {
+                                // 链接会自动跳转到iframe，无需额外处理
+                                // 隐藏空状态，显示iframe
+                                $('#emptyState').hide();
+                                $('#contentFrame').show();
+                            }
+                        });
+                    }
+                });
+            }
+
+            // 展开/收起节点
+            function toggleNode($node, $childList, $nodeIcon) {
+                const $toggleIcon = $node.find('.toggle-icon');
+                const isExpanded = $childList.hasClass('expanded');
+                
+                if (isExpanded) {
+                    $childList.removeClass('expanded');
+                    $toggleIcon.removeClass('expanded');
+                    $nodeIcon.removeClass('folder-open').addClass('folder');
+                } else {
+                    $childList.addClass('expanded');
+                    $toggleIcon.addClass('expanded');
+                    $nodeIcon.removeClass('folder').addClass('folder-open');
+                }
+                
+                selectNode($node);
+            }
+
+            // 选中节点
+            function selectNode($node) {
+                $('.tree-node').removeClass('active');
+                $node.addClass('active');
+                
+                const nodeName = $node.find('.node-text').text();
+                console.log('选中节点:', nodeName);
+            }
+
+            // 监听iframe加载完成
+            $('#contentFrame').on('load', function() {
+                console.log('iframe内容加载完成');
+            });
+
+            // 初始化树
+            buildTree(treeData, $('#treeRoot'));
+            
+            // 默认展开第一层
+            // $('#treeRoot > li > ul').addClass('expanded');
+            // $('#treeRoot > li > .tree-node .toggle-icon').addClass('expanded');
+            // $('#treeRoot > li > .tree-node .node-icon').removeClass('folder').addClass('folder-open');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+<channel>
+<title><![CDATA[流浪的龙－个人知识管理]]></title> 
+<link>http://i.renjihe.com/blog/index.php</link> 
+<description><![CDATA[]]></description> 
+<language>zh-cn</language> 
+<copyright><![CDATA[流浪的龙－个人知识管理]]></copyright>
+<item>
+<link>http://i.renjihe.com/blog/read.php?</link>
+<title><![CDATA[ 走出浮躁的泥沼系列文章]]></title> 
+<author>renjihe1988 &lt;admin@yourname.com&gt;</author>
+<category><![CDATA[置顶]]></category>
+<pubDate>Thu, 11 Jul 2013 01:51:36 +0000</pubDate> 
+<guid>http://i.renjihe.com/blog/read.php?</guid> 
+<description>
+<![CDATA[ 
+	<a style="text-decoration: none; color: #333333; font-family: Tahoma, Arial; font-size: 14px; line-height: 16px" href="read.php?5233">走出浮躁的泥沼：为什么会浮躁</a><br /><br /><a style="text-decoration: none; color: #333333; font-family: Tahoma, Arial; font-size: 14px; line-height: 16px" href="read.php?5234">走出浮躁的泥沼：把一件事做到某种境界</a><br /><br /><a style="text-decoration: none; color: #333333; font-family: Tahoma, Arial; font-size: 14px; line-height: 16px" href="read.php?5235">走出浮躁的泥沼：学会享受学习过程的乐趣</a><br /><br /><a style="text-decoration: none; color: #333333; font-family: Tahoma, Arial; font-size: 14px; line-height: 16px" href="read.php?5236">走出浮躁的泥沼：浮躁的社会原因</a><br /><br /><a style="text-decoration: none; color: #333333; font-family: Tahoma, Arial; font-size: 14px; line-height: 16px" href="read.php?5237">走出浮躁的泥沼：仅专注就能胜过大部分人</a><br /><br /><a style="text-decoration: none; color: #333333; font-family: Tahoma, Arial; font-size: 14px; line-height: 16px" href="read.php?5238">走出浮躁的泥沼：关于技术与工作</a>
+]]>
+</description>
+</item><item>
+<link>http://i.renjihe.com/blog/read.php?#blogcomment</link>
+<title><![CDATA[[评论]  走出浮躁的泥沼系列文章]]></title> 
+<author> &lt;user@domain.com&gt;</author>
+<category><![CDATA[评论]]></category>
+<pubDate>Thu, 01 Jan 1970 00:00:00 +0000</pubDate> 
+<guid>http://i.renjihe.com/blog/read.php?#blogcomment</guid> 
+<description>
+<![CDATA[ 
+	
+]]>
+</description>
+</item>
+</channel>
+</rss>

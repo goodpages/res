@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+<channel>
+<title><![CDATA[流浪的龙－个人知识管理]]></title> 
+<link>http://i.renjihe.com/blog/index.php</link> 
+<description><![CDATA[]]></description> 
+<language>zh-cn</language> 
+<copyright><![CDATA[流浪的龙－个人知识管理]]></copyright>
+<item>
+<link>http://i.renjihe.com/blog/read.php?</link>
+<title><![CDATA[迷茫，就是不想做小事，只想做大事]]></title> 
+<author>renjihe1988 &lt;admin@yourname.com&gt;</author>
+<category><![CDATA[微语录]]></category>
+<pubDate>Sun, 28 Jun 2015 06:59:10 +0000</pubDate> 
+<guid>http://i.renjihe.com/blog/read.php?</guid> 
+<description>
+<![CDATA[ 
+	<span style="font-size: 15px; line-height: 27px; text-align: justify; text-indent: 30px; font-family: 'Microsoft YaHei', Helvetica, Arial, 'Lucida Grande', Tahoma, sans-serif; color: #444444">迷茫，就是不想做小事，只想做大事；不想做手边的事，只想做天边的事；不想做烦琐的事，只想做繁荣的事。其实人生没有迷茫，有的只是对自己的高估。把自己看高了，其实就是&ldquo;装迷茫&rdquo;。别再装了，且把自己看低，脚踏实地，这病就好了。</span>
+]]>
+</description>
+</item><item>
+<link>http://i.renjihe.com/blog/read.php?#blogcomment</link>
+<title><![CDATA[[评论] 迷茫，就是不想做小事，只想做大事]]></title> 
+<author> &lt;user@domain.com&gt;</author>
+<category><![CDATA[评论]]></category>
+<pubDate>Thu, 01 Jan 1970 00:00:00 +0000</pubDate> 
+<guid>http://i.renjihe.com/blog/read.php?#blogcomment</guid> 
+<description>
+<![CDATA[ 
+	
+]]>
+</description>
+</item>
+</channel>
+</rss>

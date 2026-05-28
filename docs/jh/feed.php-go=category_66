@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+<channel>
+<title><![CDATA[流浪的龙－个人知识管理]]></title> 
+<link>http://i.renjihe.com/blog/index.php</link> 
+<description><![CDATA[]]></description> 
+<language>zh-cn</language> 
+<copyright><![CDATA[流浪的龙－个人知识管理]]></copyright>
+<item>
+<link>http://i.renjihe.com/blog/read.php?3626</link>
+<title><![CDATA[锁相环原理]]></title> 
+<author>renjihe1988 &lt;admin@yourname.com&gt;</author>
+<category><![CDATA[模电与电路]]></category>
+<pubDate>Fri, 09 Nov 2012 01:19:48 +0000</pubDate> 
+<guid>http://i.renjihe.com/blog/read.php?3626</guid> 
+<description>
+<![CDATA[ 
+	<p><span style="font-family: Verdana">锁相环原理</span></p><p>锁相环路是一种反馈电路，锁相环的英文全称是Phase-Locked Loop,简称PLL。其作用是使得电路上的时钟和某一外部时钟的相位同步。因锁相环可以实现输出信号频率对输入信号频率的自动跟踪，所以锁相环通常用于闭环跟踪电路。锁相环在工作的过程中，当输出信号的频率与输入信号的频率相等时，输出电压与输入电压保持固定的相位差值，即输出电压与输入电压<br />的相位被锁住，这就是锁相环名称的由来。 </p><p><br />在数据采集系统中，锁相环是一种非常有用的同步技术，因为通过锁相环，可以使得不同的数据采集板卡共享同一个采样时钟。因此，所有板卡上各自的本地 80MHz和20MHz时基的相位都是同步的，从而采样时钟也是同步的。因为每块板卡的采样时钟都是同步的，所以都能严格地在同一时刻进行数据采集。锁相环路是一个相位反馈自动控制系统。它由以下三个基本部件组成：鉴相器（PD）、环路滤波器（LPF）和压控振荡器（VCO）。</p><p>锁相环的工作原理：<br />1. 压控振荡器的输出经过采集并分频；<br />2. 和基准信号同时输入鉴相器；<br />3. 鉴相器通过比较上述两个信号的频率差，然后输出一个直流脉冲电压；<br />4. 控制VCO，使它的频率改变；<br />5. 这样经过一个很短的时间，VCO 的输出就会稳定于某一期望值。</p><p><br />锁相环可用来实现输出和输入两个信号之间的相位同步。当没有基准（参考）输入信号时，环路滤波器的输出为零（或为某一固定值）。这时，压控振荡器按其固有频率fv进行自由振荡。当有频率为fR的参考信号输入时，uR 和uv同时加到鉴相器进行鉴相。如果fR和fv相差不大，鉴相器对uR和uv进行鉴相的结果，输出一个与uR和uv的相位差成正比的误差电压ud，再经过环路滤波器滤去ud中的高频成分，输出一个控制电压uc，uc将使压控振荡器的频率fv（和相位）发生变化，朝着参考输入信号的频率靠拢，最后使fv= fR，环路锁定。环路一旦进入锁定状态后，压控振荡器的输出信号与环路的输入信号（参考信号）之间只有一个固定的稳态相位差，而没有频差存在。这时我们就称环路已被锁定。</p><p><br />环路的锁定状态是对输入信号的频率和相位不变而言的，若环路输入的是频率和相位不断变化的信号，而且环路能使压控振荡器的频率和相位不断地跟踪输入信号的频率和相位变化，则这时环路所处的状态称为跟踪状态。</p><p><br />锁相环路在锁定后，不仅能使输出信号频率与输入信号频率严格同步，而且还具有频率跟踪特性，所以它在电子技术的各个领域中都有着广泛的应用。</p><p>推荐锁相环的原理，特性与分析电子书：<a href="http://www.elecfans.com/soft/69/2008/200808157292.html" target="_blank" title="pll锁相环" class="showtopic"><span style="color: #000000">pll锁相环</span> </a></p>
+]]>
+</description>
+</item>
+</channel>
+</rss>

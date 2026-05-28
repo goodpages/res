@@ -1,0 +1,29 @@
+﻿标题：nodejs异步控制利器Async
+出处：流浪的龙－个人知识管理
+时间：Mon, 29 Aug 2016 14:34:57 +0000
+作者：renjihe1988
+地址：http://i.renjihe.com/blog/read.php?7513
+
+内容：
+Node.js 是一个基于 Chrome V8 引擎的 JavaScript 运行环境。Node.js 使用了一个事件驱动、非阻塞式 I/O 的模型，使其轻量又高效。 因为是js语言，也就是说，凡是懂得一点js或者jquery，对nodejs入手相当的快，而且没过多久你就会爱上nodejs！
+但是！但是！但是！nodejs是基于异步的写法，有时一个函数需要上一个函数的返回值做参数，这样下来一不小心就会陷入回调地狱的陷阱中。（一把辛酸泪-_-!!!） 下面的一个相当简单的需求
+将A、B、C文件里面的内容读取出来存到D文件中11普通的写法如下
+var fs = require('fs'); fs.readFile('D:\\test\\A.txt',function(err,data1){   fs.readFile('D:\\test\\B.txt',function(err,data2){     fs.readFile('D:\\test\\C.txt',function(err,data3){       console.log(data1+'>>>'+data2+'>>>'+data3);       fs.writeFile('D:\\test\\D.txt',data1+'>>>'+data2+'>>>'+data3,function(err){         console.log(err);       });     });   }); });12345678910111234567891011如果再来个a，b，c等等文件，各种嵌套，一是看起来很凌乱，二是后来维护起来是相当的困难！ 那么为了避免这样的问题，也有一些模块来解决，比如Promise，Async，co等等，使用哪种来控制异步流程，我也纠结了许久，最终选择使用Async，有人说Asunc是一代，promise是二代，co是三代。于是毫不犹豫的选择了Async. 在此推荐相当详细的demo地址 GitHub地址 里面把asunc所有的方法重新讲解了一遍，很详细。 我下面要介绍的是四种控制流程 * 串行无关联 * 串行有关联 * 并行无关联 * 只能控制
+下载async模块
+npm install async11串行无关联多个函数或方法要依次执行，但是他们之间并没有什么联系，只有先后的顺序，比如我要写一个文件，写完之后像用户发送邮件，这两者之间没有必然的联系，但是发邮件必须在写文件完成之后。 async里有一个方法series可以实现这一流程,代码实现如下：
+var async = require('async'); console.time('series'); async.series({     one: function(callback) {         callback(null, 'one');//callback('i am err','one');异常处理     },     two: function(callback) {         callback(null, 'two');      }, }, function(error, result) {     //最后结果     console.log('error: ' + error);     console.log('result: ' + result);     console.timeEnd('series'); });1234567891011121314151612345678910111213141516结果
+error: null result: [object Object] series: 4.472ms123123串行流程，one执行完再执行two，如果有three、four等方法，依次写下去，callback(arg1,arg2),两个参数，arg1是异常，arg2是方法的返回值，如果某个函数中arg1不为空，则程序到此终止，之后的不再执行，可自行测试！ 注意:waterfall不能使用对象表示法来传递(json格式)
+串行有关联多个函数或方法执行，每一步执行时都需要上一步执行的结果当参数，所以就会有串行等待。async里有waterfall可以实现此场景：
+var async = require('async'); console.time('waterfall'); async.waterfall([     function(callback) {         callback(null, 'one');     },     function(onearg, callback) {         callback(null, onearg + '>>>two');     },     function(twoarg, callback) {         callback(null, twoarg + '>>>three');     },     function(threearg, callback) {         callback(null, threearg + '>>>four');     } ], function(error, result) {     console.log('error: ' + error);     console.log('result: ' + result);     console.timeEnd('waterfall'); });12345678910111213141516171819201234567891011121314151617181920结果
+error: null result: one>>>two>>>three>>>four waterfall: 4.516ms123123这个比较series换了个方法名之外，每个函数多了个参数第二个函数中onearg则是第一个函数的值，以此类推，callback中没变，如果有异常，立即终止可自行验证;
+并行无关联多个函数执行，之间没有任何的关系，也就是说谁执行都行，为了节约时间就可以使用并行流程来解决，如下：
+var async = require('async'); console.time('parallel'); async.parallel({     one: function(callback) {         //处理逻辑         callback(null, 'one');     },     two: function(callback) {         //处理逻辑         callback(null, 'tow');     },     three: function(callback) {         //处理逻辑         callback(null, 'three');     },     four: function(callback) {         //处理逻辑         callback(null, 'four');     } }, function(error, result) {     console.log('one:', result.one);     console.log('two:', result.two);     console.log('three:', result.three);     console.log('four:', result.four);     console.log('error: ' + error);     console.log('result: ' + JSON.stringify(result));     console.timeEnd('parallel'); });1234567891011121314151617181920212223242526272812345678910111213141516171819202122232425262728结果
+one: one two: tow three: three four: four error: null result: {"one":"one","two":"tow","three":"three","four":"four"} parallel: 4.237ms12345671234567并行无关联和串行无关联唯一的差异就是名称不同，但也都是见名知意，主要看执行的时间！！！
+智能控制以上都是纯串行传并行，但是当一个场景里，需要使用串行也需要使用并行的时候，虽然分别写能解决，但是效率不是很高，维护性也不是很好，auto可以解决这一问题。如下场景，参见github示例 需求如下：
+从某处取得数据在硬盘上建立一个新的目录将数据写入到目录下某文件发送邮件，将文件以附件形式发送给其它人。可以知道1与2可以并行执行，3需要等1和2完成，4要等3完成。 使用auto来解决
+var async = require('async'); console.time('auto'); async.auto({     getData: function(callback) {         setTimeout(function() {             console.log('1.1: got data');             callback(null, 'mydata');         }, 300);     },     makeFolder: function(callback) {         setTimeout(function() {             console.log('1.1: made folder');             callback(null, 'myfolder');         }, 200);     },     writeFile: ['getData', 'makeFolder', function(callback) {         setTimeout(function() {             console.log('1.1: wrote file');             callback(null, 'myfile');         }, 300);     }],     emailFiles: ['writeFile', function(callback, results) {         console.log('emailed file: ', results.writeFile);         callback(null, results.writeFile);     }] }, function(err, results) {     console.log('err: ', err);     console.log('results: ', results);     console.timeEnd('auto'); });123456789101112131415161718192021222324252627282930123456789101112131415161718192021222324252627282930结果
+1.1: made folder 1.1: got data 1.1: wrote file emailed file:  myfile err:  null results:  { makeFolder: 'myfolder',   getData: 'mydata',   writeFile: 'myfile',   emailFiles: 'myfile' } auto: 650.972ms1234567891012345678910通过这样的写法，就可以实现串行并行组合写法，这些方法需要多多练习才能熟练使用。。。
+
+
+
+Generated by Bo-blog 2.1.1 Release

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>分类小说素材库</title>
+    <style>
+        .frame-container {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+        }
+
+        #left-pane {
+            width: 300px;
+            height: 100%;
+            border-right: 1px solid #ddd;
+        }
+
+        #right-pane {
+            flex: 1;
+            height: 100%;
+        }
+
+        iframe {
+            border: none;
+            width: 100%;
+            height: 100%;
+        }
+
+    </style>
+    <script>
+        // 父页面暴露一个全局方法，给iframeA调用，用于修改iframeB的地址
+        window.changeIframeUrl = function(newUrl) {
+            // 1. 通过id获取目标iframeB的DOM元素
+            const iframeB = document.getElementById('content');
+            // 2. 核心代码：修改iframeB的地址（两种写法等价，任选其一）
+            iframeB.contentWindow.location.href = newUrl; 
+            // iframeB.src = newUrl; // 写法2，效果完全一样，更简洁
+        }
+    </script>
+</head>
+
+<body>
+    <div class="frame-container">
+        <iframe id="left-pane" name="left" src="menu.hhc.htm"></iframe>
+        <iframe id="right-pane" name="content" src="chm/000022/List.htm"></iframe>
+    </div>
+</body>
+
+</html>

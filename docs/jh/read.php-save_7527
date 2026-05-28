@@ -1,0 +1,53 @@
+﻿标题：mysql优化之索引优化
+出处：流浪的龙－个人知识管理
+时间：Thu, 01 Sep 2016 20:56:02 +0000
+作者：renjihe1988
+地址：http://i.renjihe.com/blog/read.php?7527
+
+内容：
+第一篇 序章第二篇 连接优化第三篇 索引优化第四篇 查询优化第五篇 到实战中去
+索引优化索引优化涉及到几个方面，包括了索引的类型、如何让查询使用索引，查询是索引算法的选择等等操作。(原文链接http://ddbiz.com/?p=961)涉及到数据库的查询时，大多数情况都是要建立索引的，MySQL的索引类型以及创建索引方式，可以参考其文档或者这里。
+服务器参数设置在于索引有关系的数据库参数中，有一些特别重要，如下：
+key_buffer_size命令行参数: &ndash;key_buffer_size=#ini/cnf参数: key_buffer_sizemysql 变量: key_buffer_size全局变量，可动态调整，取值范围 8到4G(32bitOS), 在64bitOS上可以设置更高，只要你的系统有那么多物理内存。
+key_buffer_size 主要作用于MyISAM表的索引。我们知道，MyISAM的索引句柄是对全部连接用户共享的。状态参数 key_read_requests(响应用户请求时从缓存中获取的数据)和key_reads(响应用户请求时从文件中加载的数据) 可以用来检测key_buffer_size是否太小，根据文档, key_reads/key_read_request 应该远小于0.01(当然我们的测试环境可能完全无法达到此设定，只能尽量接近了). 如果一个MyISAM的数据表的索引文件过G，除非物理内存远远高于索引大小，否则让key_reads/key_read_request接近0.01也是一件不可能的任务。
+MySQL还支持把索引提前加载到内存，本节后面将描述此方法及其限制.
+受如下参数影响: 系统内存将影响如下参数: 无调整触发条件: key_reads/key_read_request >0.01
+key_cache_block_size与key_buffer_size相关联的另外一个参数是 key_cache_block_size命令行参数: &ndash;key_cache_block_size=#ini/cnf参数: key_cache_block_sizemysql 变量: key_cache_block_size全局变量，可动态调整，取值范围 512bytes到16k。
+key_cache_block_size表明key_buffer_size被分割的区域的大小。可以通过 show status 来判断当前key_buffer_size被分为多少个块：
+Key_blocks_unused, 目前剩余可用的索引缓存空间Key_blocks_used(历史上的最大峰值)
+对于一个key_buffer_size=4G的数据库来说， key_cache_block_size*Key_blocks_unused 就是剩余的可用的缓存空间。只要这个空间允许，我们都应该尽可能的把索引预装入缓存中（见LOAD INDEX INTO CACHE
+理论上讲，key_cache_block_size与操作系统的I/O buffer相同大小时工作（读取、写入）效率最高，比如linux中i/o缓存一般为1k. 对于mysql来说，可以通过 &ndash;myisam-block-size来定义MyISAM索引文件的块大小，其最小为1k。
+key_cache_division_limit命令行参数: &ndash;key_cache_division_limit=1~100配置文件参数: key_cache_division_limit=#MySQL变量: key_cache_division_limit全局可调整变量，默认为100(即LRU队列)。当MyISAM的key_buffer_size中设置了key_cache_division_limit(
+key_cache_age_threshold命令行参数: &ndash;key_cache_age_threshold=100~4G(32bitOS)或者100~~(64bitOS)配置文件参数: key_cache_age_threshold=#MySQL变量: key_cache_age_threshold全局可调整变量，默认为300。当MyISAM的key_buffer_size被分为热链和温链时，key_cache_age_threshold就被用来控制什么样的情况下处于热链的数据会被转移到温链中。key_cache_age_threshold是指的block个数，如果在最近的 （key_cache_age_threshold * key_cache_division_limit/100）次访问中，处于热链顶部的block没有被访问到，那么这些块将被移到温链的顶部（处于温链顶部的block会很快被移除出key cache）。
+说明:key_buffer_size, key_cache_block_size, key_cache_division_limit, key_cache_age_threshold 这4个变量是一个结构变量中的一组变量。本文后续有部分详细介绍.
+read_buffer_size命令行参数: &ndash;read_buffer_size=#ini/cnf参数: read_buffer_sizemysql 变量: read_buffer_size全局变量，可动态调整，默认128k，取值范围8k到2G.
+read_buffer_size主要作用于顺序读取一批数据时，减少数据库文件访问的次数。
+受如下参数影响:将影响如下参数: KEY_BLOCK_SIZE（表创建时的参数）调整触发条件:
+read_rnd_buffer_size命令行参数: &ndash;read_rnd_buffer_size=#ini/cnf参数: read_rnd_buffer_sizemysql 变量: read_rnd_buffer_size全局变量，可动态调整，默认256k，取值范围8k到4G.
+read_rnd_buffer_size用于使用键/索引进行排序时的磁盘文件预读，一个足够大的read_rnd_buffer_size对ORDER BY语句会有很大影响。注意:read_rnd_buffer_size是和每一个session相关的，因此其大小需要谨慎处理，当并发连接很大时，尤其要小心。
+LOAD CACHE INTO CACHEMySQL可以把索引文件预先加载到指定的缓存中:
+LOAD INDEX INTO CACHE table_name;LOAD INDEX INTO CACHE table_name INDEX (index_name_1, index_name_2);LOAD INDEX INTO CACHE table_name INDEX (index_name_1, index_name_2) IGNORE LEAVES;
+对于查询型的超大型的表，当没有足够的内存时，可以使用 IGNORE LEAVES 的方式加载索引到缓存。比如一个接近1Billion的数据表，其索引可能也是几G大小的。下面这个例子就显示了当预先加载数据索引时，查询的速度变化，这个数据表有接近1亿条记录，3个索引，有超过3G的大小，对于同一个查询：
+#mysql> select * from tbigdatatable where username in (&lsquo;ABCDEF&rsquo;, &lsquo;19740821&rsquo;)
+在非预先加载索引以及预载索引的情况下，查询的响应区别:
+#mysqld_safe &ndash;key-buffer-cache=1073741824####不预载索引#### 5 rows in set (0.65 sec)######预载索引#### 5 rows in set (1.94 sec)
+当然一个查询有很大的偶然性，不过从一个大量的查询平均来看，这个效果还是有很大的差别的。
+如果一个表的索引包含不同的key_block_size,那么这个预装载将会遇到困难, 如：
+alter table tbigdatatable add index idx_bigdatatable_username(username) key_block_size=8192, add index idx_bigdatatable_email(email) key_block_size=8192, add index idx_bigdatatable_id(id) key_block_size=1024;load index into cache tbigdatatable index (idx_bigdatatable_username, idx_bigdatatable_email) ignore leaves;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&ndash;+&mdash;&mdash;&mdash;-+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-+| Table | Op | Msg_type | Msg_text |+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&ndash;+&mdash;&mdash;&mdash;-+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-+| coredata.tbigdatatable | preload_keys | error | Indexes use different block sizes || coredata.tbigdatatable | preload_keys | error | Subpartition p178sp0 returned error || coredata.tbigdatatable | preload_keys | status | Operation failed |+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&ndash;+&mdash;&mdash;&mdash;-+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-+
+因为.MYI中包含不同block_size的索引，所以无法预加载！
+MySQL 5.1 对分区表不能预装载索引：preload_keys | note | The storage engine for the table doesn&rsquo;t support preload_keys真是不幸, 这些版本包括: 5.1.47, 5.1.61-community-log
+因为手头上没有MySQL5.5的数据库可供使用，所以关于预装载索引到内存的方法只能暂时放一放，这也导致了我的另外一个测试项目差点夭折：9千万数据的分区表查询，每个查询要耗时1m左右，伤不起啊。
+CACHE INDEXLOAD INDEX INTO CACHE可以把索引装入缓存中，除此外，MySQL还可以更有针对性的把索引装入制定的缓存中。key_buffer_size是一个结构中一个变量，这个结构是系统的默认缓存空间，我们还可以设定其他的缓存空间，比如：
+set global key1.key_buffer_size=128*1024*1024;set global key2.key_buffer_size=512*1024*1024;
+这样我们就能定义不同的缓存空间，配合 CACHE INDEX IN cache_region语句，就可以把不同的索引放入不同的缓存中。
+(接上)cache index table_name index (index_name_1) in key1;cache index table_name index (index_name_2) in key2;load cache into cache table_name index (index_name_1);load cache into cache table_name index (index_name_2) ignore leaves;
+上面的语句就把 index_name_1放入了 key1, 把 index_name_2放入了 key2;至于何时使用不同的缓存，我们在后面的实战中再做讨论。
+结构化的变量，在mysql中没办法用 show variables like &lsquo;structure_name_1.key_buffer%&rsquo; ; 的方式来查询。假如我们定义了不同的结构变量（创建不同的缓存空间的）: staticdb.*，则可以用下面的方式来查询该空间的设置情况：
+set global staticdb.key_buffer_size=1000*1024*1024;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;mysql> select @@global.staticdb.key_buffer_size KBS, @@global.staticdb.key_cache_division_limit KCDL, @@global.staticdb.key_cache_age_threshold KCAT, @@global.staticdb.key_cache_block_size KCBS;+&mdash;&mdash;&mdash;&mdash;+&mdash;&mdash;+&mdash;&mdash;+&mdash;&mdash;+| KBS | KCDL | KCAT | KCBS |+&mdash;&mdash;&mdash;&mdash;+&mdash;&mdash;+&mdash;&mdash;+&mdash;&mdash;+| 1048576000 | 100 | 300 | 1024 |+&mdash;&mdash;&mdash;&mdash;+&mdash;&mdash;+&mdash;&mdash;+&mdash;&mdash;+1 row in set (0.00 sec)
+目前我还没有办法查看指定一个结构空间的使用情况，如果你知道如何查看的话，请留言给我。
+要点总结本节的要点是：
+对于MyISAM来说：设置尽可能大的缓存，最好把MyISAM表的索引能够全部装入缓存中
+
+
+
+Generated by Bo-blog 2.1.1 Release

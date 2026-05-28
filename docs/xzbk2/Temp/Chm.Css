@@ -1,0 +1,152 @@
+body {
+	font-family: "宋体";
+	font-size: 12px;
+	margin:0px;
+	background-color:#e7f4fe;
+}
+a:link {
+	color:#333333;
+	font-family: Verdana, Arial, Helvetica, sans-serif, "宋体";
+	text-decoration: none;
+}
+a:visited {
+	color:#333333;
+	font-family: Verdana, Arial, Helvetica, sans-serif, "宋体";
+	text-decoration: underline;
+}
+a:hover {
+	color:#333333;
+	font-family: Verdana, Arial, Helvetica, sans-serif, "宋体";
+	text-decoration: underline;
+}
+a:active {
+	color:#333333;
+	font-family: Verdana, Arial, Helvetica, sans-serif, "宋体";
+	text-decoration: underline;
+}
+.newstitle {
+	FONT-WEIGHT: bold;
+	FONT-SIZE: 16px;
+	COLOR: #cc0000;
+	LINE-HEIGHT: 18px;
+}
+.tb0 {	PADDING-RIGHT: 6px; PADDING-LEFT: 6px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px;}
+.tb1 {	BORDER-RIGHT: #999 1px solid; PADDING-RIGHT: 6px; BORDER-TOP: #999 1px solid; PADDING-LEFT: 6px; BACKGROUND: #ccc; PADDING-BOTTOM: 0px; BORDER-LEFT: #999 1px solid; PADDING-TOP: 0px; BORDER-BOTTOM: #999 1px solid}
+.tbsep {PADDING-RIGHT: 1px; PADDING-LEFT: 1px; FONT: 9px Verdana; COLOR: #a9a9a9; TEXT-ALIGN: center}
+#Top {
+    margin-top:5px;
+	padding:5px 0 0 10px;
+	height:20px;
+	border-top:1px solid #CCCCCC;
+	border-bottom:1px solid #CCCCCC;
+}
+#BookTitle {
+	margin-top: 30px;
+	font-weight:bold;
+	font-size: 24px;
+	color: #ff3300;
+	font-FAMILY: "宋体";
+	text-align:center;
+}
+#BookWriter {
+    padding-top:20px;
+    margin:auto;
+    width:772px;
+}
+#VolumeList {
+    margin:auto;
+	font-size: 9pt;
+	margin-top: 5px;
+	line-height: 130%;
+	text-align: left;
+	width:772px;
+}
+#VolumeList ul {
+	border-left: #666666 1px solid;
+	float: left;
+	width: 100%;
+	list-style-type:none;
+	margin:0;
+	padding:0;
+}
+#VolumeList ul li{
+	border-right: #666666 1px solid; 
+	border-top: #666666 1px solid;
+	table-layout:fixed;
+	padding:9px 0 0 2px;
+	float:left;
+	overflow:hidden;
+	word-break:break-all;
+	width:190px;
+    height:20px;
+	text-align:left;
+}
+#VolumeList #NclassTitle {
+	height: 24px;
+	width:771px;
+	background-color: #d3e5fa;
+	padding-top:9px;
+	text-align:center;
+	border-top: #666666 1px solid; 
+	border-right: #666666 1px solid;
+	border-left: #666666 1px solid;
+}
+#VolumeList #ListEnd {
+	clear: both !important; 
+	height: 1px;
+	width: 100%;
+	border-top: #666666 1px solid;
+	margin:auto;
+}
+#ChapterList {
+	clear: both !important;
+}
+#ChapterList .TextTitle {
+	margin:auto;
+	clear: both !important; 
+	height: 18px;
+	margin-top: 10px;
+	text-align:center;
+	width:85%;
+}
+#ChapterList .TextType {
+	margin:auto;
+	font-size: 11pt;
+	margin-top: 5px;
+	line-height: 180%;
+	text-align: left;
+	width:85%;
+}
+#TextType {
+	clear: both !important;
+	margin:auto;
+	font-size: 11pt;
+	margin-top: 15px;
+	line-height: 180%;
+	text-align: left;
+	width:85%;
+}
+#LinkMenu {
+	height: 20px;
+	margin-top: 5px;
+}
+#ReadInfo {
+	margin-top: 5px;
+	line-height: 180%;
+	text-align: left;
+	padding-left:10px;
+}
+#End {
+    margin-top:5px;
+	padding:5px 0 0 10px;
+	height:20px;
+	border-top:1px solid #CCCCCC;
+	border-bottom:1px solid #CCCCCC;
+}
+#CopyRight {
+    margin-top:5px;
+	padding:5px 0 0 0;
+	text-align:center;
+	line-height: 180%;
+}
+
